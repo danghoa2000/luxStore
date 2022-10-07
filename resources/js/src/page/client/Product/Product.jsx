@@ -1,6 +1,21 @@
 import { Opacity } from '@mui/icons-material';
-import { Box, Checkbox, Container, Divider, FormControl, IconButton, List, ListItem, ListItemButton, ListItemIcon, ListItemText, ListSubheader, MenuItem, Select } from '@mui/material';
-import { unset } from 'lodash';
+import {
+    Box,
+    Checkbox,
+    Divider,
+    FormControl,
+    Grid,
+    IconButton,
+    List,
+    ListItem,
+    ListItemIcon,
+    ListItemText,
+    ListSubheader,
+    MenuItem,
+    Pagination,
+    Select,
+    Stack
+} from '@mui/material';
 import React, { useState } from 'react';
 import './product.scss';
 
@@ -98,187 +113,49 @@ const Product = () => {
                 </div>
 
                 <div className="product__list">
-                    <div>
-                        <div className='box'>
-                            <div className='product m-3'>
-                                <div className='img'>
-                                    <span className='discount'>{5}% Off</span>
-                                    <img src={"https://bonik-react.vercel.app/assets/images/products/headphone.png"} alt='' />
-                                    <div className='product-like'>
-                                        <label>{10}</label> <br />
-                                        <i className='fa-regular fa-heart'></i>
+                    <Grid container spacing={2}>
+                        {[0, 1, 2, 3].map((value) => {
+                            return (
+                                <Grid item xs={4}>
+                                    <div className='box'>
+                                        <div className='product m-3'>
+                                            <div className='img'>
+                                                <span className='discount'>{5}% Off</span>
+                                                <img src={"https://bonik-react.vercel.app/assets/images/products/headphone.png"} alt='' />
+                                                <div className='product-like'>
+                                                    <label>{10}</label> <br />
+                                                    <i className='fa-regular fa-heart'></i>
+                                                </div>
+                                            </div>
+                                            <div className='product-details'>
+                                                <h3>{"Watch"}</h3>
+                                                <div className='rate'>
+                                                    <i className='fa fa-star'></i>
+                                                    <i className='fa fa-star'></i>
+                                                    <i className='fa fa-star'></i>
+                                                    <i className='fa fa-star'></i>
+                                                    <i className='fa fa-star'></i>
+                                                </div>
+                                                <div className='price'>
+                                                    <h4>${200}.00 </h4>
+                                                    <button onClick={() => ({})}>
+                                                        <i className='fa fa-plus'></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
-                                </div>
-                                <div className='product-details'>
-                                    <h3>{"Watch"}</h3>
-                                    <div className='rate'>
-                                        <i className='fa fa-star'></i>
-                                        <i className='fa fa-star'></i>
-                                        <i className='fa fa-star'></i>
-                                        <i className='fa fa-star'></i>
-                                        <i className='fa fa-star'></i>
-                                    </div>
-                                    <div className='price'>
-                                        <h4>${200}.00 </h4>
-                                        <button onClick={() => ({})}>
-                                            <i className='fa fa-plus'></i>
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
+                                </Grid>
+                            )
+                        })}
+                    </Grid>
+                    <div className="d-flex mt-3 justify-content-end w-100">
+                        <div className='pagination'>
+                            <Stack spacing={2}>
+                                <Pagination count={10} />
+                            </Stack>
                         </div>
                     </div>
-                    <div >
-                        <div className='box'>
-                            <div className='product m-3'>
-                                <div className='img'>
-                                    <span className='discount'>{5}% Off</span>
-                                    <img src={"https://bonik-react.vercel.app/assets/images/products/headphone.png"} alt='' />
-                                    <div className='product-like'>
-                                        <label>{10}</label> <br />
-                                        <i className='fa-regular fa-heart'></i>
-                                    </div>
-                                </div>
-                                <div className='product-details'>
-                                    <h3>{"Watch"}</h3>
-                                    <div className='rate'>
-                                        <i className='fa fa-star'></i>
-                                        <i className='fa fa-star'></i>
-                                        <i className='fa fa-star'></i>
-                                        <i className='fa fa-star'></i>
-                                        <i className='fa fa-star'></i>
-                                    </div>
-                                    <div className='price'>
-                                        <h4>${200}.00 </h4>
-                                        <button onClick={() => ({})}>
-                                            <i className='fa fa-plus'></i>
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div >
-                        <div className='box'>
-                            <div className='product m-3'>
-                                <div className='img'>
-                                    <span className='discount'>{5}% Off</span>
-                                    <img src={"https://bonik-react.vercel.app/assets/images/products/headphone.png"} alt='' />
-                                    <div className='product-like'>
-                                        <label>{10}</label> <br />
-                                        <i className='fa-regular fa-heart'></i>
-                                    </div>
-                                </div>
-                                <div className='product-details'>
-                                    <h3>{"Watch"}</h3>
-                                    <div className='rate'>
-                                        <i className='fa fa-star'></i>
-                                        <i className='fa fa-star'></i>
-                                        <i className='fa fa-star'></i>
-                                        <i className='fa fa-star'></i>
-                                        <i className='fa fa-star'></i>
-                                    </div>
-                                    <div className='price'>
-                                        <h4>${200}.00 </h4>
-                                        <button onClick={() => ({})}>
-                                            <i className='fa fa-plus'></i>
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div >
-                        <div className='box'>
-                            <div className='product m-3'>
-                                <div className='img'>
-                                    <span className='discount'>{5}% Off</span>
-                                    <img src={"https://bonik-react.vercel.app/assets/images/products/headphone.png"} alt='' />
-                                    <div className='product-like'>
-                                        <label>{10}</label> <br />
-                                        <i className='fa-regular fa-heart'></i>
-                                    </div>
-                                </div>
-                                <div className='product-details'>
-                                    <h3>{"Watch"}</h3>
-                                    <div className='rate'>
-                                        <i className='fa fa-star'></i>
-                                        <i className='fa fa-star'></i>
-                                        <i className='fa fa-star'></i>
-                                        <i className='fa fa-star'></i>
-                                        <i className='fa fa-star'></i>
-                                    </div>
-                                    <div className='price'>
-                                        <h4>${200}.00 </h4>
-                                        <button onClick={() => ({})}>
-                                            <i className='fa fa-plus'></i>
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div >
-                        <div className='box'>
-                            <div className='product m-3'>
-                                <div className='img'>
-                                    <span className='discount'>{5}% Off</span>
-                                    <img src={"https://bonik-react.vercel.app/assets/images/products/headphone.png"} alt='' />
-                                    <div className='product-like'>
-                                        <label>{10}</label> <br />
-                                        <i className='fa-regular fa-heart'></i>
-                                    </div>
-                                </div>
-                                <div className='product-details'>
-                                    <h3>{"Watch"}</h3>
-                                    <div className='rate'>
-                                        <i className='fa fa-star'></i>
-                                        <i className='fa fa-star'></i>
-                                        <i className='fa fa-star'></i>
-                                        <i className='fa fa-star'></i>
-                                        <i className='fa fa-star'></i>
-                                    </div>
-                                    <div className='price'>
-                                        <h4>${200}.00 </h4>
-                                        <button onClick={() => ({})}>
-                                            <i className='fa fa-plus'></i>
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div >
-                        <div className='box'>
-                            <div className='product m-3'>
-                                <div className='img'>
-                                    <span className='discount'>{5}% Off</span>
-                                    <img src={"https://bonik-react.vercel.app/assets/images/products/headphone.png"} alt='' />
-                                    <div className='product-like'>
-                                        <label>{10}</label> <br />
-                                        <i className='fa-regular fa-heart'></i>
-                                    </div>
-                                </div>
-                                <div className='product-details'>
-                                    <h3>{"Watch"}</h3>
-                                    <div className='rate'>
-                                        <i className='fa fa-star'></i>
-                                        <i className='fa fa-star'></i>
-                                        <i className='fa fa-star'></i>
-                                        <i className='fa fa-star'></i>
-                                        <i className='fa fa-star'></i>
-                                    </div>
-                                    <div className='price'>
-                                        <h4>${200}.00 </h4>
-                                        <button onClick={() => ({})}>
-                                            <i className='fa fa-plus'></i>
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    
                 </div>
             </div>
         </section>

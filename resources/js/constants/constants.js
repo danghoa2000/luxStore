@@ -30,3 +30,5 @@ export const CATEGORY_TYPE = {
     PRODUCT: 0,
     BLOG: 1,
 };
+
+export const BASE_URL = "http://127.0.0.1:8000/"

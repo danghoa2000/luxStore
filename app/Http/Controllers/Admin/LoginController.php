@@ -44,18 +44,22 @@ class LoginController extends Controller
 
     public function login(Request $request)
     {
-        $user = User::where("email", $request->email)->first();
+        $user = User::whereHas('info', function ($query) use ($request) {
+            $query->where("email", $request->email);
+        })
+            ->where('status', config('constants.user.status.active'))
+            ->first();
         if (!$user) {
             return response()->json([
                 'status' => 'fails',
-                'message' => 'Unauthorized'
+                'message' => 'Incorrect account or password'
             ], Response::HTTP_UNAUTHORIZED);
         }
 
-        if (!password_verify($request->password, $user->password)) {
+        if (!password_verify($request->password, $user->info->password)) {
             return response()->json([
                 'status' => 'fails',
-                'message' => 'Unauthorized'
+                'message' => 'Incorrect account or password'
             ], Response::HTTP_UNAUTHORIZED);
         }
 

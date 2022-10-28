@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\CategoriesController;
 use App\Http\Controllers\Admin\LoginController;
 use App\Http\Controllers\Admin\HomeController;
+use App\Http\Controllers\DirectionController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -23,9 +24,13 @@ Route::group([
     Route::get('logout', [LoginController::class, 'logout']);
 
     Route::group([
-        'middleware' => 'auth:api', 'prefix' => 'admin'
+        'middleware' => ['auth:api', 'cors'], 'prefix' => 'admin'
     ], function () {
         Route::get('home', [HomeController::class, 'index']);
         Route::get('categories', [CategoriesController::class, 'index']);
     });
 });
+
+Route::get('get-province', [DirectionController::class, 'getProvince']);
+Route::get('get-district/{provinceId}', [DirectionController::class, 'getDistrict']);
+Route::get('get-commune/{districtId}', [DirectionController::class, 'getCommune']);

@@ -1,64 +1,189 @@
-@import "antd/dist/antd.css";
-#components-layout-demo-top-side-2 .logo {
-    float: left;
-    width: 120px;
-    height: 31px;
-    margin: 16px 24px 16px 0;
-    background: rgba(255, 255, 255, 0.3);
+.css-11b3ww9-MuiPaper-root-MuiAppBar-root {
+    background-color: #343a40 !important;
 }
 
-.ant-row-rtl #components-layout-demo-top-side-2 .logo {
-    float: right;
-    margin: 16px 0 16px 24px;
+.admin__header {
+    background-color: #343a40;
+    border-color: #4b545c;
 }
 
-.site-layout-background {
-    background: #fff;
+header {
+    border-bottom: 1px solid rgb(236, 238, 241, 0.2);
 }
 
-.logo {
-    float: left;
-    width: 120px;
-    height: 31px;
-    margin: 16px 24px 16px 0;
+.css-19r6kue-MuiContainer-root {
+    max-width: 100% !important;
 }
 
-.account {
-    float: right;
-    display: flex;
-    align-items: center;
-    height: 64px;
+.left__menu {
+    width: 250px;
+    background-color: #343a40;
     color: #fff;
+    height: calc(100vh - 70px);
+    overflow: hidden;
+    position: fixed;
+
+    > ul {
+        overflow-y: scroll;
+        height: 100%;
+        &:hover {
+            &::-webkit-scrollbar-thumb {
+                background-color: #707881;
+                box-shadow: inset 0 0 0 10px #707881;
+            }
+        }
+
+        &::-webkit-scrollbar,
+        &::-webkit-scrollbar-thumb {
+            width: 5px;
+            border-radius: 15px;
+            background-clip: padding-box;
+            border: 1px solid transparent;
+            background-color: transparent;
+        }
+
+        &::-webkit-scrollbar-thumb {
+            box-shadow: inset 0 0 0 10px transparent;
+        }
+    }
+}
+
+.main__content {
+    background-color: #454d55;
+    color: #fff;
+    min-height: calc(100vh - 70px);
+    width: calc(100% - 250px);
+    padding: 15px;
+    margin-left: 250px;
+    a,
+    p,
+    li {
+        color: #fff;
+    }
+
+    nav {
+        li {
+            p {
+                color: #adb5bd;
+            }
+        }
+    }
+}
+
+.css-kk1bwy-MuiButtonBase-root-MuiMenuItem-root:hover {
+    background-color: rgba(255, 255, 255, 0.1) !important;
+    color: #fff;
+}
+
+.css-r40f8v-MuiTypography-root,
+.css-u4tvz2-MuiFormLabel-root,
+.css-cveggr-MuiListItemIcon-root,
+.css-vqmohf-MuiButtonBase-root-MuiRadio-root {
+    color: #fff !important;
+}
+
+.card__admin {
+    background-color: #343a40;
+    color: #fff;
+    box-shadow: 0 0 1px rgb(0 0 0 / 13%), 0 1px 3px rgb(0 0 0 / 20%);
+    margin-bottom: 1rem;
+    width: 100%;
+    border-radius: 0.25rem;
+    padding: 25px;
+    > div {
+        background-color: transparent;
+    }
+}
+
+.table__dark {
+    background-color: #343a40;
+    box-shadow: 0 0 1px rgb(0 0 0 / 13%), 0 1px 3px rgb(0 0 0 / 20%);
+    td {
+        color: #fff;
+        background-color: #343a40;
+    }
+
+    th {
+        color: #fff;
+        background-color: #32363a;
+        font-weight: bold;
+    }
+}
+
+.paginate__admin {
+    color: #fff;
+    background-color: #32363a;
+
+    div,
+    input,
+    span,
+    svg,
+    p {
+        color: #fff;
+    }
+
+    p {
+        margin: 0;
+    }
+}
+
+.css-1ptx2yq-MuiInputBase-root-MuiInput-root {
+    color: #fff !important;
+
+    &::before {
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
+    }
+}
+
+.css-ittuaa-MuiInputAdornment-root,
+.css-1c2i806-MuiFormLabel-root-MuiInputLabel-root {
+    color: #fff !important;
+    font-weight: 500 !important;
+    font-size: 20px !important;
+}
+
+.required {
+    color: red;
+    margin-left: 5px;
+    &::before {
+        content: "*";
+    }
+}
+
+.MuiFormControl-root {
+    width: 100%;
+}
+
+.css-e80s1w-MuiGrid-root {
+    > .MuiGrid-item {
+        padding: 25px !important;
+    }
+}
+
+input::-webkit-input-placeholder {
     font-size: 14px;
-    line-height: 24px;
-    font-weight: 400;
+}
 
-    .account__info,
-    .account__logout {
-        display: flex;
-        align-items: center;
-    }
+.btn-cancel {
+    background-color: #e0e0e04a !important;
+}
 
-    .account__info {
-        .account__info__avatar {
-            width: 40px;
-            height: 40px;
-            overflow: hidden;
-            border: 2px solid rgb(189 159 159);
-            border-radius: 50%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            cursor: pointer;
-        }
+input[type="date"]::-webkit-inner-spin-button,
+input[type="date"]::-webkit-calendar-picker-indicator {
+    display: none;
+    -webkit-appearance: none;
+}
 
-        .account__info__name {
-            margin: 0 10px;
-            cursor: pointer;
-        }
-    }
+.direction {
+    position: absolute;
+    // bottom: -100%;
+    z-index: 10;
+    background: #454d55;
+    width: 100%;
+    box-shadow: rgb(43 52 69 / 10%) 0px 4px 16px;
+}
 
-    .account__logout {
-        cursor: pointer;
-    }
+.tab__header__address {
+    flex: 1;
+    color: #fff !important;
 }

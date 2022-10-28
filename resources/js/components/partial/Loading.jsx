@@ -1,10 +1,10 @@
+import { LinearProgress } from "@mui/material";
 import React from "react";
-import { Spin } from "antd";
 
 const Loading = () => {
     return (
-        <div className="loading-overlay text-center">
-            <Spin />
+        <div className="d-flex justify-center" style={{ minHeight: 500, width: '100%' }}>
+            <LinearProgress />
         </div>
     );
 };

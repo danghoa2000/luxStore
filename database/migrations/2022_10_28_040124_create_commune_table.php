@@ -13,9 +13,10 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('cart', function (Blueprint $table) {
+        Schema::create('commune', function (Blueprint $table) {
             $table->id();
-            $table->integer("product_id");
+            $table->string('name');
+            $table->integer('district_id');
             $table->timestamps();
         });
     }
@@ -27,6 +28,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('cart');
+        Schema::dropIfExists('commune');
     }
 };

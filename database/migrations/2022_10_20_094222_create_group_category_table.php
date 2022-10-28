@@ -13,12 +13,14 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('customer', function (Blueprint $table) {
+        Schema::create('group_category', function (Blueprint $table) {
             $table->id();
-            $table->string("customer_code")->nullable();
-            $table->integer('cart_id')->nullable();
+            $table->string('group_category_code')->unique();
+            $table->string('name')->nullable();
+            $table->integer("province_id")->nullable();
+            $table->integer("district_id")->nullable();
+            $table->integer("commune_id")->nullable();
             $table->timestamps();
-            $table->softDeletes();
         });
     }
 
@@ -29,6 +31,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('customer');
+        Schema::dropIfExists('group_category');
     }
 };

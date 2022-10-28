@@ -13,12 +13,11 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('customer', function (Blueprint $table) {
+        Schema::create('district', function (Blueprint $table) {
             $table->id();
-            $table->string("customer_code")->nullable();
-            $table->integer('cart_id')->nullable();
+            $table->string('name');
             $table->timestamps();
-            $table->softDeletes();
+            $table->integer('province_id');
         });
     }
 
@@ -29,6 +28,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('customer');
+        Schema::dropIfExists('district');
     }
 };

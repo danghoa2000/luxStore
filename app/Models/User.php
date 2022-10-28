@@ -44,4 +44,9 @@ class User extends Authenticatable
     ];
 
     protected $table = "users";
+
+    public function info()
+    {
+        return $this->hasOne(Info::class, 'id', 'info_id');
+    }
 }

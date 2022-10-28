@@ -1,6 +1,6 @@
 import React, { lazy, Suspense, useCallback, useEffect, useState } from "react";
 import { BrowserRouter, Navigate, Outlet, Route, Routes } from "react-router-dom";
-import AdminLayout from "./src/layout/admin/AdminLayout";
+import AdminLayout from "./src/layout/AdminLayout";
 import DefaultLayout from "./src/layout/DefaultLayout";
 
 import { createRoot } from "react-dom/client";
@@ -10,6 +10,7 @@ import PrivateAdminRoute from "./PrivateAdminRoute"
 
 import Data from "./components/client/Data"
 import Sdata from "./components/client/shops/Sdata"
+import Loading from "./components/partial/Loading";
 
 // admin
 const AdminLoginContainer = lazy(() => import("./src/page/admin/login/LoginContainer"));
@@ -17,7 +18,8 @@ const AdminHomeContainer = lazy(() => import("./src/page/admin/Home/HomeContaine
 const AdminCategoryContainer = lazy(() => import("./src/page/admin/categories/CategoryContainer"));
 const AdminCategoryCreateContainer = lazy(() => import("./src/page/admin/categories/create/CategoryCreateContainer"));
 const AdminCategoryUpdateContainer = lazy(() => import("./src/page/admin/categories/Update/CategoryUpdateContainer"));
-
+const AdminAccountContainer = lazy(() => import("./src/page/admin/account/AccountContainer"));
+const AdminAccountCreateContainer = lazy(() => import("./src/page/admin/account/create/AccountCreateContainer"));
 // ====
 
 const HomePageContainer = lazy(() => import("./src/page/client/HomePageContainer"));
@@ -85,24 +87,24 @@ const App = () => {
                             <Route index element={<Navigate to="/elite" />} />
                             <Route path="/elite" element={<DefaultLayout CartItem={CartItem} />} >
                                 <Route index element={
-                                    <Suspense fallback={<div> Loadding 99%... </div>}>
+                                    <Suspense fallback={<Loading />}>
                                         <HomePageContainer productItems={productItems} addToCart={addToCart} shopItems={shopItems} />
                                     </Suspense>}
                                 />
 
                                 <Route path='cart' element={
-                                    <Suspense fallback={<div> Loadding 99%... </div>}>
+                                    <Suspense fallback={<Loading />}>
                                         <CartContainer CartItem={CartItem} addToCart={addToCart} decreaseQty={decreaseQty} />
                                     </Suspense>}
                                 />
 
                                 <Route path='product' element={
-                                    <Suspense fallback={<div> Loadding 99%... </div>}>
+                                    <Suspense fallback={<Loading />}>
                                         <DetailContainer />
                                     </Suspense>}
                                 />
                                 <Route path="search" element={
-                                    <Suspense fallback={<div> Loadding 99%... </div>}>
+                                    <Suspense fallback={<Loading />}>
                                         <ProductContainer />
                                     </Suspense>
                                 } />
@@ -132,6 +134,30 @@ const App = () => {
                                         element={
                                             <PrivateAdminRoute roles={[ROLE.MANAGER, ROLE.EMPLOYEE]}>
                                                 <AdminCategoryCreateContainer />
+                                            </PrivateAdminRoute>
+                                        }
+                                    />
+                                    <Route path="update"
+                                        element={
+                                            <PrivateAdminRoute roles={[ROLE.MANAGER, ROLE.EMPLOYEE]}>
+                                                <AdminCategoryUpdateContainer />
+                                            </PrivateAdminRoute>
+                                        }
+                                    />
+                                </Route>
+                                <Route path="account"
+                                    element={<Outlet />}
+                                >
+                                    <Route index element={
+                                        <PrivateAdminRoute roles={[ROLE.MANAGER, ROLE.EMPLOYEE]}>
+                                            <AdminAccountContainer />
+                                        </PrivateAdminRoute>
+                                    } />
+
+                                    <Route path="create"
+                                        element={
+                                            <PrivateAdminRoute roles={[ROLE.MANAGER, ROLE.EMPLOYEE]}>
+                                                <AdminAccountCreateContainer />
                                             </PrivateAdminRoute>
                                         }
                                     />

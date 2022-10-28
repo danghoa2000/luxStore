@@ -13,12 +13,14 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('customer', function (Blueprint $table) {
+        Schema::create('order_detail', function (Blueprint $table) {
             $table->id();
-            $table->string("customer_code")->nullable();
-            $table->integer('cart_id')->nullable();
+            $table->string("order_code")->nullable();
+            $table->integer("product_id")->nullable();
+            $table->string("product_name")->nullable();
+            $table->integer("product_price")->nullable();
+            $table->integer("qty")->nullable();
             $table->timestamps();
-            $table->softDeletes();
         });
     }
 
@@ -29,6 +31,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('customer');
+        Schema::dropIfExists('order_detail');
     }
 };

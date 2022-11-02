@@ -9,6 +9,11 @@ export const ROLE = {
     CUSTOMER: 2,
 };
 
+export const STATUS = {
+    BLOCK: 0,
+    ACTIVE: 1,
+};
+
 export const MENU_MAPPING = {
     0: "",
     1: "categories",
@@ -31,4 +36,11 @@ export const CATEGORY_TYPE = {
     BLOG: 1,
 };
 
-export const BASE_URL = "http://127.0.0.1:8000/"
+export const CODE = {
+    HTTP_OK: 200,
+    HTTP_NOT_FOUND: 404,
+    UNPROCESSABLE_ENTITY: 422,
+};
+
+export const BASE_URL = "http://127.0.0.1:8000/";
+export const DATE_TIME = "Y-M-dd";

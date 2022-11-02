@@ -9,7 +9,7 @@ export const axiosClient = axios.create();
 const history = createBrowserHistory();
 
 axiosClient.defaults.headers = {
-    "Content-Type": "application/x-www-form-urlencoded",
+    "Content-Type": "application/json",
     Accept: "application/json",
 };
 

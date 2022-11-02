@@ -17,15 +17,13 @@ class Category extends Model
      * @var array<int, string>
      */
     protected $fillable = [
+        'category_code',
         'name',
-        'meta_title',
-        'slug',
         'parent_id',
-        'keyword',
-        'icon',
         'description',
         'image',
         'type',
+        'group_category_id',
         'created_by'
     ];
 

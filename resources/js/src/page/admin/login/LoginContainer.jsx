@@ -20,7 +20,7 @@ const LoginContainer = () => {
     }, [])
 
     const login = async (data) => {
-        await axiosClient.post(API_BASE_URL + LOGIN_API.LOGIN, {
+        await axiosClient.post(LOGIN_API.LOGIN, {
             email: data.email,
             password: data.password,
         },
@@ -32,7 +32,7 @@ const LoginContainer = () => {
         }).catch(err => {
             setisLoginFailed({
                 status: err.response.status,
-                message: err.response.statusText
+                message: err.response.data.message
             })
         });
     }

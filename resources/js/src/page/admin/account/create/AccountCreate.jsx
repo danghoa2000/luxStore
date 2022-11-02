@@ -1,35 +1,29 @@
 import { AccountCircle, AddHomeWork, BorderColor, CalendarMonth, Call, Email, PermContactCalendar } from '@mui/icons-material';
-import { Box, Breadcrumbs, Button, FormControl, FormControlLabel, FormHelperText, FormLabel, Grid, Input, InputAdornment, InputLabel, Radio, RadioGroup, Tab, Tabs, TextField, Typography } from '@mui/material';
+import { Box, Breadcrumbs, Button, CircularProgress, FormControl, FormControlLabel, FormHelperText, FormLabel, Grid, Input, InputAdornment, InputLabel, Radio, RadioGroup, Tab, Tabs, TextField, Typography } from '@mui/material';
 import React, { useCallback, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
 import { Link, useNavigate } from 'react-router-dom';
 import Direction from '../../../../../components/partial/Direction';
+import ShowSnackbars from '../../../../../components/partial/ShowSnackbars';
 
 const AccountCreate = (props) => {
     const {
         redirectBack,
         handleCreate,
         toggleDirection,
-        setToggleDirection
+        setToggleDirection,
+        handleSubmit,
+        control,
+        reset,
+        setValue,
+        getValues,
+        errors,
+        loadding,
+        showNoti,
+        status,
+        setShowNoti
     } = props;
-
-    const { handleSubmit, control, setValue, getValues } = useForm({
-        shouldUnregister: false,
-        defaultValues: {
-            user_code: '',
-            full_name: '',
-            email: '',
-            telephone: '',
-            birthday: '',
-            address: '',
-            direction: '',
-            role: 0,
-            status: 1,
-            province_id: '',
-            district_id: '',
-            commune_id: '',
-        }
-    });
 
     return <>
         <div className="d-flex justify-content-between align-items-center">
@@ -76,6 +70,7 @@ const AccountCreate = (props) => {
                                     />
                                 </FormControl>}
                         />
+                        {errors.user_code && <p className='text-danger'>{errors.user_code.message}</p>}
 
                     </Grid>
                     <Grid item xs={6}>
@@ -100,6 +95,7 @@ const AccountCreate = (props) => {
                                     />
                                 </FormControl>}
                         />
+                        {errors.full_name && <p className='text-danger'>{errors.full_name.message}</p>}
                     </Grid>
                     <Grid item xs={6}>
                         <Controller
@@ -123,6 +119,7 @@ const AccountCreate = (props) => {
                                     />
                                 </FormControl>}
                         />
+                        {errors.email && <p className='text-danger'>{errors.email.message}</p>}
                     </Grid>
                 </Grid>
             </div>
@@ -138,7 +135,7 @@ const AccountCreate = (props) => {
                             control={control}
                             render={({ field }) =>
                                 <FormControl variant="standard">
-                                    <InputLabel htmlFor="telephone">Telephone <span className='required'></span></InputLabel>
+                                    <InputLabel htmlFor="telephone">Telephone</InputLabel>
                                     <Input
                                         id="telephone"
                                         {...field}
@@ -162,7 +159,7 @@ const AccountCreate = (props) => {
                             control={control}
                             render={({ field }) =>
                                 <FormControl variant="standard">
-                                    <InputLabel htmlFor="birthday">Birthday <span className='required'></span></InputLabel>
+                                    <InputLabel htmlFor="birthday">Birthday</InputLabel>
                                     <Input
                                         id="birthday"
                                         {...field}
@@ -286,12 +283,18 @@ const AccountCreate = (props) => {
 
             </div>
             <div className='d-flex justify-content-center w-100'>
-                <Button variant="contained" type='submit' className='m-1'>Create</Button>
-                <Button variant="contained" className='m-1 btn-cancel'>Cancle</Button>
+                <Button variant="contained" type='submit' className='m-1' disabled={loadding}>{loadding &&
+                    <CircularProgress
+                        disableShrink
+                        style={{ color: 'white', width: '14px', height: '14px', margin: '0 5px 0 0' }} />}
+                    Create
+                </Button>
+                <Button variant="contained" type='reset' className='m-1 btn-cancel'
+                    onClick={() => reset()}
+                >Clear</Button>
             </div>
-
         </form>
-
+        {showNoti && <ShowSnackbars type={status.type} message={status.message} setShowNoti={setShowNoti} />}
     </>
 };
 

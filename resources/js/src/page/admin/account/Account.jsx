@@ -1,7 +1,8 @@
-import { AddCircleSharp, Filter, Search, StarBorder } from '@mui/icons-material';
+import { AddCircleSharp, BorderColor, Description, Filter, FolderOpen, ReportProblem, RestoreFromTrash, Search, StarBorder } from '@mui/icons-material';
 import {
     Breadcrumbs,
     Button,
+    Checkbox,
     Collapse,
     List,
     ListItemButton,
@@ -17,76 +18,38 @@ import {
     TableRow,
     Typography
 } from '@mui/material';
+import { t } from 'i18next';
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import ShowSnackbars from '../../../../components/partial/ShowSnackbars';
+import EnhancedTableHead from '../../../../components/partial/table/EnhancedTableHead';
+import { ACCOUNT_API } from '../../../../constants/api';
+import { ACCOUNT_URL } from '../../../../constants/pathUrl';
+import FormFilter from './FormFilter';
 
-const Account = () => {
-    const [open, setOpen] = React.useState(true);
-    const navligate = useNavigate();
-    const handleClick = () => {
-        setOpen(!open);
-    };
-    const columns = [
-        { id: 'name', label: 'Name', minWidth: 170 },
-        { id: 'code', label: 'ISO\u00a0Code', minWidth: 100 },
-        {
-            id: 'population',
-            label: 'Population',
-            minWidth: 170,
-            align: 'right',
-            format: (value) => value.toLocaleString('en-US'),
-        },
-        {
-            id: 'size',
-            label: 'Size\u00a0(km\u00b2)',
-            minWidth: 170,
-            align: 'right',
-            format: (value) => value.toLocaleString('en-US'),
-        },
-        {
-            id: 'density',
-            label: 'Density',
-            minWidth: 170,
-            align: 'right',
-            format: (value) => value.toFixed(2),
-        },
-    ];
+const Account = (props) => {
+    const {
+        open,
+        setOpen,
+        order,
+        orderBy,
+        page,
+        rowsPerPage,
+        handleRequestSort,
+        handleChangePage,
+        handleChangeRowsPerPage,
+        redirectAccountCreate,
+        headCells,
+        accountList,
+        showNoti,
+        status,
+        setShowNoti,
+        setSearchFiled,
+        totalRecord,
+        deleteAccount
+    } = props;
 
-    function createData(name, code, population, size) {
-        const density = population / size;
-        return { name, code, population, size, density };
-    }
-
-    const rows = [
-        createData('India', 'IN', 1324171354, 3287263),
-        createData('China', 'CN', 1403500365, 9596961),
-        createData('Italy', 'IT', 60483973, 301340),
-        createData('United States', 'US', 327167434, 9833520),
-        createData('Canada', 'CA', 37602103, 9984670),
-        createData('Australia', 'AU', 25475400, 7692024),
-        createData('Germany', 'DE', 83019200, 357578),
-        createData('Ireland', 'IE', 4857000, 70273),
-        createData('Mexico', 'MX', 126577691, 1972550),
-        createData('Japan', 'JP', 126317000, 377973),
-        createData('France', 'FR', 67022000, 640679),
-        createData('United Kingdom', 'GB', 67545757, 242495),
-        createData('Russia', 'RU', 146793744, 17098246),
-        createData('Nigeria', 'NG', 200962417, 923768),
-        createData('Brazil', 'BR', 210147125, 8515767),
-    ];
-
-    const [page, setPage] = React.useState(0);
-    const [rowsPerPage, setRowsPerPage] = React.useState(10);
-
-    const handleChangePage = (event, newPage) => {
-        setPage(newPage);
-    };
-
-    const handleChangeRowsPerPage = (event) => {
-        setRowsPerPage(+event.target.value);
-        setPage(0);
-    };
-
+    const navigate = useNavigate();
     return (
         <>
             <div className="d-flex justify-content-between align-items-center">
@@ -101,58 +64,95 @@ const Account = () => {
                 </Breadcrumbs>
             </div>
             <div style={{ marginBottom: 10 }}>
-                <Button variant="contained" onClick={handleClick}>Filter <Search sx={{ marginLeft: 1 }} /></Button>
-                <Button variant="contained" onClick={() => navligate('/admin/account/create')} sx={{ marginLeft: 2 }} >Create <AddCircleSharp sx={{ marginLeft: 1 }} /></Button>
+                <Button variant="contained" onClick={() => setOpen(!open)}>Filter <Search sx={{ marginLeft: 1 }} /></Button>
+                <Button variant="contained" onClick={() => redirectAccountCreate()} sx={{ marginLeft: 2 }} >Create <AddCircleSharp sx={{ marginLeft: 1 }} /></Button>
             </div>
             <Collapse in={open} timeout="auto" unmountOnExit>
                 <div className="card__admin">
+                    <FormFilter
+                        headCells={headCells}
+                        setSearchFiled={setSearchFiled}
+                    />
                 </div>
             </Collapse>
 
             <div className="card__admin">
-                <Paper sx={{ width: '100%', overflow: 'hidden' }}>
+                <Paper style={{ margin: '-25px' }}>
                     <TableContainer sx={{ maxHeight: 440 }} className='table__dark'>
-                        <Table stickyHeader aria-label="sticky table">
-                            <TableHead>
-                                <TableRow>
-                                    {columns.map((column) => (
-                                        <TableCell
-                                            key={column.id}
-                                            align={column.align}
-                                            style={{ minWidth: column.minWidth }}
-                                        >
-                                            {column.label}
-                                        </TableCell>
-                                    ))}
-                                </TableRow>
-                            </TableHead>
+                        <Table
+                            sx={{ minWidth: 750 }}
+                            aria-labelledby="tableTitle"
+                            size={'medium'}
+                            stickyHeader
+                            aria-label="sticky table"
+                        >
+                            <EnhancedTableHead
+                                order={order}
+                                orderBy={orderBy}
+                                onRequestSort={handleRequestSort}
+                                rowCount={accountList.length || 0}
+                                headCells={headCells}
+                            />
                             <TableBody>
-                                {rows
-                                    .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                                    .map((row) => {
+                                {
+                                    accountList.length > 0 ? accountList.map((row, index) => {
                                         return (
-                                            <TableRow hover role="checkbox" tabIndex={-1} key={row.code}>
-                                                {columns.map((column) => {
-                                                    const value = row[column.id];
-                                                    return (
-                                                        <TableCell key={column.id} align={column.align}>
-                                                            {column.format && typeof value === 'number'
-                                                                ? column.format(value)
-                                                                : value}
+                                            <TableRow
+                                                hover
+                                                key={index}
+                                            >
+                                                <TableCell
+                                                    component="td"
+                                                    scope="row"
+                                                    padding="normal"
+                                                >
+                                                    <BorderColor color='primary' className='action'
+                                                        onClick={() => {
+                                                            navigate(ACCOUNT_URL.UPDATE, {
+                                                                state: {
+                                                                    id: row.id,
+                                                                },
+                                                            })
+                                                        }}
+                                                    />
+                                                    <span className='tool'></span>
+                                                    <RestoreFromTrash color='error' className='action'
+                                                        onClick={() => deleteAccount(row.id)}
+                                                    />
+                                                </TableCell>
+                                                {
+                                                    Object.keys(headCells).map((headCell, index) => (
+                                                        <TableCell
+                                                            component="td"
+                                                            key={index}
+                                                            scope="row"
+                                                            padding="normal"
+                                                        >
+                                                            {headCells[headCell].render
+                                                                ?
+                                                                headCells[headCell].convert ?
+                                                                    t(headCells[headCell].render(row)) :
+                                                                    headCells[headCell].render(row)
+
+                                                                : row[headCell]}
                                                         </TableCell>
-                                                    );
-                                                })}
+                                                    ))
+                                                }
                                             </TableRow>
                                         );
-                                    })}
+                                    }) :
+                                        <TableCell align="center" colSpan={Object.keys(headCells).length} style={{ opacity: .5, height: '100px' }}>
+                                            <ReportProblem /> No data
+                                        </TableCell>
+                                }
                             </TableBody>
                         </Table>
                     </TableContainer>
                     <TablePagination
-                        className='paginate__admin'
                         rowsPerPageOptions={[5, 10, 25]}
                         component="div"
-                        count={rows.length}
+                        className='paginate__admin'
+                        count={totalRecord}
                         rowsPerPage={rowsPerPage}
                         page={page}
                         onPageChange={handleChangePage}
@@ -160,7 +160,7 @@ const Account = () => {
                     />
                 </Paper>
             </div>
-
+            {showNoti && <ShowSnackbars type={status.type} message={status.message} setShowNoti={setShowNoti} />}
         </>
 
     );

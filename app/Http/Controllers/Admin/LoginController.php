@@ -47,8 +47,8 @@ class LoginController extends Controller
         $user = User::whereHas('info', function ($query) use ($request) {
             $query->where("email", $request->email);
         })
-            ->where('status', config('constants.user.status.active'))
-            ->first();
+        ->where('status', config('constants.user.status.active'))
+        ->first();
         if (!$user) {
             return response()->json([
                 'status' => 'fails',

@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('category_code')->unique();
             $table->string('name')->nullable();
             $table->integer('parent_id')->nullable();
-            $table->integer('groupCategory_id')->nullable();
+            $table->integer('group_category_id')->nullable();
             $table->text('description')->nullable();
             $table->string('image', 255)->nullable();
             $table->tinyInteger('type')->default(0);

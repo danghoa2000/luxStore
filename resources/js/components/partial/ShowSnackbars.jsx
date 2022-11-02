@@ -5,7 +5,8 @@ import * as React from 'react';
 export default function ShowSnackbars(props) {
     const {
         message,
-        type
+        type,
+        setShowNoti,
     } = props;
     const [open, setOpen] = React.useState(true);
 
@@ -15,6 +16,7 @@ export default function ShowSnackbars(props) {
         }
 
         setOpen(false);
+        setShowNoti(false);
     };
 
     return (

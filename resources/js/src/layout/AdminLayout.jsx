@@ -20,7 +20,7 @@ import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import AdbIcon from '@mui/icons-material/Adb';
-import { AccountBalance, Cloud, ContentCopy, ContentCut, ContentPaste, Dashboard, ExpandLess, StarBorder } from "@mui/icons-material";
+import { AccountBalance, BookOnline, Cloud, ContentCopy, ContentCut, ContentPaste, Dashboard, ExpandLess, StarBorder } from "@mui/icons-material";
 import "../../../sass/admin.scss";
 
 const AdminLayout = () => {
@@ -39,7 +39,7 @@ const AdminLayout = () => {
     const redirect = (item) => navigate(item);
 
     const logout = useCallback(async () => {
-        await axiosClient.get(API_BASE_URL + LOGIN_API.LOGOUT);
+        await axiosClient.get(LOGIN_API.LOGOUT);
         setAuth({});
         window.sessionStorage.clear(ADMIN_SESSION_ACCESS_TOKEN);
         navigate("/admin/login");
@@ -223,6 +223,19 @@ const AdminLayout = () => {
                                 </ListItemIcon>
                                 <ListItemText>Account</ListItemText>
                             </MenuItem>
+                            <MenuItem onClick={() => redirect('manufacturer')}>
+                                <ListItemIcon>
+                                    <BookOnline fontSize="small" />
+                                </ListItemIcon>
+                                <ListItemText>Manufacturer</ListItemText>
+                            </MenuItem>
+                            <MenuItem onClick={() => redirect('group-category')}>
+                                <ListItemIcon>
+                                    <BookOnline fontSize="small" />
+                                </ListItemIcon>
+                                <ListItemText>Group category</ListItemText>
+                            </MenuItem>
+
                         </MenuList>
                     </Box>
                     <Box className="main__content">

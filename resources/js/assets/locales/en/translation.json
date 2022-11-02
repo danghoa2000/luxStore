@@ -1,0 +1,52 @@
+{
+    "validate": {
+        "required": "The {{name}} field is required.",
+        "email": "The {{name}} must be a valid email address."
+    },
+    "placehoder": "Enter your {{name}}",
+    "account": {
+        "list": {
+            "table": {
+                "user_code": "User code",
+                "role": "Role",
+                "status": "Status",
+                "full_name": "Full name",
+                "email": "Email",
+                "telephone": "Telephone",
+                "birthday": "Birthday",
+                "province": "Province",
+                "district": "District",
+                "commune": "Commune",
+                "address": "Address"
+            }
+        }
+    },
+    "manufacturer": {
+        "list": {
+            "table": {
+                "manufacturer_code": "Manufacturer code",
+                "status": "Status",
+                "name": "Name",
+                "telephone": "Telephone",
+                "address": "Address"
+            }
+        }
+    },
+    "group_category": {
+        "list": {
+            "table": {
+                "group_category_code": "Group category code",
+                "status": "Status",
+                "name": "Name"
+            }
+        }
+    },
+    "role": {
+        "1": "Manage",
+        "0": "Employee"
+    },
+    "status": {
+        "1": "Active",
+        "0": "Block"
+    }
+}

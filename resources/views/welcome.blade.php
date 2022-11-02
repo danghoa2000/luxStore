@@ -19,7 +19,7 @@
             }
         </style>
         @viteReactRefresh
-        @vite(['resources/sass/app.scss', 'resources/js/app.jsx'])
+        @vite(['resources/sass/app.scss', 'resources/js/index.jsx'])
     </head>
     <body class="antialiased">
         <div id="App"></div>

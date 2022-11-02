@@ -17,9 +17,7 @@ return new class extends Migration
             $table->id();
             $table->string('group_category_code')->unique();
             $table->string('name')->nullable();
-            $table->integer("province_id")->nullable();
-            $table->integer("district_id")->nullable();
-            $table->integer("commune_id")->nullable();
+            $table->integer('status')->nullable()->default(1);
             $table->timestamps();
         });
     }

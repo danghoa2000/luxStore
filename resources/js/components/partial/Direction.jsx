@@ -15,20 +15,20 @@ const Direction = (props) => {
         getValues
     } = props;
     const [value, setValueTab] = useState(0);
-    const handleChange = (event, newValue) => {
-        setValueTab(newValue);
-    };
-
     const [province, setProvince] = useState([]);
     const [district, setDistrict] = useState([]);
     const [commune, setCommune] = useState([]);
-    const [provinceSelected, setProvinceSelected] = useState(() => (getValues('province_id') ? {id: getValues('province_id')} : {}));
-    const [districtSelected, setDistrictSelected] = useState(() => (getValues('district_id') ? {id: getValues('district_id')} : {}));
-    const [communeSelected, setCommuneSelected] = useState(() => (getValues('commune_id') ? {id: getValues('commune_id')} : {}));
+    const [provinceSelected, setProvinceSelected] = useState({});
+    const [districtSelected, setDistrictSelected] = useState({});
+    const [communeSelected, setCommuneSelected] = useState({});
     const [error, setError] = useState(false);
     const [message, setMassage] = useState('');
     const [clickedOutside, setClickedOutside] = useState(false);
     const myRef = useRef();
+
+    const handleChange = (event, newValue) => {
+        setValueTab(newValue);
+    };
 
     const getProvince = useCallback(() => {
         axiosClient.get(API_BASE_URL + "api/get-province")
@@ -70,6 +70,23 @@ const Direction = (props) => {
     }, []);
 
     useEffect(() => {
+        const sessionDirection = JSON.parse(sessionStorage.getItem('sessionDirectionAccount'));
+        if (sessionDirection && Object.keys(sessionDirection).length !== 0) {
+            if (sessionDirection.province) {
+                setProvinceSelected({ id: sessionDirection.province.id, name: sessionDirection.province.name })
+            }
+
+            if (sessionDirection.district) {
+                setDistrictSelected({ id: sessionDirection.district.id, name: sessionDirection.district.name })
+            }
+
+            if (sessionDirection.commune) {
+                setCommuneSelected({ id: sessionDirection.commune.id, name: sessionDirection.commune.name })
+            }
+        }
+    }, []);
+
+    useEffect(() => {
         if (Object.keys(provinceSelected).length !== 0) {
             getDistrict();
         }
@@ -96,14 +113,20 @@ const Direction = (props) => {
         let address = '';
         if (Object.keys(provinceSelected).length !== 0) {
             address += provinceSelected.name;
+            setValue('province_id', provinceSelected.id || '');
         }
         if (Object.keys(districtSelected).length !== 0) {
             address += ', ' + districtSelected.name;
+            setValue('district_id', districtSelected?.id || '');
         }
         if (Object.keys(communeSelected).length !== 0) {
             address += ', ' + communeSelected.name;
+            setValue('commune_id', communeSelected?.id || '');
         }
         setValue(field, address);
+
+
+
     }, [provinceSelected, districtSelected, communeSelected]);
 
     return (
@@ -124,10 +147,12 @@ const Direction = (props) => {
                     {province && province.map(item => (
                         <ListItem disablePadding key={item.id}
                             onClick={() => {
-                                setProvinceSelected({id: item.id, name: item.name});
+                                setProvinceSelected({ id: item.id, name: item.name });
                                 setDistrictSelected({});
                                 setCommuneSelected({});
                                 setValueTab(1);
+                                sessionStorage.setItem('sessionDirectionAccount',
+                                    JSON.stringify({ province: { id: item.id, name: item.name } }))
                             }}>
                             <ListItemButton>
                                 <ListItemText primary={item.name} />
@@ -142,8 +167,13 @@ const Direction = (props) => {
                     {district && district.map(item => (
                         <ListItem disablePadding key={item.id}
                             onClick={() => {
-                                setDistrictSelected({id: item.id, name: item.name});
+                                setDistrictSelected({ id: item.id, name: item.name });
                                 setValueTab(2);
+                                sessionStorage.setItem('sessionDirectionAccount',
+                                    JSON.stringify({
+                                        ...JSON.parse(sessionStorage.getItem('sessionDirectionAccount')),
+                                        district: { id: item.id, name: item.name }
+                                    }))
 
                             }}>
                             <ListItemButton>
@@ -160,7 +190,12 @@ const Direction = (props) => {
                     {commune && commune.map(item => (
                         <ListItem disablePadding key={item.id}
                             onClick={() => {
-                                setCommuneSelected({id: item.id, name: item.name});
+                                setCommuneSelected({ id: item.id, name: item.name });
+                                sessionStorage.setItem('sessionDirectionAccount',
+                                    JSON.stringify({
+                                        ...JSON.parse(sessionStorage.getItem('sessionDirectionAccount')),
+                                        commune: { id: item.id, name: item.name }
+                                    }))
                             }}>
                             <ListItemButton>
                                 <ListItemText primary={item.name} />

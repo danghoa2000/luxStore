@@ -1,25 +1,16 @@
-import { Breadcrumb } from 'antd';
-import { Content } from 'antd/lib/layout/layout';
+import { Paper, Typography } from '@mui/material';
 import React from 'react';
+import { Outlet } from 'react-router-dom';
 
 const Home = () => {
     return (
         <>
-            <Breadcrumb style={{ margin: '16px 0' }}>
-                <Breadcrumb.Item>Home</Breadcrumb.Item>
-                <Breadcrumb.Item>List</Breadcrumb.Item>
-                <Breadcrumb.Item>App</Breadcrumb.Item>
-            </Breadcrumb>
-            <Content
-                className="site-layout-background"
-                style={{
-                    padding: 24,
-                    margin: 0,
-                    minHeight: 280,
-                }}
-            >
-                Home
-            </Content>
+            <div className="d-flex justify-content-between align-items-center">
+                <Typography variant="h4" gutterBottom>
+                    Home
+                </Typography>
+            </div>
+            <Outlet />
         </>
     );
 };

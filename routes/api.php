@@ -1,8 +1,11 @@
 <?php
 
+use App\Http\Controllers\Admin\AccountController;
 use App\Http\Controllers\Admin\CategoriesController;
+use App\Http\Controllers\Admin\GroupCategoryController;
 use App\Http\Controllers\Admin\LoginController;
 use App\Http\Controllers\Admin\HomeController;
+use App\Http\Controllers\admin\ManufacturerController;
 use App\Http\Controllers\DirectionController;
 use Illuminate\Support\Facades\Route;
 
@@ -20,14 +23,32 @@ use Illuminate\Support\Facades\Route;
 Route::group([
     'prefix' => 'auth'
 ], function () {
-    Route::post('login', [LoginController::class, 'login']);
-    Route::get('logout', [LoginController::class, 'logout']);
+    Route::post('login', [LoginController::class, 'login'])->name('login');
+    Route::get('logout', [LoginController::class, 'logout'])->name('logout');
 
     Route::group([
         'middleware' => ['auth:api', 'cors'], 'prefix' => 'admin'
     ], function () {
-        Route::get('home', [HomeController::class, 'index']);
-        Route::get('categories', [CategoriesController::class, 'index']);
+        Route::get('home', [HomeController::class, 'index'])->name('home');
+        Route::get('categories', [CategoriesController::class, 'index'])->name('category');
+
+        Route::get('account', [AccountController::class, 'index'])->name('account');
+        Route::post('account/create', [AccountController::class, 'store'])->name('account.create');
+        Route::put('account/update', [AccountController::class, 'update'])->name('account.update');
+        Route::get('account/show', [AccountController::class, 'show'])->name('account.show');
+        Route::delete('account/delete/{id}', [AccountController::class, 'destroy'])->name('account.delete');
+
+        Route::get('manufacturer', [ManufacturerController::class, 'index'])->name('manufacturer');
+        Route::post('manufacturer/create', [ManufacturerController::class, 'store'])->name('manufacturer.create');
+        Route::put('manufacturer/update', [ManufacturerController::class, 'update'])->name('manufacturer.update');
+        Route::get('manufacturer/show', [ManufacturerController::class, 'show'])->name('manufacturer.show');
+        Route::delete('manufacturer/delete/{id}', [ManufacturerController::class, 'destroy'])->name('manufacturer.delete');
+
+        Route::get('group-category', [GroupCategoryController::class, 'index'])->name('groupCategory');
+        Route::post('group-category/create', [GroupCategoryController::class, 'store'])->name('groupCategory.create');
+        Route::put('group-category/update', [GroupCategoryController::class, 'update'])->name('groupCategory.update');
+        Route::get('group-category/show', [GroupCategoryController::class, 'show'])->name('groupCategory.show');
+        Route::delete('group-category/delete/{id}', [GroupCategoryController::class, 'destroy'])->name('groupCategory.delete');
     });
 });
 

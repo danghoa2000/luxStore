@@ -7,7 +7,7 @@ import AccountUpdate from './AccountUpdate';
 import * as Yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useTranslation } from 'react-i18next';
-import { CODE } from '../../../../../constants/constants';
+import { CODE, ROLE, STATUS } from '../../../../../constants/constants';
 import { useEffect } from 'react';
 
 const AccountUpdateContainer = () => {
@@ -72,7 +72,7 @@ const AccountUpdateContainer = () => {
                 birthday: '',
                 address: '',
                 direction: '',
-                role: ROLE.EMPlOYEE
+                role: ROLE.EMPLOYEE,
                 status: STATUS.ACTIVE,
                 province_id: '',
                 district_id: '',
@@ -108,7 +108,8 @@ const AccountUpdateContainer = () => {
                 if (response.data.code === CODE.HTTP_NOT_FOUND) {
                     setStatus({ type: 'error', message: response.data.message });
                 };
-                setShowNoti(true)
+                setShowNoti(true);
+                setLoading(false);
             }).catch(({ response }) => {
                 if (response.status === CODE.UNPROCESSABLE_ENTITY) {
                     Object.keys(response.data.errors).forEach(element => {
@@ -116,7 +117,8 @@ const AccountUpdateContainer = () => {
                     });
                 }
                 setStatus({ type: 'error', message: response.data.message });
-                setShowNoti(true)
+                setShowNoti(true);
+                setLoading(false);
             });
     }, []);
 

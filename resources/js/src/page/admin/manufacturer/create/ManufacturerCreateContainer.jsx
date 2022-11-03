@@ -7,7 +7,7 @@ import ManufacturerCreate from './ManufacturerCreate';
 import * as Yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useTranslation } from 'react-i18next';
-import { CODE } from '../../../../../constants/constants';
+import { CODE, STATUS } from '../../../../../constants/constants';
 
 const ManufacturerCreateContainer = () => {
 
@@ -55,6 +55,8 @@ const ManufacturerCreateContainer = () => {
                     reset();
                 }
                 setShowNoti(true)
+                setLoading(false);
+
             }).catch(({ response }) => {
                 if (response.status === CODE.UNPROCESSABLE_ENTITY) {
                     Object.keys(response.data.errors).forEach(element => {
@@ -63,6 +65,7 @@ const ManufacturerCreateContainer = () => {
                 }
                 setStatus({ type: 'error', message: response.data ? response.data.message : 'Server error' });
                 setShowNoti(true)
+                setLoading(false);
             });
     }, []);
 

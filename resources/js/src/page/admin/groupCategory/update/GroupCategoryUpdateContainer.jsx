@@ -87,6 +87,7 @@ const GroupCategoryUpdateContainer = () => {
                     setStatus({ type: 'error', message: response.data.message });
                 };
                 setShowNoti(true)
+                setLoading(false);
             }).catch(({ response }) => {
                 if (response.status === CODE.UNPROCESSABLE_ENTITY) {
                     Object.keys(response.data.errors).forEach(element => {
@@ -95,6 +96,7 @@ const GroupCategoryUpdateContainer = () => {
                 }
                 setStatus({ type: 'error', message: response.data ? response.data.message : 'Server error' });
                 setShowNoti(true)
+                setLoading(false);
             });
     }, []);
 

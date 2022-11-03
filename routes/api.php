@@ -6,6 +6,7 @@ use App\Http\Controllers\Admin\GroupCategoryController;
 use App\Http\Controllers\Admin\LoginController;
 use App\Http\Controllers\Admin\HomeController;
 use App\Http\Controllers\admin\ManufacturerController;
+use App\Http\Controllers\admin\ShippingController;
 use App\Http\Controllers\DirectionController;
 use Illuminate\Support\Facades\Route;
 
@@ -30,7 +31,12 @@ Route::group([
         'middleware' => ['auth:api', 'cors'], 'prefix' => 'admin'
     ], function () {
         Route::get('home', [HomeController::class, 'index'])->name('home');
+        
         Route::get('categories', [CategoriesController::class, 'index'])->name('category');
+        Route::post('categories/create', [CategoriesController::class, 'store'])->name('category.create');
+        Route::put('categories/update', [CategoriesController::class, 'update'])->name('category.update');
+        Route::get('categories/show', [CategoriesController::class, 'show'])->name('category.show');
+        Route::delete('categories/delete/{id}', [CategoriesController::class, 'destroy'])->name('category.delete');
 
         Route::get('account', [AccountController::class, 'index'])->name('account');
         Route::post('account/create', [AccountController::class, 'store'])->name('account.create');
@@ -49,6 +55,11 @@ Route::group([
         Route::put('group-category/update', [GroupCategoryController::class, 'update'])->name('groupCategory.update');
         Route::get('group-category/show', [GroupCategoryController::class, 'show'])->name('groupCategory.show');
         Route::delete('group-category/delete/{id}', [GroupCategoryController::class, 'destroy'])->name('groupCategory.delete');
+
+        Route::get('shipping', [ShippingController::class, 'index'])->name('shipping');
+        Route::post('shipping/create', [ShippingController::class, 'store'])->name('shipping.create');
+        Route::put('shippingy/update', [ShippingController::class, 'update'])->name('shipping.update');
+        Route::get('shipping/show', [ShippingController::class, 'show'])->name('shipping.show');
     });
 });
 

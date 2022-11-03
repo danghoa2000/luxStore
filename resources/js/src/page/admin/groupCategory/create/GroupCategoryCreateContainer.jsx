@@ -35,7 +35,7 @@ const GroupCategoryCreateContainer = () => {
         = useForm({
             shouldUnregister: false,
             defaultValues: {
-                groub_category_code: '',
+                group_category_code: '',
                 name: '',
                 status: STATUS.ACTIVE,
             },
@@ -53,6 +53,7 @@ const GroupCategoryCreateContainer = () => {
                     reset();
                 }
                 setShowNoti(true)
+                setLoading(false);
             }).catch(({ response }) => {
                 if (response.status === CODE.UNPROCESSABLE_ENTITY) {
                     Object.keys(response.data.errors).forEach(element => {
@@ -61,6 +62,7 @@ const GroupCategoryCreateContainer = () => {
                 }
                 setStatus({ type: 'error', message: response.data ? response.data.message : 'Server error' });
                 setShowNoti(true)
+                setLoading(false);
             });
     }, []);
 

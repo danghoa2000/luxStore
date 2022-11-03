@@ -13,26 +13,17 @@ axiosClient.defaults.headers = {
     Accept: "application/json",
 };
 
-// axiosClient.defaults.headers["Access-Control-Allow-Methods"] = "*";
-// axiosClient.defaults.headers["Access-Control-Allow-Headers"] = "*";
-// axiosClient.defaults.headers["Access-Control-Allow-Origin"] = "*";
-// axiosClient.defaults.baseURL = 'http://127.0.0.1:8000/';
-
-let token = getAccessToken();
-const paths = history.location.pathname;
-const arrayPaths = paths.split("/");
-if (arrayPaths[1] === "admin") {
-    token = window.sessionStorage.getItem(ADMIN_SESSION_ACCESS_TOKEN);
-}
-if (token) {
-    // axiosClient.defaults.headers["Access-Control-Allow-Origin"] = "*";
-    axiosClient.defaults.headers["Authorization"] = `Bearer ${token}`;
-
-        // "Origin, X-Requested-With, Content-Type, Accept";
-    // axios.defaults.headers["Content-type"] = "Application/json";
-}
-
 axiosClient.interceptors.request.use(function (config) {
+    let token = getAccessToken();
+    const paths = history.location.pathname;
+    const arrayPaths = paths.split("/");
+    if (arrayPaths[1] === "admin") {
+        token = window.sessionStorage.getItem(ADMIN_SESSION_ACCESS_TOKEN);
+    }
+    if (token) {
+        config.headers["Authorization"] = `Bearer ${token}`;
+    }
+
     return config;
 });
 

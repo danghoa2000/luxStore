@@ -6,7 +6,11 @@ export const LOGIN_API = {
 };
 
 export const CATEGORIES_API = {
-    LIST: "api/auth/admin/categories",
+    LIST: API_BASE_URL + "api/auth/admin/categories",
+    CREATE: API_BASE_URL + "api/auth/admin/categories/create",
+    UPDATE: API_BASE_URL + "api/auth/admin/categories/update",
+    SHOW: API_BASE_URL + "api/auth/admin/categories/show",
+    DELETE: API_BASE_URL + "api/auth/admin/categories/delete",
 };
 
 export const ACCOUNT_API = {
@@ -31,4 +35,11 @@ export const GROUP_CATEGORY_API = {
     UPDATE: API_BASE_URL + "api/auth/admin/group-category/update",
     SHOW: API_BASE_URL + "api/auth/admin/group-category/show",
     DELETE: API_BASE_URL + "api/auth/admin/group-category/delete",
+};
+
+export const SHIPPING_API = {
+    LIST: API_BASE_URL + "api/auth/admin/shipping",
+    CREATE: API_BASE_URL + "api/auth/admin/shipping/create",
+    UPDATE: API_BASE_URL + "api/auth/admin/shipping/update",
+    SHOW: API_BASE_URL + "api/auth/admin/shipping/show",
 };

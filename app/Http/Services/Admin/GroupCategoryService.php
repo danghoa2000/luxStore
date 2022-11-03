@@ -15,10 +15,13 @@ class GroupCategoryService
             'group_category_code',
             'name',
             'status',
-        )->filter($request);
+        )->filter($request)
+        ->where('status', config('constants.user.status.active'));
         $total = count($groupCategories->get());
-        $groupCategories->limit($request->pageSize)
-            ->offset(($request->currentPage) * $request->pageSize);
+        if ($request->pageSize) {
+            $groupCategories->limit($request->pageSize)
+                ->offset(($request->currentPage) * ($request->pageSize));
+        }
 
         return response([
             'groupCategories' => $groupCategories->get(),
@@ -80,7 +83,7 @@ class GroupCategoryService
                     'name' => $request->name,
                     'status' => $request->status,
                 ]);
-                
+
                 DB::commit();
                 return response([
                     'groupCategory' => $groupCategory,

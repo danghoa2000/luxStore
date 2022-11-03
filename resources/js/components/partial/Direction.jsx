@@ -125,8 +125,6 @@ const Direction = (props) => {
         }
         setValue(field, address);
 
-
-
     }, [provinceSelected, districtSelected, communeSelected]);
 
     return (
@@ -158,7 +156,6 @@ const Direction = (props) => {
                                 <ListItemText primary={item.name} />
                             </ListItemButton>
                         </ListItem>
-
                     ))}
                 </List>
             </TabPanel>
@@ -174,7 +171,6 @@ const Direction = (props) => {
                                         ...JSON.parse(sessionStorage.getItem('sessionDirectionAccount')),
                                         district: { id: item.id, name: item.name }
                                     }))
-
                             }}>
                             <ListItemButton>
                                 <ListItemText primary={item.name} />
@@ -201,7 +197,6 @@ const Direction = (props) => {
                                 <ListItemText primary={item.name} />
                             </ListItemButton>
                         </ListItem>
-
                     ))}
                 </List>
             </TabPanel>

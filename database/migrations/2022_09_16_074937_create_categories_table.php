@@ -24,6 +24,7 @@ return new class extends Migration
             $table->tinyInteger('type')->default(0);
             // 0 - thư mục sản phẩm, 1 - thư mục bài đăng.
             $table->integer('created_by')->nullable();
+            $table->integer('status')->nullable()->default(1);
             $table->timestamps();
             $table->softDeletes();
         });

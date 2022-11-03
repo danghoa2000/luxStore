@@ -58,6 +58,7 @@ const GroupCategoryUpdate = (props) => {
                                     <InputLabel htmlFor="userCode">Group category code <span className='required'></span></InputLabel>
                                     <Input
                                         {...field}
+                                        disabled
                                         startAdornment={
                                             <InputAdornment position="start">
                                                 <AccountCircle />

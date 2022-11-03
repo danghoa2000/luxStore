@@ -15,9 +15,11 @@ import Loading from "./components/partial/Loading";
 // admin
 const AdminLoginContainer = lazy(() => import("./src/page/admin/login/LoginContainer"));
 const AdminHomeContainer = lazy(() => import("./src/page/admin/Home/HomeContainer"));
-// const AdminCategoryContainer = lazy(() => import("./src/page/admin/categories/CategoryContainer"));
-// const AdminCategoryCreateContainer = lazy(() => import("./src/page/admin/categories/create/CategoryCreateContainer"));
-// const AdminCategoryUpdateContainer = lazy(() => import("./src/page/admin/categories/Update/CategoryUpdateContainer"));
+
+const AdminCategoryContainer = lazy(() => import("./src/page/admin/categories/CategoryContainer"));
+const AdminCategoryCreateContainer = lazy(() => import("./src/page/admin/categories/create/CategoryCreateContainer"));
+const AdminCategoryUpdateContainer = lazy(() => import("./src/page/admin/categories/Update/CategoryUpdateContainer"));
+
 const AdminAccountContainer = lazy(() => import("./src/page/admin/account/AccountContainer"));
 const AdminAccountCreateContainer = lazy(() => import("./src/page/admin/account/create/AccountCreateContainer"));
 const AdminAccountUpdateContainer = lazy(() => import("./src/page/admin/account/update/AccountUpdateContainer"));
@@ -29,6 +31,8 @@ const AdminManufacturerUpdateContainer = lazy(() => import("./src/page/admin/man
 const AdminGroupCategoryContainer = lazy(() => import("./src/page/admin/groupCategory/GroupCategoryContainer"));
 const AdminGroupCategoryCreateContainer = lazy(() => import("./src/page/admin/groupCategory/create/GroupCategoryCreateContainer"));
 const AdminGroupCategoryUpdateContainer = lazy(() => import("./src/page/admin/groupCategory/update/GroupCategoryUpdateContainer"));
+
+const AdminShippingContainer = lazy(() => import("./src/page/admin/shipping/ShippingContainer"));
 // ====
 
 const HomePageContainer = lazy(() => import("./src/page/client/HomePageContainer"));
@@ -133,7 +137,7 @@ const App = () => {
                                         </PrivateAdminRoute>
                                     }
                                 />
-                                {/* <Route path="categories"
+                                <Route path="categories"
                                     element={<Outlet />}
                                 >
                                     <Route index element={
@@ -156,7 +160,7 @@ const App = () => {
                                             </PrivateAdminRoute>
                                         }
                                     />
-                                </Route> */}
+                                </Route>
                                 <Route path="account"
                                     element={<Outlet />}
                                 >
@@ -247,6 +251,38 @@ const App = () => {
                                             <Suspense fallback={<Loading />}>
                                                 <PrivateAdminRoute roles={[ROLE.MANAGER, ROLE.EMPLOYEE]}>
                                                     <AdminGroupCategoryUpdateContainer />
+                                                </PrivateAdminRoute>
+                                            </Suspense>
+
+                                        }
+                                    />
+                                </Route>
+                                <Route path="shipping"
+                                    element={<Outlet />}
+                                >
+                                    <Route index element={
+                                        <Suspense fallback={<Loading />}>
+                                            <PrivateAdminRoute roles={[ROLE.MANAGER, ROLE.EMPLOYEE]}>
+                                                <AdminShippingContainer />
+                                            </PrivateAdminRoute>
+                                        </Suspense>}
+
+                                    />
+
+                                    <Route path="create"
+                                        element={
+                                            <Suspense fallback={<Loading />}>
+                                                <PrivateAdminRoute roles={[ROLE.MANAGER, ROLE.EMPLOYEE]}>
+                                                    <AdminManufacturerCreateContainer />
+                                                </PrivateAdminRoute>
+                                            </Suspense>
+                                        }
+                                    />
+                                    <Route path="update"
+                                        element={
+                                            <Suspense fallback={<Loading />}>
+                                                <PrivateAdminRoute roles={[ROLE.MANAGER, ROLE.EMPLOYEE]}>
+                                                    <AdminManufacturerUpdateContainer />
                                                 </PrivateAdminRoute>
                                             </Suspense>
 

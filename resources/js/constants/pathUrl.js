@@ -19,3 +19,16 @@ export const GROUP_CATEGORY_URL = {
     CREATE: "/admin/group-category/create",
 };
 
+export const CATEGORY_URL = {
+    LIST: "/admin/categories",
+    SHOW: "/admin/categories/show",
+    UPDATE: "/admin/categories/update",
+    CREATE: "/admin/categories/create",
+};
+
+export const SHIPPING_URL = {
+    LIST: "/admin/shipping",
+    SHOW: "/admin/shipping/show",
+    UPDATE: "/admin/shipping/update",
+    CREATE: "/admin/shipping/create",
+};

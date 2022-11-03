@@ -1,26 +1,23 @@
 import React, { useEffect, useState } from 'react';
 import { useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { CATEGORIES_API, GROUP_CATEGORY_API } from '../../../../constants/api';
+import { SHIPPING_API } from '../../../../constants/api';
 import { axiosClient } from '../../../../hooks/useHttp';
-import Category from './Category';
 import TableHeader from './TableHeader';
 import { CODE } from '../../../../constants/constants';
+import Shipping from './Shipping';
 
-const CategoryContainer = () => {
-
-    const [categoryList, setCategoryList] = useState([]);
+const ShippingContainer = () => {
+    const [shippingList, setShippingList] = useState([]);
     const [open, setOpen] = React.useState(true);
     const [order, setOrder] = React.useState('asc');
-    const [orderBy, setOrderBy] = React.useState('category_code');
+    const [orderBy, setOrderBy] = React.useState('shipping_code');
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(5);
     const [status, setStatus] = useState({});
     const [showNoti, setShowNoti] = useState(false);
     const [searchField, setSearchFiled] = useState({});
     const [totalRecord, setTotalRecode] = useState(0);
-    const [groupCategoryList, setGroupCategoryList] = useState([]);
-    const [isCompleteSetting, setCompleteSetting] = useState(false);
 
     const navligate = useNavigate();
     const headCells = { ...TableHeader }
@@ -40,10 +37,10 @@ const CategoryContainer = () => {
         setPage(0);
     };
 
-    const redirectCategoryCreate = useCallback(() => {
-        navligate('/admin/categories/create');
+    const redirectShippingCreate = useCallback(() => {
+        navligate('/admin/shipping/create');
     }, [])
-    const getCategoryList = useCallback(() => {
+    const getShippingList = useCallback(() => {
 
         const paramater = {
             searchField: searchField,
@@ -53,13 +50,13 @@ const CategoryContainer = () => {
             currentDirection: order,
         };
 
-        axiosClient.get(CATEGORIES_API.LIST, {
+        axiosClient.get(SHIPPING_API.LIST, {
             params: {
                 ...paramater
             }
         }).then((response) => {
             if (response.status === CODE.HTTP_OK) {
-                setCategoryList(response.data.categories);
+                setShippingList(response.data.shippings);
                 setTotalRecode(response.data.total);
             }
         }).catch((response) => {
@@ -69,16 +66,16 @@ const CategoryContainer = () => {
     }, [order, orderBy, page, rowsPerPage, searchField]);
 
     useEffect(() => {
-        getCategoryList()
+        getShippingList()
     }, [order, orderBy, page, rowsPerPage, searchField])
 
-    const deleteCategory = useCallback((id) => {
-        axiosClient.delete(CATEGORIES_API.DELETE + '/' + id)
+    const deleteShipping = useCallback((id) => {
+        axiosClient.delete(SHIPPING_API.DELETE + '/' + id)
             .then((response) => {
                 if (response.status === CODE.HTTP_OK) {
                     setStatus({ type: 'success', message: response.data.message });
                     setShowNoti(true)
-                    getCategoryList()
+                    getShippingList()
                 }
                 if (response.data.code === CODE.HTTP_NOT_FOUND) {
                     setShowNoti(true)
@@ -94,26 +91,7 @@ const CategoryContainer = () => {
                 setShowNoti(true)
             });
     }, []);
-
-    const getGroupCategory = useCallback(() => {
-        axiosClient.get(GROUP_CATEGORY_API.LIST)
-            .then((response) => {
-                if (response.status === CODE.HTTP_OK) {
-                    setGroupCategoryList(response.data.groupCategories);
-                }
-            }).catch((response) => {
-                console.log(response);
-                setStatus({ type: 'error', message: response.data ? response.data.message : 'Server error' });
-                setShowNoti(true)
-            });
-    }, [])
-
-    useEffect(() => {
-        getGroupCategory();
-        setCompleteSetting(true)
-    }, [])
-
-    return <Category
+    return <Shipping
         open={open}
         setOpen={setOpen}
         order={order}
@@ -123,18 +101,18 @@ const CategoryContainer = () => {
         handleRequestSort={handleRequestSort}
         handleChangePage={handleChangePage}
         handleChangeRowsPerPage={handleChangeRowsPerPage}
-        redirectCategoryCreate={redirectCategoryCreate}
+        redirectShippingCreate={redirectShippingCreate}
         headCells={headCells}
-        categoryList={categoryList}
+        shippingList={shippingList}
         showNoti={showNoti}
         status={status}
         setShowNoti={setShowNoti}
+        setStatus={setStatus}
         setSearchFiled={setSearchFiled}
         totalRecord={totalRecord}
-        deleteCategory={deleteCategory}
-        groupCategoryList={groupCategoryList}
-        isCompleteSetting={isCompleteSetting}
+        deleteShipping={deleteShipping}
+        getShippingList={getShippingList}
     />
 };
 
-export default CategoryContainer;
+export default ShippingContainer;

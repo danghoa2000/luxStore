@@ -41,6 +41,28 @@
             }
         }
     },
+    "category": {
+        "list": {
+            "table": {
+                "category_code": "Category code",
+                "status": "Status",
+                "name": "Name",
+                "group_category_id": "Group category",
+                "description": "Description",
+                "created_by": "CreatedBy"
+            }
+        }
+    },
+    "shipping": {
+        "list": {
+            "table": {
+                "province": "Province",
+                "district": "District",
+                "commune": "Commune",
+                "price": "Price"
+            }
+        }
+    },
     "role": {
         "1": "Manage",
         "0": "Employee"

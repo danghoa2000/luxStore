@@ -23,10 +23,10 @@ import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import ShowSnackbars from '../../../../components/partial/ShowSnackbars';
 import EnhancedTableHead from '../../../../components/partial/table/EnhancedTableHead';
-import { CATEGORY_URL } from '../../../../constants/pathUrl';
+import { PRODUCT_URL } from '../../../../constants/pathUrl';
 import FormFilter from './FormFilter';
 
-const Category = (props) => {
+const Product = (props) => {
     const {
         open,
         setOpen,
@@ -37,16 +37,15 @@ const Category = (props) => {
         handleRequestSort,
         handleChangePage,
         handleChangeRowsPerPage,
-        redirectCategoryCreate,
+        redirectProductCreate,
         headCells,
-        categoryList,
+        productList,
         showNoti,
         status,
         setShowNoti,
         setSearchFiled,
         totalRecord,
-        deleteCategory,
-        groupCategoryList,
+        deleteProduct,
     } = props;
 
     const navigate = useNavigate();
@@ -54,25 +53,24 @@ const Category = (props) => {
         <>
             <div className="d-flex justify-content-between align-items-center">
                 <Typography variant="h4" gutterBottom>
-                    Category
+                    Product
                 </Typography>
                 <Breadcrumbs separator="›" aria-label="breadcrumb">
                     <Link to="/admin">
                         Home
                     </Link>
-                    <Typography>Category</Typography>
+                    <Typography>Product</Typography>
                 </Breadcrumbs>
             </div>
             <div style={{ marginBottom: 10 }}>
                 <Button variant="contained" onClick={() => setOpen(!open)}>Filter <Search sx={{ marginLeft: 1 }} /></Button>
-                <Button variant="contained" onClick={() => redirectCategoryCreate()} sx={{ marginLeft: 2 }} >Create <AddCircleSharp sx={{ marginLeft: 1 }} /></Button>
+                <Button variant="contained" onClick={() => redirectProductCreate()} sx={{ marginLeft: 2 }} >Create <AddCircleSharp sx={{ marginLeft: 1 }} /></Button>
             </div>
             <Collapse in={open} timeout="auto" unmountOnExit>
                 <div className="card__admin">
                     <FormFilter
                         headCells={headCells}
                         setSearchFiled={setSearchFiled}
-                        groupCategoryList={groupCategoryList}
                     />
                 </div>
             </Collapse>
@@ -95,7 +93,7 @@ const Category = (props) => {
                             />
                             <TableBody>
                                 {
-                                    categoryList.length > 0 ? categoryList.map((row, index) => {
+                                    productList.length > 0 ? productList.map((row, index) => {
                                         return (
                                             <TableRow
                                                 hover
@@ -108,7 +106,7 @@ const Category = (props) => {
                                                 >
                                                     <BorderColor color='primary' className='action'
                                                         onClick={() => {
-                                                            navigate(CATEGORY_URL.UPDATE, {
+                                                            navigate(PRODUCT_URL.UPDATE, {
                                                                 state: {
                                                                     id: row.id,
                                                                 },
@@ -117,7 +115,7 @@ const Category = (props) => {
                                                     />
                                                     <span className='tool'></span>
                                                     <RestoreFromTrash color='error' className='action'
-                                                        onClick={() => deleteCategory(row.id)}
+                                                        onClick={() => deleteProduct(row.id)}
                                                     />
                                                 </TableCell>
                                                 {
@@ -166,4 +164,4 @@ const Category = (props) => {
     );
 };
 
-export default Category;
+export default Product;

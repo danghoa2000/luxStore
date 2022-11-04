@@ -1,54 +1,28 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { CATEGORIES_API, GROUP_CATEGORY_API } from '../../../../../constants/api';
 import { axiosClient } from '../../../../../hooks/useHttp';
-import CategoryUpdate from './CategoryUpdate';
+import ProductCreate from './ProductCreate';
 import * as Yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useTranslation } from 'react-i18next';
 import { CODE, STATUS } from '../../../../../constants/constants';
-import { useEffect } from 'react';
 
-const CategoryUpdateContainer = () => {
-
+const ProductCreateContainer = () => {
     const navigate = useNavigate();
     const [toggleDirection, setToggleDirection] = useState(false);
     const [loading, setLoading] = useState(false);
+    const [t] = useTranslation();
     const [status, setStatus] = useState({});
     const [showNoti, setShowNoti] = useState(false);
-    const [category, setCategory] = useState();
-    const { state } = useLocation();
-    const [groupCategoryList, setGroupCategoryList] = useState([]);
-
-    const [t] = useTranslation();
+    const [groupCategorytList, setGroupCategoryList] = useState([]);
     const redirectBack = () => navigate(-1);
 
     const validationSchema = Yup.object().shape({
         category_code: Yup.string().
-            required(t('validate.required', { name: 'Category code' })),
+            required(t('validate.required', { name: 'Product code' })),
     });
-
-    const getCategory = useCallback(() => {
-        axiosClient.get(CATEGORIES_API.SHOW, {
-            params: {
-                id: state.id
-            }
-        }).then((response) => {
-            setCategory(response.data.category);
-            if (response.data.code === CODE.HTTP_NOT_FOUND) {
-                setStatus({ type: 'error', message: response.data.message });
-                setShowNoti(true)
-            };
-        }).catch(({ response }) => {
-            setStatus({ type: 'error', message: response.data ? response.data.message : 'Server error' });
-            setShowNoti(true)
-        });
-    }, [state])
-
-    useEffect(() => {
-        getCategory();
-    }, [state])
 
     const {
         handleSubmit,
@@ -70,19 +44,17 @@ const CategoryUpdateContainer = () => {
             resolver: yupResolver(validationSchema),
         });
 
-    const handleUpdate = useCallback((value) => {
+    const handleCreate = useCallback((value) => {
         setLoading(true);
-        axiosClient.put(CATEGORIES_API.UPDATE, {
+        axiosClient.post(CATEGORIES_API.CREATE, {
             ...value
         })
             .then((response) => {
                 if (response.status === CODE.HTTP_OK) {
                     setStatus({ type: 'success', message: response.data.message });
+                    reset();
                 }
-                if (response.data.code === CODE.HTTP_NOT_FOUND) {
-                    setStatus({ type: 'error', message: response.data.message });
-                };
-                setShowNoti(true)
+                setShowNoti(true);
                 setLoading(false);
             }).catch(({ response }) => {
                 if (response.status === CODE.UNPROCESSABLE_ENTITY) {
@@ -91,7 +63,7 @@ const CategoryUpdateContainer = () => {
                     });
                 }
                 setStatus({ type: 'error', message: response.data ? response.data.message : 'Server error' });
-                setShowNoti(true)
+                setShowNoti(true);
                 setLoading(false);
             });
     }, []);
@@ -112,19 +84,9 @@ const CategoryUpdateContainer = () => {
         getGroupCategory();
     }, [])
 
-    useEffect(() => {
-        setValue('id', category ? category.id : '')
-        setValue('category_code', category ? category.category_code : '')
-        setValue('name', category ? category.name : '')
-        setValue('status', category ? category.status : -1)
-        setValue('group_category_id', category ? category.group_category_id : '')
-        setValue('description', category ? category.description : '')
-    }, [category]);
-
-
-    return <CategoryUpdate
+    return <ProductCreate
         redirectBack={redirectBack}
-        handleUpdate={handleUpdate}
+        handleCreate={handleCreate}
         toggleDirection={toggleDirection}
         setToggleDirection={setToggleDirection}
         handleSubmit={handleSubmit}
@@ -137,8 +99,8 @@ const CategoryUpdateContainer = () => {
         showNoti={showNoti}
         status={status}
         setShowNoti={setShowNoti}
-        groupCategoryList={groupCategoryList}
+        groupCategorytList={groupCategorytList}
     />
 };
 
-export default CategoryUpdateContainer;
+export default ProductCreateContainer;

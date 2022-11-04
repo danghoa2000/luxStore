@@ -63,6 +63,20 @@
             }
         }
     },
+    "product": {
+        "list": {
+            "table": {
+                "image": "Image",
+                "product_code": "Product code",
+                "status": "Status",
+                "name": "Name",
+                "price": "Price",
+                "category_id": "Category",
+                "manufacturer_id": "Manufacturer",
+                "description": "Description"
+            }
+        }
+    },
     "role": {
         "1": "Manage",
         "0": "Employee"

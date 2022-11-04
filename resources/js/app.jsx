@@ -3,7 +3,6 @@ import { BrowserRouter, Navigate, Outlet, Route, Routes } from "react-router-dom
 import AdminLayout from "./src/layout/AdminLayout";
 import DefaultLayout from "./src/layout/DefaultLayout";
 
-import { createRoot } from "react-dom/client";
 import { AuthContext } from "./hooks/useAuth";
 import { ROLE } from "./constants/constants";
 import PrivateAdminRoute from "./PrivateAdminRoute"
@@ -31,6 +30,10 @@ const AdminManufacturerUpdateContainer = lazy(() => import("./src/page/admin/man
 const AdminGroupCategoryContainer = lazy(() => import("./src/page/admin/groupCategory/GroupCategoryContainer"));
 const AdminGroupCategoryCreateContainer = lazy(() => import("./src/page/admin/groupCategory/create/GroupCategoryCreateContainer"));
 const AdminGroupCategoryUpdateContainer = lazy(() => import("./src/page/admin/groupCategory/update/GroupCategoryUpdateContainer"));
+
+const AdminProductContainer = lazy(() => import("./src/page/admin/Product/ProductContainer"));
+const AdminProductCreateContainer = lazy(() => import("./src/page/admin/Product/create/ProductCreateContainer"));
+const AdminProductUpdateContainer = lazy(() => import("./src/page/admin/Product/update/ProductUpdateContainer"));
 
 const AdminShippingContainer = lazy(() => import("./src/page/admin/shipping/ShippingContainer"));
 // ====
@@ -283,6 +286,39 @@ const App = () => {
                                             <Suspense fallback={<Loading />}>
                                                 <PrivateAdminRoute roles={[ROLE.MANAGER, ROLE.EMPLOYEE]}>
                                                     <AdminManufacturerUpdateContainer />
+                                                </PrivateAdminRoute>
+                                            </Suspense>
+
+                                        }
+                                    />
+                                </Route>
+
+                                <Route path="product"
+                                    element={<Outlet />}
+                                >
+                                    <Route index element={
+                                        <Suspense fallback={<Loading />}>
+                                            <PrivateAdminRoute roles={[ROLE.MANAGER, ROLE.EMPLOYEE]}>
+                                                <AdminProductContainer />
+                                            </PrivateAdminRoute>
+                                        </Suspense>}
+
+                                    />
+
+                                    <Route path="create"
+                                        element={
+                                            <Suspense fallback={<Loading />}>
+                                                <PrivateAdminRoute roles={[ROLE.MANAGER, ROLE.EMPLOYEE]}>
+                                                    <AdminProductCreateContainer />
+                                                </PrivateAdminRoute>
+                                            </Suspense>
+                                        }
+                                    />
+                                    <Route path="update"
+                                        element={
+                                            <Suspense fallback={<Loading />}>
+                                                <PrivateAdminRoute roles={[ROLE.MANAGER, ROLE.EMPLOYEE]}>
+                                                    <AdminProductUpdateContainer />
                                                 </PrivateAdminRoute>
                                             </Suspense>
 

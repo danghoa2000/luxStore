@@ -20,7 +20,7 @@ const GroupCategoryContainer = () => {
     const [searchField, setSearchFiled] = useState({});
     const [totalRecord, setTotalRecode] = useState(0);
 
-    const navligate = useNavigate();
+    const navigate = useNavigate();
     const headCells = { ...TableHeader }
 
     const handleRequestSort = (event, property) => {
@@ -39,7 +39,7 @@ const GroupCategoryContainer = () => {
     };
 
     const redirectGroupCategoryCreate = useCallback(() => {
-        navligate('/admin/group-category/create');
+        navigate('/admin/group-category/create');
     }, [])
     const getGroupCategoryList = useCallback(() => {
 

@@ -57,8 +57,11 @@ const ShippingCreate = (props) => {
                     Object.keys(response.data.errors).forEach(element => {
                         setError(element, { type: 'custom', message: Object.values(response.data.errors[element]) })
                     });
-                }
-                setStatus({ type: 'error', message: response.data ? response.data.message : 'Server error' });
+                } else if (response.data.code === CODE.HTTP_FOUND) {
+                    setStatus({ type: 'warning', message: response.data.message });
+                } else {
+                    setStatus({ type: 'error', message: response.data ? response.data.message : 'Server error' });
+                };
                 setShowNoti(true);
                 setLoading(false);
             });

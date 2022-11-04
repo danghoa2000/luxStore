@@ -107,7 +107,7 @@ header {
         color: #fff;
         background-color: #32363a;
         font-weight: bold;
-
+        border: 1px solid rgba(224, 224, 224, 1) !important;
         > span {
             width: 150px;
             justify-content: center;
@@ -280,4 +280,15 @@ input::-webkit-input-placeholder {
 }
 .css-1x51dt5-MuiInputBase-input-MuiInput-input.Mui-disabled {
     -webkit-text-fill-color: #fff !important;
+}
+
+table {
+    input {
+        font-size: 12px !important;
+        color: #fff !important;
+    }
+
+    .css-1tcs2i1-MuiInputBase-root-MuiInput-root:before {
+        border-bottom-color: #7c70705e !important;
+    }
 }

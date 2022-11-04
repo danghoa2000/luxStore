@@ -6,6 +6,7 @@ use App\Http\Controllers\Admin\GroupCategoryController;
 use App\Http\Controllers\Admin\LoginController;
 use App\Http\Controllers\Admin\HomeController;
 use App\Http\Controllers\admin\ManufacturerController;
+use App\Http\Controllers\admin\ProductController;
 use App\Http\Controllers\admin\ShippingController;
 use App\Http\Controllers\DirectionController;
 use Illuminate\Support\Facades\Route;
@@ -58,8 +59,14 @@ Route::group([
 
         Route::get('shipping', [ShippingController::class, 'index'])->name('shipping');
         Route::post('shipping/create', [ShippingController::class, 'store'])->name('shipping.create');
-        Route::put('shippingy/update', [ShippingController::class, 'update'])->name('shipping.update');
+        Route::put('shipping/update', [ShippingController::class, 'update'])->name('shipping.update');
         Route::get('shipping/show', [ShippingController::class, 'show'])->name('shipping.show');
+
+        Route::get('product', [ProductController::class, 'index'])->name('product');
+        Route::post('product/create', [ProductController::class, 'store'])->name('product.create');
+        Route::put('product/update', [ProductController::class, 'update'])->name('product.update');
+        Route::get('product/show', [ProductController::class, 'show'])->name('product.show');
+        Route::delete('product/delete/{id}', [ProductController::class, 'destroy'])->name('product.delete');
     });
 });
 

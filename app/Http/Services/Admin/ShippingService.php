@@ -25,6 +25,16 @@ class ShippingService
     {
         try {
             DB::beginTransaction();
+            $checkExistShipping = Shipping::where('province_id', $request->province_id)
+                ->where('district_id', $request->district_id)
+                ->where('commune_id', $request->commune_id)
+                ->first();
+            if ($checkExistShipping) {
+                return response([
+                    'message' => 'This shipping has already created, Create shipping error!',
+                    'code' => Response::HTTP_FOUND
+                ], Response::HTTP_FOUND);
+            }
             $shipping = Shipping::create([
                 'province_id' => $request->province_id,
                 'district_id' => $request->district_id,
@@ -39,6 +49,7 @@ class ShippingService
                 'code' => Response::HTTP_OK
             ], Response::HTTP_OK);
         } catch (\Throwable $th) {
+            dd(111);
             DB::rollBack();
             return response([
                 'message' => 'Create shipping error!',
@@ -72,9 +83,6 @@ class ShippingService
             $shipping = Shipping::find($request->id);
             if ($shipping) {
                 $shipping->update([
-                    'province_id' => $request->province_id,
-                    'district_id' => $request->district_id,
-                    'commune_id' => $request->commune_id,
                     'price' => $request->price,
                 ]);
 

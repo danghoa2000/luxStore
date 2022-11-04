@@ -43,3 +43,10 @@ export const SHIPPING_API = {
     UPDATE: API_BASE_URL + "api/auth/admin/shipping/update",
     SHOW: API_BASE_URL + "api/auth/admin/shipping/show",
 };
+
+export const PRODUCT_API = {
+    LIST: API_BASE_URL + "api/auth/admin/product",
+    CREATE: API_BASE_URL + "api/auth/admin/product/create",
+    UPDATE: API_BASE_URL + "api/auth/admin/product/update",
+    SHOW: API_BASE_URL + "api/auth/admin/product/show",
+};

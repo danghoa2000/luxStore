@@ -20,7 +20,7 @@ const AccountContainer = () => {
     const [searchField, setSearchFiled] = useState({});
     const [totalRecord, setTotalRecode] = useState(0);
 
-    const navligate = useNavigate();
+    const navigate = useNavigate();
     const headCells = { ...TableHeader }
 
     const handleRequestSort = (event, property) => {
@@ -39,7 +39,7 @@ const AccountContainer = () => {
     };
 
     const redirectAccountCreate = useCallback(() => {
-        navligate('/admin/account/create');
+        navigate('/admin/account/create');
     }, [])
     const getAccountList = useCallback(() => {
 

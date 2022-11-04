@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { useCallback } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { SHIPPING_API } from '../../../../constants/api';
 import { axiosClient } from '../../../../hooks/useHttp';
 import TableHeader from './TableHeader';
@@ -19,7 +18,6 @@ const ShippingContainer = () => {
     const [searchField, setSearchFiled] = useState({});
     const [totalRecord, setTotalRecode] = useState(0);
 
-    const navligate = useNavigate();
     const headCells = { ...TableHeader }
 
     const handleRequestSort = (event, property) => {
@@ -37,11 +35,7 @@ const ShippingContainer = () => {
         setPage(0);
     };
 
-    const redirectShippingCreate = useCallback(() => {
-        navligate('/admin/shipping/create');
-    }, [])
     const getShippingList = useCallback(() => {
-
         const paramater = {
             searchField: searchField,
             pageSize: rowsPerPage,
@@ -69,18 +63,19 @@ const ShippingContainer = () => {
         getShippingList()
     }, [order, orderBy, page, rowsPerPage, searchField])
 
-    const deleteShipping = useCallback((id) => {
-        axiosClient.delete(SHIPPING_API.DELETE + '/' + id)
+    const handleUpdate = useCallback((value) => {
+        axiosClient.put(SHIPPING_API.UPDATE, {
+            ...value
+        })
             .then((response) => {
                 if (response.status === CODE.HTTP_OK) {
                     setStatus({ type: 'success', message: response.data.message });
-                    setShowNoti(true)
                     getShippingList()
                 }
                 if (response.data.code === CODE.HTTP_NOT_FOUND) {
-                    setShowNoti(true)
                     setStatus({ type: 'error', message: response.data.message });
                 };
+                setShowNoti(true)
             }).catch(({ response }) => {
                 if (response.status === CODE.UNPROCESSABLE_ENTITY) {
                     Object.keys(response.data.errors).forEach(element => {
@@ -90,7 +85,7 @@ const ShippingContainer = () => {
                 setStatus({ type: 'error', message: response.data ? response.data.message : 'Server error' });
                 setShowNoti(true)
             });
-    }, []);
+    }, [order, orderBy, page, rowsPerPage, searchField]);
     return <Shipping
         open={open}
         setOpen={setOpen}
@@ -101,7 +96,6 @@ const ShippingContainer = () => {
         handleRequestSort={handleRequestSort}
         handleChangePage={handleChangePage}
         handleChangeRowsPerPage={handleChangeRowsPerPage}
-        redirectShippingCreate={redirectShippingCreate}
         headCells={headCells}
         shippingList={shippingList}
         showNoti={showNoti}
@@ -110,7 +104,7 @@ const ShippingContainer = () => {
         setStatus={setStatus}
         setSearchFiled={setSearchFiled}
         totalRecord={totalRecord}
-        deleteShipping={deleteShipping}
+        handleUpdate={handleUpdate}
         getShippingList={getShippingList}
     />
 };

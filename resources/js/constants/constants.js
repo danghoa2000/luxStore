@@ -40,6 +40,7 @@ export const CODE = {
     HTTP_OK: 200,
     HTTP_NOT_FOUND: 404,
     UNPROCESSABLE_ENTITY: 422,
+    HTTP_FOUND: 302,
 };
 
 export const BASE_URL = "http://127.0.0.1:8000/";

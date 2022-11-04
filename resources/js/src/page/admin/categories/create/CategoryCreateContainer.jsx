@@ -75,7 +75,6 @@ const CategoryCreateContainer = () => {
                     setGroupCategoryList(response.data.groupCategories);
                 }
             }).catch((response) => {
-                console.log(response);
                 setStatus({ type: 'error', message: response.data ? response.data.message : 'Server error' });
                 setShowNoti(true)
             });

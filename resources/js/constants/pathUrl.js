@@ -32,3 +32,10 @@ export const SHIPPING_URL = {
     UPDATE: "/admin/shipping/update",
     CREATE: "/admin/shipping/create",
 };
+
+export const PRODUCT_URL = {
+    LIST: "/admin/product",
+    SHOW: "/admin/product/show",
+    UPDATE: "/admin/product/update",
+    CREATE: "/admin/product/create",
+};

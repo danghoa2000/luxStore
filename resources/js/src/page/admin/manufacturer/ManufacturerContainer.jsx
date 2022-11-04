@@ -20,7 +20,7 @@ const ManufacturerContainer = () => {
     const [searchField, setSearchFiled] = useState({});
     const [totalRecord, setTotalRecode] = useState(0);
 
-    const navligate = useNavigate();
+    const navigate = useNavigate();
     const headCells = { ...TableHeader }
 
     const handleRequestSort = (event, property) => {
@@ -39,7 +39,7 @@ const ManufacturerContainer = () => {
     };
 
     const redirectManufacturerCreate = useCallback(() => {
-        navligate('/admin/manufacturer/create');
+        navigate('/admin/manufacturer/create');
     }, [])
     const getManufacturerList = useCallback(() => {
 

@@ -1,10 +1,11 @@
-import { AccountCircle, AddHomeWork, BorderColor, CalendarMonth, Call, Email, PermContactCalendar } from '@mui/icons-material';
-import { Box, Breadcrumbs, Button, CircularProgress, FormControl, FormControlLabel, FormHelperText, FormLabel, Grid, Input, InputAdornment, InputLabel, MenuItem, Radio, RadioGroup, Select, Tab, Tabs, TextField, Typography } from '@mui/material';
+import { AccountCircle, AddHomeWork, BorderColor, CalendarMonth, Call, Email, PermContactCalendar, PhotoCamera } from '@mui/icons-material';
+import { Box, Breadcrumbs, Button, CircularProgress, FormControl, FormControlLabel, FormHelperText, FormLabel, Grid, IconButton, Input, InputAdornment, InputLabel, MenuItem, Radio, RadioGroup, Select, Tab, Tabs, TextField, Typography } from '@mui/material';
 import React, { useCallback, useState } from 'react';
 import { Controller } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { Link, useNavigate } from 'react-router-dom';
 import ShowSnackbars from '../../../../../components/partial/ShowSnackbars';
+import UploadFile from '../../../../../components/partial/UploadFile';
 
 const ProductCreate = (props) => {
     const {
@@ -22,7 +23,9 @@ const ProductCreate = (props) => {
         showNoti,
         status,
         setShowNoti,
-        groupCategorytList
+        groupCategorytList,
+        categoryList,
+        manufacturerList
     } = props;
 
     const [t] = useTranslation();
@@ -52,11 +55,11 @@ const ProductCreate = (props) => {
                 <Grid container sx={{ margin: 0, padding: 1, width: '100%' }} spacing={10}>
                     <Grid item xs={6}>
                         <Controller
-                            name="category_code"
+                            name="image"
                             control={control}
                             render={({ field }) =>
                                 <FormControl variant="standard">
-                                    <InputLabel htmlFor="">{t('category.list.table.category_code')}<span className='required'></span></InputLabel>
+                                    <InputLabel htmlFor="">{t('product.list.table.image')}</InputLabel>
                                     <Input
                                         {...field}
                                         startAdornment={
@@ -64,14 +67,39 @@ const ProductCreate = (props) => {
                                                 <AccountCircle />
                                             </InputAdornment>
                                         }
-                                        placeholder={t('placehoder', { name: t('category.list.table.category_code') })}
+                                        placeholder={t('placehoder', { name: t('product.list.table.image') })}
                                         onBlur={(event) => {
                                             setValue(event.target.id, event.target.value ? event.target.value.trim() : '')
                                         }}
                                     />
                                 </FormControl>}
                         />
-                        {errors.category_code && <p className='text-danger'>{errors.category_code.message}</p>}
+                        {errors.image && <p className='text-danger'>{errors.image.message}</p>}
+
+                    </Grid>
+                    <Grid item xs={6}></Grid>
+                    <Grid item xs={6}>
+                        <Controller
+                            name="product_code"
+                            control={control}
+                            render={({ field }) =>
+                                <FormControl variant="standard">
+                                    <InputLabel htmlFor="">{t('product.list.table.product_code')}<span className='required'></span></InputLabel>
+                                    <Input
+                                        {...field}
+                                        startAdornment={
+                                            <InputAdornment position="start">
+                                                <AccountCircle />
+                                            </InputAdornment>
+                                        }
+                                        placeholder={t('placehoder', { name: t('product.list.table.product_code') })}
+                                        onBlur={(event) => {
+                                            setValue(event.target.id, event.target.value ? event.target.value.trim() : '')
+                                        }}
+                                    />
+                                </FormControl>}
+                        />
+                        {errors.product_code && <p className='text-danger'>{errors.product_code.message}</p>}
 
                     </Grid>
                     <Grid item xs={6}>
@@ -80,7 +108,7 @@ const ProductCreate = (props) => {
                             control={control}
                             render={({ field }) =>
                                 <FormControl variant="standard">
-                                    <InputLabel htmlFor="fullName">{t('category.list.table.name')}</InputLabel>
+                                    <InputLabel htmlFor="fullName">{t('product.list.table.name')}</InputLabel>
                                     <Input
                                         id="fullName"
                                         {...field}
@@ -89,7 +117,7 @@ const ProductCreate = (props) => {
                                                 <BorderColor />
                                             </InputAdornment>
                                         }
-                                        placeholder={t('placehoder', { name: t('category.list.table.name') })}
+                                        placeholder={t('placehoder', { name: t('product.list.table.name') })}
                                         onBlur={(event) => {
                                             setValue(event.target.id, event.target.value ? event.target.value.trim() : '')
                                         }}
@@ -100,13 +128,41 @@ const ProductCreate = (props) => {
                     </Grid>
                     <Grid item xs={6}>
                         <Controller
+                            name="price"
+                            control={control}
+                            render={({ field }) =>
+                                <FormControl variant="standard">
+                                    <InputLabel htmlFor="fullName">{t('product.list.table.price')}<span className='required'></span></InputLabel>
+                                    <Input
+                                        {...field}
+                                        startAdornment={
+                                            <InputAdornment position="start">
+                                                <BorderColor />
+                                            </InputAdornment>
+                                        }
+                                        placeholder={t('placehoder', { name: t('product.list.table.price') })}
+                                        onBlur={(event) => {
+                                            setValue(event.target.id, event.target.value ? event.target.value.trim() : '')
+                                        }}
+                                    />
+                                </FormControl>}
+                        />
+                        {errors.price && <p className='text-danger'>{errors.price.message}</p>}
+                    </Grid>
+                </Grid>
+            </div>
+
+            <div className="card__admin">
+                <Grid container sx={{ margin: 0, padding: 1, width: '100%' }} spacing={10}>
+                    <Grid item xs={6}>
+                        <Controller
                             name="group_category_id"
                             control={control}
                             render={({ field }) =>
                                 <FormControl variant="standard">
                                     <Select
                                         {...field}
-                                        label={t('category.list.table.group_category_id')}
+                                        label={<>{t('product.list.table.group_category_id')}<span className='required'></span></>}
                                         size="small"
                                     >
                                         <MenuItem key={""} value={-1} disabled>
@@ -117,7 +173,7 @@ const ProductCreate = (props) => {
                                             groupCategorytList.length > 0 && (
                                                 groupCategorytList.map(item => (
                                                     <MenuItem key={""} value={item.id}>
-                                                       {item.name}
+                                                        {item.name}
                                                     </MenuItem>
                                                 ))
                                             )
@@ -130,13 +186,73 @@ const ProductCreate = (props) => {
 
                     <Grid item xs={6}>
                         <Controller
+                            name="category_id"
+                            control={control}
+                            render={({ field }) =>
+                                <FormControl variant="standard">
+                                    <Select
+                                        {...field}
+                                        label={<>{t('product.list.table.category_id')}<span className='required'></span></>}
+                                        size="small"
+                                    >
+                                        <MenuItem key={""} value={-1} disabled>
+                                            {"select category"}
+                                        </MenuItem>
+
+                                        {
+                                            categoryList.length > 0 && (
+                                                categoryList.map(item => (
+                                                    <MenuItem key={""} value={item.id}>
+                                                        {item.name}
+                                                    </MenuItem>
+                                                ))
+                                            )
+                                        }
+                                    </Select>
+                                </FormControl>}
+                        />
+                        {errors.category_id && <p className='text-danger'>{errors.category_id.message}</p>}
+                    </Grid>
+
+                    <Grid item xs={6}>
+                        <Controller
+                            name="manufacturer_id"
+                            control={control}
+                            render={({ field }) =>
+                                <FormControl variant="standard">
+                                    <Select
+                                        {...field}
+                                        label={<>{t('product.list.table.manufacturer_id')}<span className='required'></span></>}
+                                        size="small"
+                                    >
+                                        <MenuItem key={""} value={-1} disabled>
+                                            {"select manufacturer"}
+                                        </MenuItem>
+
+                                        {
+                                            manufacturerList.length > 0 && (
+                                                manufacturerList.map(item => (
+                                                    <MenuItem key={""} value={item.id}>
+                                                        {item.name}
+                                                    </MenuItem>
+                                                ))
+                                            )
+                                        }
+                                    </Select>
+                                </FormControl>}
+                        />
+                        {errors.manufacturer_id && <p className='text-danger'>{errors.manufacturer_id.message}</p>}
+                    </Grid>
+
+                    <Grid item xs={6}>
+                        <Controller
                             name="description"
                             control={control}
                             render={({ field }) =>
                                 <FormControl variant="standard">
                                     <TextField
                                         {...field}
-                                        label={t('category.list.table.description')}
+                                        label={t('product.list.table.description')}
                                         multiline
                                         maxRows={4}
                                         variant="standard"
@@ -145,6 +261,17 @@ const ProductCreate = (props) => {
                         />
                         {errors.description && <p className='text-danger'>{errors.description.message}</p>}
                     </Grid>
+                </Grid>
+
+            </div>
+
+            <div className="card__admin">
+                <Typography variant="h5" className='cart_admin_title' gutterBottom>
+                    Setting
+                </Typography>
+
+                <Grid container sx={{ margin: 0, padding: 1, width: '100%' }} spacing={10}>
+                    <UploadFile setValue={setValue} />
                 </Grid>
             </div>
 
@@ -177,7 +304,6 @@ const ProductCreate = (props) => {
 
                     </Grid>
                 </Grid>
-
             </div>
             <div className='d-flex justify-content-center w-100'>
                 <Button variant="contained" type='submit' className='m-1' disabled={loadding}>{loadding &&

@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
-import { CATEGORIES_API, GROUP_CATEGORY_API } from '../../../../../constants/api';
+import { CATEGORIES_API, GROUP_CATEGORY_API, MANUFACTURER_API, PRODUCT_API } from '../../../../../constants/api';
 import { axiosClient } from '../../../../../hooks/useHttp';
 import ProductCreate from './ProductCreate';
 import * as Yup from 'yup';
@@ -17,10 +17,13 @@ const ProductCreateContainer = () => {
     const [status, setStatus] = useState({});
     const [showNoti, setShowNoti] = useState(false);
     const [groupCategorytList, setGroupCategoryList] = useState([]);
+    const [categoryList, setCategoryList] = useState([]);
+    const [manufacturerList, setManufacturerList] = useState([]);
+
     const redirectBack = () => navigate(-1);
 
     const validationSchema = Yup.object().shape({
-        category_code: Yup.string().
+        product_code: Yup.string().
             required(t('validate.required', { name: 'Product code' })),
     });
 
@@ -35,38 +38,43 @@ const ProductCreateContainer = () => {
         = useForm({
             shouldUnregister: false,
             defaultValues: {
-                category_code: '',
+                image: '',
+                product_code: '',
                 name: '',
+                price: '',
                 status: STATUS.ACTIVE,
-                group_category_id: '',
+                group_category_id: -1,
+                category_id: -1,
+                manufacturer_id: -1,
                 description: '',
             },
             resolver: yupResolver(validationSchema),
         });
 
     const handleCreate = useCallback((value) => {
-        setLoading(true);
-        axiosClient.post(CATEGORIES_API.CREATE, {
-            ...value
-        })
-            .then((response) => {
-                if (response.status === CODE.HTTP_OK) {
-                    setStatus({ type: 'success', message: response.data.message });
-                    reset();
-                }
-                setShowNoti(true);
-                setLoading(false);
-            }).catch(({ response }) => {
-                if (response.status === CODE.UNPROCESSABLE_ENTITY) {
-                    Object.keys(response.data.errors).forEach(element => {
-                        setError(element, { type: 'custom', message: Object.values(response.data.errors[element]) })
-                    });
-                }
-                setStatus({ type: 'error', message: response.data ? response.data.message : 'Server error' });
-                setShowNoti(true);
-                setLoading(false);
-            });
-    }, []);
+        console.log(value);
+        // setLoading(true);
+        // axiosClient.post(PRODUCT_API.CREATE, {
+        //     ...value
+        // })
+        //     .then((response) => {
+        //         if (response.status === CODE.HTTP_OK) {
+        //             setStatus({ type: 'success', message: response.data.message });
+        //             reset();
+        //         }
+        //         setShowNoti(true);
+        //         setLoading(false);
+        //     }).catch(({ response }) => {
+        //         if (response.status === CODE.UNPROCESSABLE_ENTITY) {
+        //             Object.keys(response.data.errors).forEach(element => {
+        //                 setError(element, { type: 'custom', message: Object.values(response.data.errors[element]) })
+        //             });
+        //         }
+        //         setStatus({ type: 'error', message: response.data ? response.data.message : 'Server error' });
+        //         setShowNoti(true);
+        //         setLoading(false);
+        //     });
+    });
 
     const getGroupCategory = useCallback(() => {
         axiosClient.get(GROUP_CATEGORY_API.LIST)
@@ -80,8 +88,32 @@ const ProductCreateContainer = () => {
             });
     }, [])
 
+    const getCategoryList = useCallback(() => {
+        axiosClient.get(CATEGORIES_API.LIST).then((response) => {
+            if (response.status === CODE.HTTP_OK) {
+                setCategoryList(response.data.categories);
+            }
+        }).catch((response) => {
+            setStatus({ type: 'error', message: response.data ? response.data.message : 'Server error' });
+            setShowNoti(true)
+        });
+    }, []);
+
+    const getManufacturerList = useCallback(() => {
+        axiosClient.get(MANUFACTURER_API.LIST).then((response) => {
+            if (response.status === CODE.HTTP_OK) {
+                setManufacturerList(response.data.manufacturers);
+            }
+        }).catch((response) => {
+            setStatus({ type: 'error', message: response.data ? response.data.message : 'Server error' });
+            setShowNoti(true)
+        });
+    }, []);
+
     useEffect(() => {
         getGroupCategory();
+        getCategoryList();
+        getManufacturerList();
     }, [])
 
     return <ProductCreate
@@ -100,6 +132,8 @@ const ProductCreateContainer = () => {
         status={status}
         setShowNoti={setShowNoti}
         groupCategorytList={groupCategorytList}
+        categoryList={categoryList}
+        manufacturerList={manufacturerList}
     />
 };
 

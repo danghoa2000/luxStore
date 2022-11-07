@@ -8,10 +8,24 @@ const FormFilter = (props) => {
     const {
         headCells,
         setSearchFiled,
-        groupCategoryList
+        groupCategoryList,
+        categoryList
     } = props;
 
     const [t] = useTranslation();
+
+    const OBJ = useMemo(() => {
+        let obj = {};
+        Object.keys(headCells).forEach(item => {
+            if (headCells[item].inputMode && headCells[item].inputMode === 'select') {
+                obj[item] = -1;
+            } else {
+                obj[item] = '';
+            }
+        })
+        return obj;
+    }, []);
+
     const {
         handleSubmit,
         control,
@@ -21,12 +35,7 @@ const FormFilter = (props) => {
     }
         = useForm({
             defaultValues: {
-                category_code: '',
-                name: '',
-                status: -1,
-                group_category_id: -1,
-                description: '',
-                created_by: ''
+                ...OBJ
             }
         });
 
@@ -34,7 +43,10 @@ const FormFilter = (props) => {
     const FORM_FILTER = useMemo(() => {
         const formFilter = [];
         Object.keys(headCells).forEach((headCell, index) => {
-            if (headCells[headCell].id !== 'province_id' && headCells[headCell].id !== 'district_id' && headCells[headCell].id !== 'commune_id') {
+            if (headCells[headCell].id !== 'province_id'
+                && headCells[headCell].id !== 'district_id'
+                && headCells[headCell].id !== 'commune_id'
+                && headCells[headCell].id !== 'image') {
                 if (headCells[headCell].type === 'date') {
                     formFilter.push(
                         <Grid item xs={4} key={index}>
@@ -149,6 +161,38 @@ const FormFilter = (props) => {
                                 />
                             </Grid>
                         )
+                    } else if (headCells[headCell].id === 'category_id') {
+                        formFilter.push(
+                            <Grid item xs={4} key={index}>
+                                <Controller
+                                    name={headCells[headCell].id}
+                                    control={control}
+                                    render={({ field }) => (
+                                        <FormControl variant="standard">
+                                            <Select
+                                                {...field}
+                                                label={t('category.list.table.category_id')}
+                                                size="small"
+                                            >
+                                                <MenuItem key={""} value={-1}>
+                                                    {"select category"}
+                                                </MenuItem>
+
+                                                {
+                                                    categoryList.length > 0 && (
+                                                        categoryList.map(item => (
+                                                            <MenuItem key={item.id} value={item.id}>
+                                                                {item.name}
+                                                            </MenuItem>
+                                                        ))
+                                                    )
+                                                }
+                                            </Select>
+                                        </FormControl>
+                                    )}
+                                />
+                            </Grid>
+                        )
                     }
                     else {
                         formFilter.push(
@@ -207,7 +251,7 @@ const FormFilter = (props) => {
         //     </Grid>
         // )
         return formFilter;
-    }, [groupCategoryList]);
+    }, [groupCategoryList, categoryList]);
 
     const onFinish = (value) => {
         setSearchFiled(value);

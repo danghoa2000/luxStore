@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { PRODUCT_API } from '../../../../constants/api';
+import { CATEGORIES_API, GROUP_CATEGORY_API, PRODUCT_API } from '../../../../constants/api';
 import { axiosClient } from '../../../../hooks/useHttp';
 import Product from './Product';
 import TableHeader from './TableHeader';
@@ -19,6 +19,9 @@ const ProductContainer = () => {
     const [showNoti, setShowNoti] = useState(false);
     const [searchField, setSearchFiled] = useState({});
     const [totalRecord, setTotalRecode] = useState(0);
+    const [groupCategoryList, setGroupCategoryList] = useState([]);
+    const [categoryList, setCategoryList] = useState([]);
+    const [manufacturerList, setManufacturerList] = useState([]);
 
     const navigate = useNavigate();
     const headCells = { ...TableHeader }
@@ -66,8 +69,36 @@ const ProductContainer = () => {
         });
     }, [order, orderBy, page, rowsPerPage, searchField]);
 
+    const getGroupCategoryList = useCallback(() => {
+
+        axiosClient.get(GROUP_CATEGORY_API.LIST).then((response) => {
+            if (response.status === CODE.HTTP_OK) {
+                setGroupCategoryList(response.data.groupCategories);
+            }
+        }).catch((response) => {
+            setStatus({ type: 'error', message: response.data ? response.data.message : 'Server error' });
+            setShowNoti(true)
+        });
+    }, []);
+
+    const getCategoryList = useCallback(() => {
+        axiosClient.get(CATEGORIES_API.LIST).then((response) => {
+            if (response.status === CODE.HTTP_OK) {
+                setCategoryList(response.data.categories);
+            }
+        }).catch((response) => {
+            setStatus({ type: 'error', message: response.data ? response.data.message : 'Server error' });
+            setShowNoti(true)
+        });
+    }, [order, orderBy, page, rowsPerPage, searchField]);
+
     useEffect(() => {
-        getProductList()
+        getGroupCategoryList();
+        getCategoryList();
+    }, [])
+    
+    useEffect(() => {
+        getProductList();
     }, [order, orderBy, page, rowsPerPage, searchField])
 
     const deleteProduct = useCallback((id) => {
@@ -112,6 +143,9 @@ const ProductContainer = () => {
         setSearchFiled={setSearchFiled}
         totalRecord={totalRecord}
         deleteProduct={deleteProduct}
+        groupCategoryList={groupCategoryList}
+        categoryList={categoryList}
+        manufacturerList={manufacturerList}
     />
 };
 

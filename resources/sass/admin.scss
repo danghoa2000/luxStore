@@ -289,6 +289,40 @@ table {
     }
 
     .css-1tcs2i1-MuiInputBase-root-MuiInput-root:before {
-        border-bottom-color: #7c70705e !important;
+        border-bottom-color: #454d55 !important;
+    }
+}
+
+.css-1kuq5xv-MuiButtonBase-root-MuiIconButton-root {
+    padding: 0 !important;
+    border-radius: 0 !important;
+}
+
+.image__list {
+    position: relative;
+    display: inline-block;
+
+    &:hover {
+        .remove__image {
+            opacity: 0.6;
+        }
+    }
+}
+
+.remove__image {
+    background: rgba(0, 0, 0, 1);
+    opacity: 0;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+
+    > svg {
+        color: #706e6e !important;
     }
 }

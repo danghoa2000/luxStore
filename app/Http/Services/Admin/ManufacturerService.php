@@ -18,11 +18,12 @@ class ManufacturerService
             'address',
             'status',
         )->filter($request)
-        ->where('status', config('constants.user.status.active'));
+            ->where('status', config('constants.user.status.active'));
         $total = count($manufacturers->get());
-        $manufacturers->limit($request->pageSize)
-            ->offset(($request->currentPage) * $request->pageSize);
-
+        if ($request->pageSize) {
+            $manufacturers->limit($request->pageSize)
+                ->offset(($request->currentPage) * ($request->pageSize));
+        }
         return response([
             'manufacturers' => $manufacturers->get(),
             'total' => $total,
@@ -87,7 +88,7 @@ class ManufacturerService
                     'telephone' =>  $request->telephone,
                     'address' =>  $request->address,
                 ]);
-                
+
                 DB::commit();
                 return response([
                     'manufacturer' => $manufacturer,

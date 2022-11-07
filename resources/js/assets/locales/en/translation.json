@@ -72,6 +72,7 @@
                 "name": "Name",
                 "price": "Price",
                 "category_id": "Category",
+                "group_category_id": "Group category",
                 "manufacturer_id": "Manufacturer",
                 "description": "Description"
             }

@@ -32,34 +32,34 @@ class Product extends Model
 
     public function productMedia()
     {
-        return $this->hasMany(ProductMedia::class, 'id', 'product_id');
+        return $this->hasMany(ProductMedia::class, 'product_id', 'id');
     }
 
     public function productPrice()
     {
-        return $this->hasMany(ProductPrice::class, 'id', 'product_id');
+        return $this->hasMany(ProductPrice::class, 'product_id', 'id');
     }
 
     public function productProperties()
     {
-        return $this->hasMany(ProductProperty::class, 'id', 'product_id');
+        return $this->hasMany(ProductProperty::class, 'product_id', 'id');
     }
 
     public function productSuggest()
     {
-        return $this->hasMany(ProductSuggest::class, 'id', 'product_id');
+        return $this->hasMany(ProductSuggest::class, 'product_id', 'id');
     }
 
     public function category()
     {
-        return $this->belongsTo(Category::class, 'product_id', 'id');
+        return $this->belongsTo(Category::class, 'category_id', 'id');
     }
 
     public function groupCategory()
     {
-        return $this->belongsTo(GroupCategory::class, 'product_id', 'id');
+        return $this->belongsTo(GroupCategory::class, 'group_category_id', 'id');
     }
-    
+
     public function scopeFilter($query, $request)
     {
         // $data = json_decode($request->searchField, true);

@@ -46,6 +46,9 @@ const Product = (props) => {
         setSearchFiled,
         totalRecord,
         deleteProduct,
+        groupCategoryList,
+        categoryList,
+        manufacturerList
     } = props;
 
     const navigate = useNavigate();
@@ -71,6 +74,8 @@ const Product = (props) => {
                     <FormFilter
                         headCells={headCells}
                         setSearchFiled={setSearchFiled}
+                        groupCategoryList={groupCategoryList}
+                        categoryList={categoryList}
                     />
                 </div>
             </Collapse>

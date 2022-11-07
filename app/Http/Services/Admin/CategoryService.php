@@ -10,7 +10,7 @@ class CategoryService
 {
     public function list($request)
     {
-        $categories = Category::with('groupCategory', 'createdBy.info')->select(
+        $categories = Category::select(
             'id',
             'category_code',
             'name',
@@ -19,11 +19,13 @@ class CategoryService
             'created_by',
             'status',
         )->filter($request)
-        ->where('status', config('constants.user.status.active'));
+            ->where('status', config('constants.user.status.active'));
         $total = count($categories->get());
-        $categories->limit($request->pageSize)
-            ->offset(($request->currentPage) * $request->pageSize);
-
+        if ($request->pageSize) {
+            $categories->with('groupCategory', 'createdBy.info')
+                ->limit($request->pageSize)
+                ->offset(($request->currentPage) * ($request->pageSize));
+        }
         return response([
             'categories' => $categories->get(),
             'total' => $total,

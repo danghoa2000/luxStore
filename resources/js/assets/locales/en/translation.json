@@ -66,7 +66,7 @@
     "product": {
         "list": {
             "table": {
-                "image": "Image",
+                "Image": "Image",
                 "product_code": "Product code",
                 "status": "Status",
                 "name": "Name",
@@ -74,7 +74,8 @@
                 "category_id": "Category",
                 "group_category_id": "Group category",
                 "manufacturer_id": "Manufacturer",
-                "description": "Description"
+                "description": "Description",
+                "avatar": "Avatar"
             }
         }
     },

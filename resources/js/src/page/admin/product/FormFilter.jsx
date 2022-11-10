@@ -46,7 +46,8 @@ const FormFilter = (props) => {
             if (headCells[headCell].id !== 'province_id'
                 && headCells[headCell].id !== 'district_id'
                 && headCells[headCell].id !== 'commune_id'
-                && headCells[headCell].id !== 'image') {
+                && headCells[headCell].id !== 'image'
+                && headCells[headCell].id !== 'description') {
                 if (headCells[headCell].type === 'date') {
                     formFilter.push(
                         <Grid item xs={4} key={index}>

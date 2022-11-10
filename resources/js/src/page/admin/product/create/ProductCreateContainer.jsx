@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { CATEGORIES_API, GROUP_CATEGORY_API, MANUFACTURER_API, PRODUCT_API } from '../../../../../constants/api';
@@ -20,6 +20,8 @@ const ProductCreateContainer = () => {
     const [categoryList, setCategoryList] = useState([]);
     const [manufacturerList, setManufacturerList] = useState([]);
 
+    const avatarRef = useRef();
+    const imageRef = useRef();
     const redirectBack = () => navigate(-1);
 
     const validationSchema = Yup.object().shape({
@@ -34,6 +36,7 @@ const ProductCreateContainer = () => {
         setValue,
         getValues,
         setError,
+        clearErrors,
         formState: { errors } }
         = useForm({
             shouldUnregister: false,
@@ -126,6 +129,8 @@ const ProductCreateContainer = () => {
         reset={reset}
         setValue={setValue}
         getValues={getValues}
+        setError={setError}
+        clearErrors={clearErrors}
         errors={errors}
         loading={loading}
         showNoti={showNoti}
@@ -134,6 +139,8 @@ const ProductCreateContainer = () => {
         groupCategorytList={groupCategorytList}
         categoryList={categoryList}
         manufacturerList={manufacturerList}
+        avatarRef={avatarRef}
+        imageRef={imageRef}
     />
 };
 

@@ -49,4 +49,6 @@ export const PRODUCT_API = {
     CREATE: API_BASE_URL + "api/auth/admin/product/create",
     UPDATE: API_BASE_URL + "api/auth/admin/product/update",
     SHOW: API_BASE_URL + "api/auth/admin/product/show",
+    OPTIONS: API_BASE_URL + "api/auth/admin/product/option",
+    ATTRIBUTE: API_BASE_URL + "api/auth/admin/product/attribute",
 };

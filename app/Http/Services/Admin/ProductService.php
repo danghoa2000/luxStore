@@ -136,4 +136,14 @@ class ProductService
             ], Response::HTTP_NOT_FOUND);
         }
     }
+
+    public function attribute($request)
+    {
+        return;
+    }
+
+    public function options($request)
+    {
+        return;
+    }
 }

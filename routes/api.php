@@ -67,6 +67,9 @@ Route::group([
         Route::put('product/update', [ProductController::class, 'update'])->name('product.update');
         Route::get('product/show', [ProductController::class, 'show'])->name('product.show');
         Route::delete('product/delete/{id}', [ProductController::class, 'destroy'])->name('product.delete');
+
+        Route::post('product/options', [ProductController::class, 'options'])->name('product.option');
+        Route::post('product/attribute', [ProductController::class, 'attribute'])->name('product.attribute');
     });
 });
 

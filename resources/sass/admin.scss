@@ -202,6 +202,93 @@ input::-webkit-input-placeholder {
     box-shadow: 0px 3px 1px -2px rgb(0 0 0 / 20%), 0px 2px 2px 0px rgb(0 0 0 / 14%), 0px 1px 5px 0px rgb(0 0 0 / 12%) !important;
 }
 
+.tool {
+    margin: 0 10px;
+    &::before {
+        content: "";
+        height: 20px;
+        display: inline-block;
+        border: 1px solid;
+        transform: translate(0, 10px) rotate(20deg);
+    }
+}
+
+.action {
+    cursor: pointer;
+}
+.css-1x51dt5-MuiInputBase-input-MuiInput-input.Mui-disabled {
+    -webkit-text-fill-color: #fff !important;
+}
+
+table {
+    input {
+        font-size: 12px !important;
+        color: #fff !important;
+    }
+
+    .css-1tcs2i1-MuiInputBase-root-MuiInput-root:before {
+        border-bottom-color: #454d55 !important;
+    }
+}
+
+.css-1kuq5xv-MuiButtonBase-root-MuiIconButton-root {
+    padding: 0 !important;
+    border-radius: 0 !important;
+}
+
+.image__list {
+    position: relative;
+    display: inline-block;
+
+    &:hover {
+        .remove__image {
+            opacity: 0.6;
+        }
+    }
+}
+
+.remove__image {
+    background: rgba(0, 0, 0, 1);
+    opacity: 0;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+
+    > svg {
+        color: #706e6e !important;
+    }
+}
+
+.card__admin {
+    .css-1qqsdnr-MuiAutocomplete-root {
+        margin: 0 5px;
+        flex: 1;
+    }
+}
+
+.MuiAutocomplete-popper > div {
+    color: #fff;
+    background-color: #454d55 !important;
+}
+
+.MuiAutocomplete-popper > div li {
+    color: #fff !important;
+}
+.css-izuv4x-MuiAutocomplete-loading,
+.css-113ntv0-MuiButtonBase-root-MuiIconButton-root-MuiAutocomplete-popupIndicator,
+.css-qzbt6i-MuiButtonBase-root-MuiIconButton-root-MuiAutocomplete-popupIndicator,
+.css-nxo287-MuiInputBase-input-MuiOutlinedInput-input {
+    color: #fff !important;
+}
+
+.css-1glvl0p-MuiButtonBase-root-MuiIconButton-root-MuiAutocomplete-clearIndicator,
+.css-6wwd73-MuiAutocomplete-noOptions,
 .css-aqpgxn-MuiFormLabel-root-MuiInputLabel-root,
 .css-8q2m5j-MuiInputBase-root-MuiInput-root,
 .css-10by3a5-MuiButtonBase-root-MuiMenuItem-root-MuiTablePagination-menuItem,
@@ -264,65 +351,14 @@ input::-webkit-input-placeholder {
     -webkit-transition: none !important;
 }
 
-.tool {
-    margin: 0 10px;
-    &::before {
-        content: "";
-        height: 20px;
-        display: inline-block;
-        border: 1px solid;
-        transform: translate(0, 10px) rotate(20deg);
-    }
+.MuiAutocomplete-hasPopupIcon.MuiAutocomplete-hasClearIcon.css-1qqsdnr-MuiAutocomplete-root .MuiOutlinedInput-root {
+    padding-right: 65px;
 }
 
-.action {
-    cursor: pointer;
-}
-.css-1x51dt5-MuiInputBase-input-MuiInput-input.Mui-disabled {
-    -webkit-text-fill-color: #fff !important;
+.css-1qqsdnr-MuiAutocomplete-root .MuiAutocomplete-inputRoot .MuiAutocomplete-input {
+    width: 75px !important;
 }
 
-table {
-    input {
-        font-size: 12px !important;
-        color: #fff !important;
-    }
-
-    .css-1tcs2i1-MuiInputBase-root-MuiInput-root:before {
-        border-bottom-color: #454d55 !important;
-    }
-}
-
-.css-1kuq5xv-MuiButtonBase-root-MuiIconButton-root {
-    padding: 0 !important;
-    border-radius: 0 !important;
-}
-
-.image__list {
-    position: relative;
-    display: inline-block;
-
-    &:hover {
-        .remove__image {
-            opacity: 0.6;
-        }
-    }
-}
-
-.remove__image {
-    background: rgba(0, 0, 0, 1);
-    opacity: 0;
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    cursor: pointer;
-
-    > svg {
-        color: #706e6e !important;
-    }
+.css-1l5v1ga-MuiAutocomplete-root {
+    margin: 2px;
 }

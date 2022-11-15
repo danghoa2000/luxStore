@@ -68,4 +68,24 @@ class ProductController extends Controller
     {
         return $this->productService->delete($id);
     }
+
+    /**
+     * Display a listing attribute of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function attribute(Request $request)
+    {
+        return $this->productService->attribute($request);
+    }
+
+    /**
+     * Display a listing options of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function options(Request $request)
+    {
+        return $this->productService->options($request);
+    }
 }

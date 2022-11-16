@@ -7,11 +7,17 @@ function sleep(delay = 0) {
     });
 }
 
-const ProductAttributeValue = ({ topFilms, attributeValue, setAttributeValue, attributeValueList, handleUpdateAttributeValue }) => {
+const ProductAttributeValue = ({
+    topFilms,
+    attributeValue,
+    setAttributeValue,
+    attributeValueList,
+    handleUpdateAttributeValue
+}) => {
     const [open, setOpen] = useState(false);
     const [options, setOptions] = useState([]);
     const loading = open && options.length === 0;
-
+    const [inputValue, setInputValue] = React.useState('')
     // useEffect(() => {
     //     let active = true;
 
@@ -32,11 +38,7 @@ const ProductAttributeValue = ({ topFilms, attributeValue, setAttributeValue, at
     //     };
     // }, [loading]);
 
-    // useEffect(() => {
-    //     if (!open) {
-    //         setOptions([]);
-    //     }
-    // }, [open]);
+
     return (
         <Autocomplete
             sx={{ width: 170 }}
@@ -48,12 +50,18 @@ const ProductAttributeValue = ({ topFilms, attributeValue, setAttributeValue, at
             onClose={() => {
                 setOpen(false);
             }}
-            onChange={(event, value) => handleUpdateAttributeValue(value?.id || "")}
+            // defaultValue={attributeValue}
+            // value={attributeValue || null}
+            onChange={(event, value) => handleUpdateAttributeValue(value)}
             getOptionLabel={(option) => option.name || ""}
-            // getOptionSelected={(option, value) => option.id === value.id }
-            // isOptionEqualToValue={(option, value) => option?.id === value?.id}
-            // getoptionselected={(option, value) => option?.id === value?.id}
             options={topFilms}
+
+            isOptionEqualToValue={(option, value) => option.id === value.id}
+            inputValue={inputValue}
+            onInputChange={(_, newInputValue) => {
+                setInputValue(newInputValue)
+            }}
+            value={attributeValue ? attributeValue : null}
             loading={loading}
             renderInput={(params) => (
                 <TextField

@@ -1,5 +1,5 @@
 import { Autocomplete, TextField } from '@mui/material';
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 
 function sleep(delay = 0) {
     return new Promise((resolve) => {
@@ -7,11 +7,18 @@ function sleep(delay = 0) {
     });
 }
 
-const ProductAttributeName = ({ topFilms, attributeName, setAttributeName, attributeList, handleUpdateAttributeName, attributeSelectedList }) => {
+const ProductAttributeName = ({
+    topFilms,
+    attributeName,
+    setAttributeName,
+    attributeList,
+    handleUpdateAttributeName,
+    attributeSelectedList
+}) => {
     const [open, setOpen] = useState(false);
     const [options, setOptions] = useState([]);
     const loading = open && options.length === 0;
-
+    const [inputValue, setInputValue] = React.useState('')
     // useEffect(() => {
     //     let active = true;
 
@@ -22,7 +29,7 @@ const ProductAttributeName = ({ topFilms, attributeName, setAttributeName, attri
     //     (async () => {
     //         await sleep(1e3); // For demo purposes.
 
-    //         if (active) {
+    //         if (active) {    
     //             setOptions([...attributeList]);
     //         }
     //     })();
@@ -37,23 +44,28 @@ const ProductAttributeName = ({ topFilms, attributeName, setAttributeName, attri
     //         setOptions([]);
     //     }
     // }, [open]);
+
     return (
         <div className='d-flex flex-column'>
             <Autocomplete
                 onChange={(event, value) => {
-                    handleUpdateAttributeName(value?.id || "")
+                    handleUpdateAttributeName(value)
                 }}
                 sx={{ width: 170 }}
                 className='select_dark_mode'
                 disablePortal
                 name="attribute"
                 options={topFilms}
+
                 isOptionEqualToValue={(option, value) => option.id === value.id}
-                // getoptionselected={(option, value) => option?.id === value?.id}
+                inputValue={inputValue}
+                onInputChange={(_, newInputValue) => {
+                    setInputValue(newInputValue)
+                }}
+                value={attributeName ? attributeName : null}
                 getOptionLabel={(option) => option.name || ""}
                 getOptionDisabled={(option) =>
-                    attributeSelectedList.includes(option.id)
-                }
+                    attributeSelectedList.includes(option.id)}
                 renderInput={(params) => <TextField {...params} label="properties" />}
             />
         </div>

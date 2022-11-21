@@ -1,3 +1,4 @@
+import { Girl } from '@mui/icons-material';
 import { Button, FormControl, Grid, MenuItem, Select, TextField } from '@mui/material';
 import React, { useEffect, useMemo } from 'react';
 import { Controller, useForm } from 'react-hook-form';
@@ -9,7 +10,12 @@ const FormFilter = (props) => {
         headCells,
         setSearchFiled,
         groupCategoryList,
-        categoryList
+        categoryList,
+        manufacturerList,
+        showNoti,
+        status,
+        setStatus,
+        setShowNoti,
     } = props;
 
     const [t] = useTranslation();
@@ -35,7 +41,9 @@ const FormFilter = (props) => {
     }
         = useForm({
             defaultValues: {
-                ...OBJ
+                ...OBJ,
+                price_min: "",
+                price_max: ""
             }
         });
 
@@ -47,7 +55,9 @@ const FormFilter = (props) => {
                 && headCells[headCell].id !== 'district_id'
                 && headCells[headCell].id !== 'commune_id'
                 && headCells[headCell].id !== 'image'
-                && headCells[headCell].id !== 'description') {
+                && headCells[headCell].id !== 'description'
+                && headCells[headCell].id !== 'qty'
+                && headCells[headCell].id !== 'status') {
                 if (headCells[headCell].type === 'date') {
                     formFilter.push(
                         <Grid item xs={4} key={index}>
@@ -130,7 +140,88 @@ const FormFilter = (props) => {
                                 />
                             </Grid>
                         )
-                    } else if (headCells[headCell].id === 'group_category_id') {
+                    }
+                    else if (headCells[headCell].id === 'manufacturer') {
+                        formFilter.push(
+                            <Grid item xs={4} key={index}>
+                                <Controller
+                                    name={headCells[headCell].id}
+                                    control={control}
+                                    render={({ field }) => (
+                                        <FormControl variant="standard">
+                                            <Select
+                                                {...field}
+                                                label={t('category.list.table.manafacturer')}
+                                                size="small"
+                                            >
+                                                <MenuItem key={""} value={-1}>
+                                                    {"select manufacturer"}
+                                                </MenuItem>
+
+                                                {
+                                                    manufacturerList.length > 0 && (
+                                                        manufacturerList.map(item => (
+                                                            <MenuItem key={item.id} value={item.id}>
+                                                                {item.name}
+                                                            </MenuItem>
+                                                        ))
+                                                    )
+                                                }
+                                            </Select>
+                                        </FormControl>
+                                    )}
+                                />
+                            </Grid>
+                        )
+                    }
+                    else if (headCells[headCell].id === 'price') {
+                        formFilter.push(
+                            <Grid xs={4} key={index} style={{ display: 'flex', alignItems: 'center', padding: 25 }}>
+                                <Grid item xs={6}>
+                                    <Controller
+                                        name="price_min"
+                                        control={control}
+                                        render={({ field }) => (
+                                            <FormControl variant="standard">
+                                                <TextField
+                                                    {...field}
+                                                    label={"Min price"}
+                                                    size="small"
+                                                    onBlur={(event) => {
+                                                        setValue("price_min", event.target.value ? event.target.value.trim() : '')
+                                                    }}
+                                                    type="number"
+                                                />
+                                            </FormControl>
+                                        )}
+                                    />
+                                </Grid>
+                                <span style={{ margin: "0 10px" }}>~</span>
+                                <Grid item xs={6}>
+                                    <Controller
+                                        name="price_max"
+                                        control={control}
+                                        render={({ field }) => (
+                                            <FormControl variant="standard">
+                                                <TextField
+                                                    {...field}
+                                                    label={"Max price"}
+                                                    size="small"
+                                                    onBlur={(event) => {
+                                                        setValue("price_max", event.target.value ? event.target.value.trim() : '')
+                                                    }}
+                                                    type="number"
+                                                />
+                                            </FormControl>
+                                            
+                                        )}
+                                    />
+                                </Grid>
+
+                            </Grid>
+                        )
+                    }
+                    else if (headCells[headCell].id === 'group_category_id') {
                         formFilter.push(
                             <Grid item xs={4} key={index}>
                                 <Controller
@@ -255,7 +346,13 @@ const FormFilter = (props) => {
     }, [groupCategoryList, categoryList]);
 
     const onFinish = (value) => {
+        if (value.price_max && value.price_min && value.price_min > value.price_max) {
+            setStatus({ type: 'warning', message: "Price is invalid, Min price must be lower than Max price" });
+            setShowNoti(true);
+            return;
+        }
         setSearchFiled(value);
+        setPage(0);
     }
     return (
         <div>

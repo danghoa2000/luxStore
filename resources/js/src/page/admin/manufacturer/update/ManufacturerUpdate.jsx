@@ -18,7 +18,7 @@ const ManufacturerUpdate = (props) => {
         setValue,
         getValues,
         errors,
-        loadding,
+        loading,
         showNoti,
         status,
         setShowNoti
@@ -188,7 +188,7 @@ const ManufacturerUpdate = (props) => {
 
             </div>
             <div className='d-flex justify-content-center w-100'>
-                <Button variant="contained" type='submit' className='m-1' disabled={loadding}>{loadding &&
+                <Button variant="contained" type='submit' className='m-1' disabled={loading}>{loading &&
                     <CircularProgress
                         disableShrink
                         style={{ color: 'white', width: '14px', height: '14px', margin: '0 5px 0 0' }} />}

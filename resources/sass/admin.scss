@@ -109,7 +109,8 @@ header {
         font-weight: bold;
         border: 1px solid rgba(224, 224, 224, 1) !important;
         > span {
-            width: 150px;
+            min-width: 150px;
+            max-width: 100%;
             justify-content: center;
         }
     }
@@ -365,4 +366,16 @@ table {
 
 .css-1l5v1ga-MuiAutocomplete-root {
     margin: 2px;
+}
+
+.edit__property {
+    margin: 0 10px;
+    cursor: pointer;
+    padding: 5px 10px;
+    background-color: #949c1f;
+    border-radius: 20px;
+
+    &:hover {
+        text-decoration: un;
+    }
 }

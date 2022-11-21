@@ -181,7 +181,7 @@ const Shipping = (props) => {
             <div className="card__admin">
                 <Paper style={{ margin: '-25px' }}>
                     <form onSubmit={handleSubmit(handleUpdate)}>
-                        <TableContainer sx={{ maxHeight: 440 }} className='table__dark'>
+                        <TableContainer sx={{ maxHeight: 600 }} className='table__dark'>
                             <Table
                                 sx={{ minWidth: 750 }}
                                 aria-labelledby="tableTitle"

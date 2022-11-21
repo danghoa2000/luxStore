@@ -24,6 +24,11 @@ class GroupCategory extends Model
 
     protected $table = 'group_category';
 
+    public function attributes()
+    {
+        return $this->belongsToMany(Attribute::class, "group_category_attribute", "group_category_id", "attribute_id")->withTimestamps();
+    }
+
     public function scopeFilter($query, $request)
     {
         $data = json_decode($request->searchField, true);

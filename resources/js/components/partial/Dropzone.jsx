@@ -1,6 +1,8 @@
 import { Add, RemoveCircleOutline } from "@mui/icons-material";
 import React, { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useState } from "react";
 import { useDropzone } from "react-dropzone"
+import { API_UPPLOAD } from "../../constants/api";
+import { axiosClient } from "../../hooks/useHttp";
 
 const thumbsContainer = {
     display: 'flex',
@@ -55,6 +57,7 @@ const rejectStyle = {
 const Dropzone = ({
     name,
     multiple,
+    accept,
     setValue,
     setError,
     clearErrors,
@@ -75,19 +78,32 @@ const Dropzone = ({
                 clearErrors(name);
                 acceptedFiles.forEach((file) => {
                     const reader = new FileReader();
-                    reader.onload = function (e) {
-                        setFiles((prevState) => {
-                            if (multiple) {
-                                return [
-                                    ...prevState,
-                                    { file, preview: e.target.result },
-                                ]
-                            } else {
-                                return [{ file, preview: e.target.result }]
-                            }
+                    reader.onload = async function (e) {
+                        let data = new FormData();
+                        data.append("file", file);
+                        data.append("uploadType", "product")
+                        await axiosClient
+                            .post(API_UPPLOAD, data, {
+                                headers: {
+                                    "X-Requested-With": "XMLHttpRequest",
+                                    "Content-Type": "application/x-www-form-urlencoded"
+                                }
+                            })
+                            .then(response => {
+                                return setFiles((prevState) => {
+                                    if (multiple) {
+                                        return [
+                                            ...prevState,
+                                            { file: response.data.path, preview: e.target.result },
+                                        ]
+                                    } else {
+                                        return [{ file: response.data.path, preview: e.target.result }]
+                                    }
 
-                        });
-
+                                });
+                            })
+                            .catch(err => {
+                            });
                     };
                     reader.readAsDataURL(file);
                     return file;
@@ -103,6 +119,7 @@ const Dropzone = ({
         isDragAccept,
         isDragReject
     } = useDropzone({
+        accept,
         multiple,
         onDrop
     })

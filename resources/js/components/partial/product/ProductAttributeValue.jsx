@@ -11,32 +11,28 @@ const ProductAttributeValue = ({
     topFilms,
     attributeValue,
     setAttributeValue,
-    attributeValueList,
+    attributeValueOption,
     handleUpdateAttributeValue
 }) => {
     const [open, setOpen] = useState(false);
     const [options, setOptions] = useState([]);
     const loading = open && options.length === 0;
     const [inputValue, setInputValue] = React.useState('')
-    // useEffect(() => {
-    //     let active = true;
+    useEffect(() => {
+        let active = true;
 
-    //     if (!loading) {
-    //         return undefined;
-    //     }
+        if (!loading) {
+            return undefined;
+        }
 
-    //     (async () => {
-    //         await sleep(1e3); // For demo purposes.
+        (async () => {
+            await sleep(1e3);
+        })();
 
-    //         if (active) {
-    //             setOptions([...attributeValueList]);
-    //         }
-    //     })();
-
-    //     return () => {
-    //         active = false;
-    //     };
-    // }, [loading]);
+        return () => {
+            active = false;
+        };
+    }, [loading]);
 
 
     return (
@@ -50,18 +46,24 @@ const ProductAttributeValue = ({
             onClose={() => {
                 setOpen(false);
             }}
-            // defaultValue={attributeValue}
-            // value={attributeValue || null}
+
             onChange={(event, value) => handleUpdateAttributeValue(value)}
             getOptionLabel={(option) => option.name || ""}
-            options={topFilms}
-
+            options={attributeValueOption}
+            renderOption={(props, option) => {
+                return (
+                    <li {...props} key={option.id}>
+                        {option.name}
+                    </li>
+                );
+            }}
             isOptionEqualToValue={(option, value) => option.id === value.id}
             inputValue={inputValue}
             onInputChange={(_, newInputValue) => {
                 setInputValue(newInputValue)
             }}
             value={attributeValue ? attributeValue : null}
+            defaultValue={attributeValue ? attributeValue : null}
             loading={loading}
             renderInput={(params) => (
                 <TextField

@@ -19,14 +19,31 @@ const ProductCreateContainer = () => {
     const [groupCategorytList, setGroupCategoryList] = useState([]);
     const [categoryList, setCategoryList] = useState([]);
     const [manufacturerList, setManufacturerList] = useState([]);
+    const [groupCategoryId, setGroupCategoryId] = useState(-1);
 
     const avatarRef = useRef();
     const imageRef = useRef();
+    const productPropertyRef = useRef();
+    const categoryGroupRef = useRef();
+
     const redirectBack = () => navigate(-1);
 
     const validationSchema = Yup.object().shape({
         product_code: Yup.string().
             required(t('validate.required', { name: 'Product code' })),
+        name: Yup.string().
+            required(t('validate.required', { name: 'Product name' })),
+        price: Yup.string().
+            required(t('validate.required', { name: 'Price' })),
+        group_category_id: Yup.string()
+            .required(t('validate.required', { name: 'Group category' }))
+            .test("isSelect", t('validate.required', { name: 'Group category' }), value => value != "-1"),
+        category_id: Yup.string()
+            .required(t('validate.required', { name: 'Category' }))
+            .test("isSelect", t('validate.required', { name: 'Category' }), value => value != "-1"),
+        manufacturer_id: Yup.string()
+            .required(t('validate.required', { name: 'Manufacturer' }))
+            .test("isSelect", t('validate.required', { name: 'Manufacturer' }), value => value != "-1"),
     });
 
     const {
@@ -55,28 +72,31 @@ const ProductCreateContainer = () => {
         });
 
     const handleCreate = useCallback((value) => {
-        console.log(value);
-        // setLoading(true);
-        // axiosClient.post(PRODUCT_API.CREATE, {
-        //     ...value
-        // })
-        //     .then((response) => {
-        //         if (response.status === CODE.HTTP_OK) {
-        //             setStatus({ type: 'success', message: response.data.message });
-        //             reset();
-        //         }
-        //         setShowNoti(true);
-        //         setLoading(false);
-        //     }).catch(({ response }) => {
-        //         if (response.status === CODE.UNPROCESSABLE_ENTITY) {
-        //             Object.keys(response.data.errors).forEach(element => {
-        //                 setError(element, { type: 'custom', message: Object.values(response.data.errors[element]) })
-        //             });
-        //         }
-        //         setStatus({ type: 'error', message: response.data ? response.data.message : 'Server error' });
-        //         setShowNoti(true);
-        //         setLoading(false);
-        //     });
+        setLoading(true);
+        axiosClient.post(PRODUCT_API.CREATE, {
+            ...value
+        })
+            .then((response) => {
+                setShowNoti(true);
+                setLoading(false);
+                if (response.status === CODE.HTTP_OK) {
+                    setStatus({ type: 'success', message: response.data.message });
+                    reset();
+                    imageRef.current.removeAll();
+                    avatarRef.current.removeAll();
+                    productPropertyRef.current.removeAll();
+                    setGroupCategoryId(-1);
+                }
+            }).catch(({ response }) => {
+                setShowNoti(true);
+                setLoading(false);
+                if (response.status === CODE.UNPROCESSABLE_ENTITY) {
+                    Object.keys(response.data.errors).forEach(element => {
+                        setError(element, { type: 'custom', message: Object.values(response.data.errors[element]) })
+                    });
+                }
+                setStatus({ type: 'error', message: response.data ? response.data.message : 'Server error' });
+            });
     });
 
     const getGroupCategory = useCallback(() => {
@@ -135,12 +155,18 @@ const ProductCreateContainer = () => {
         loading={loading}
         showNoti={showNoti}
         status={status}
+        setStatus={setStatus}
         setShowNoti={setShowNoti}
         groupCategorytList={groupCategorytList}
         categoryList={categoryList}
         manufacturerList={manufacturerList}
         avatarRef={avatarRef}
         imageRef={imageRef}
+        categoryGroupRef={categoryGroupRef}
+        productPropertyRef={productPropertyRef}
+        getGroupCategory={getGroupCategory}
+        groupCategoryId={groupCategoryId}
+        setGroupCategoryId={setGroupCategoryId}
     />
 };
 

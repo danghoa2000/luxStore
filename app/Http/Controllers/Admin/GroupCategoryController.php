@@ -69,4 +69,26 @@ class GroupCategoryController extends Controller
     {
         return $this->groupCategoryService->delete($id);
     }
+
+    /**
+     * Store a newly attribute created resource in storage.
+     *
+     * @param  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function attribute(Request $request)
+    {
+        return $this->groupCategoryService->attribute($request);
+    }
+
+        /**
+     * Store a newly attribute created resource in storage.
+     *
+     * @param  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function attributeCreate(Request $request)
+    {
+        return $this->groupCategoryService->storeAttribute($request);
+    }
 }

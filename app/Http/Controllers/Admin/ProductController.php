@@ -4,10 +4,12 @@ namespace App\Http\Controllers\admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Services\Admin\ProductService;
+use App\Http\Services\UploadService;
 use Illuminate\Http\Request;
 
 class ProductController extends Controller
 {
+    protected $pathUpload = "product";
     protected $productService;
 
     public function __construct(ProductService $productService)

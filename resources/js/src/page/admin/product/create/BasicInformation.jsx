@@ -29,6 +29,7 @@ const BasicInformation = (props) => {
                     </Typography>
                     <UploadFile
                         name={"avatar"}
+                        accept={{ 'image/*': [] }}
                         multiple={false}
                         control={control}
                         setValue={setValue}
@@ -55,7 +56,7 @@ const BasicInformation = (props) => {
                                     }
                                     placeholder={t('placehoder', { name: t('product.list.table.product_code') })}
                                     onBlur={(event) => {
-                                        setValue(event.target.id, event.target.value ? event.target.value.trim() : '')
+                                        setValue(event.target.name, event.target.value ? event.target.value.trim() : '')
                                     }}
                                 />
                             </FormControl>}
@@ -69,9 +70,8 @@ const BasicInformation = (props) => {
                         control={control}
                         render={({ field }) =>
                             <FormControl variant="standard">
-                                <InputLabel htmlFor="fullName">{t('product.list.table.name')}</InputLabel>
+                                <InputLabel htmlFor="">{t('product.list.table.name')}</InputLabel>
                                 <Input
-                                    id="fullName"
                                     {...field}
                                     startAdornment={
                                         <InputAdornment position="start">
@@ -80,7 +80,7 @@ const BasicInformation = (props) => {
                                     }
                                     placeholder={t('placehoder', { name: t('product.list.table.name') })}
                                     onBlur={(event) => {
-                                        setValue(event.target.id, event.target.value ? event.target.value.trim() : '')
+                                        setValue(event.target.name, event.target.value ? event.target.value.trim() : '')
                                     }}
                                 />
                             </FormControl>}
@@ -93,7 +93,7 @@ const BasicInformation = (props) => {
                         control={control}
                         render={({ field }) =>
                             <FormControl variant="standard">
-                                <InputLabel htmlFor="fullName">{t('product.list.table.price')}<span className='required'></span></InputLabel>
+                                <InputLabel htmlFor="">{t('product.list.table.price')}<span className='required'></span></InputLabel>
                                 <Input
                                     {...field}
                                     startAdornment={
@@ -103,8 +103,9 @@ const BasicInformation = (props) => {
                                     }
                                     placeholder={t('placehoder', { name: t('product.list.table.price') })}
                                     onBlur={(event) => {
-                                        setValue(event.target.id, event.target.value ? event.target.value.trim() : '')
+                                        setValue(event.target.name, event.target.value ? event.target.value.trim() : '')
                                     }}
+                                    type="number"
                                 />
                             </FormControl>}
                     />

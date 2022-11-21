@@ -17,12 +17,13 @@ const ProductImage = (props) => {
     return (
         <div className="card__admin">
             <Typography variant="h5" className='cart_admin_title' gutterBottom>
-                {t('product.list.table.Image')}
+                {t('product.list.table.image')}
             </Typography>
 
             <Grid container sx={{ margin: 0, padding: 1, width: '100%' }} spacing={10}>
                 <UploadFile
                     name={"file"}
+                    accept={{ 'image/*': [] }}
                     multiple={true}
                     control={control}
                     setValue={setValue}

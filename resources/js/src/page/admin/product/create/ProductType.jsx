@@ -1,5 +1,6 @@
 import { FormControl, Grid, MenuItem, Select, TextField } from '@mui/material';
 import React from 'react';
+import { useState } from 'react';
 import { Controller } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
@@ -14,6 +15,9 @@ const ProductType = (props) => {
         groupCategorytList,
         categoryList,
         manufacturerList,
+        onChangeGroupCategory,
+        groupCategoryId,
+        setGroupCategoryId,
     } = props;
     const [t] = useTranslation();
     return (
@@ -29,8 +33,14 @@ const ProductType = (props) => {
                                     {...field}
                                     label={<>{t('product.list.table.group_category_id')}<span className='required'></span></>}
                                     size="small"
+                                    value={groupCategoryId}
+                                    onChange={e => {
+                                        setGroupCategoryId(e.target.value)
+                                        setValue(e.target.name, e.target.value)
+                                        onChangeGroupCategory()
+                                    }}
                                 >
-                                    <MenuItem key={""} value={-1} disabled>
+                                    <MenuItem key={""} value={-1}>
                                         {"select group category"}
                                     </MenuItem>
 
@@ -60,7 +70,7 @@ const ProductType = (props) => {
                                     label={<>{t('product.list.table.category_id')}<span className='required'></span></>}
                                     size="small"
                                 >
-                                    <MenuItem key={""} value={-1} disabled>
+                                    <MenuItem key={""} value={-1}>
                                         {"select category"}
                                     </MenuItem>
 
@@ -90,7 +100,7 @@ const ProductType = (props) => {
                                     label={<>{t('product.list.table.manufacturer_id')}<span className='required'></span></>}
                                     size="small"
                                 >
-                                    <MenuItem key={""} value={-1} disabled>
+                                    <MenuItem key={""} value={-1}>
                                         {"select manufacturer"}
                                     </MenuItem>
 

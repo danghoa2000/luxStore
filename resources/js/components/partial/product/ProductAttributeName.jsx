@@ -14,7 +14,7 @@ const ProductAttributeName = ({
     attributeList,
     handleUpdateAttributeName,
     attributeSelectedList
-}) => {
+}, ref) => {
     const [open, setOpen] = useState(false);
     const [options, setOptions] = useState([]);
     const loading = open && options.length === 0;
@@ -55,8 +55,14 @@ const ProductAttributeName = ({
                 className='select_dark_mode'
                 disablePortal
                 name="attribute"
-                options={topFilms}
-
+                options={attributeList}
+                renderOption={(props, option) => {
+                    return (
+                        <li {...props} key={option.id}>
+                            {option.name}
+                        </li>
+                    );
+                }}
                 isOptionEqualToValue={(option, value) => option.id === value.id}
                 inputValue={inputValue}
                 onInputChange={(_, newInputValue) => {

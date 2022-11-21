@@ -26,7 +26,7 @@ const TableHeader = {
         numeric: true,
         label: "product.list.table.status",
         convert: true,
-        // render: (value) => `status.${value.status}`,
+        render: (value) => `status.${value.status}`,
         type: "status",
         inputMode: 'select'
     },
@@ -40,34 +40,36 @@ const TableHeader = {
         id: "price",
         numeric: true,
         label: "product.list.table.price",
+        render: (value) => value?.product_price[0]?.price || '',
+        inputMode: 'text'
+    },
+    qty: {
+        id: "qty",
+        numeric: true,
+        label: "product.list.table.qty",
+        render: (value) => value?.product_detail_sum_qty || '',
         inputMode: 'text'
     },
     category_id: {
         id: "category_id",
         numeric: true,
         label: "product.list.table.category_id",
-        // render: (value) => value.group_category ? value.group_category.name : '',
+        render: (value) => value.category ? value.category.name : '',
         inputMode: 'select'
     },
     group_category_id: {
         id: "group_category_id",
         numeric: true,
         label: "product.list.table.group_category_id",
-        // render: (value) => value.group_category ? value.group_category.name : '',
+        render: (value) => value?.group_category?.name || '',
         inputMode: 'select'
     },
     manufacturer: {
         id: "manufacturer",
         numeric: true,
         label: "product.list.table.manufacturer_id",
-        // render: (value) => value.group_category ? value.group_category.name : '',
-        inputMode: 'text'
-    },
-    description: {
-        id: "description",
-        numeric: true,
-        label: "product.list.table.description",
-        inputMode: 'text'
+        render: (value) => value.manufacturer ? value.manufacturer.name : '',
+        inputMode: 'select'
     },
 };
 

@@ -3,6 +3,7 @@
 namespace App\Http\Services\Admin;
 
 use App\Models\Product;
+use App\Models\ProductDetail;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
 
@@ -11,13 +12,28 @@ class ProductService
     public function list($request)
     {
         $products = Product::with(
-            'productMedia',
-            'productPrice',
-            'productProperties',
+            'productMedia:product_id,url',
+            'productPrice:product_id,price',
+            'productDetail:id,qty,sold_qty,product_id',
+            'productDetail.propertyValue.attribute:id,name',
+            'productDetail.propertyValue:id,attribute_id,attribute_value_name',
             'productSuggest',
-            'category',
-            'groupCategory'
+            'category:id,name',
+            'groupCategory:id,name',
+            'manufacturer:id,name'
         )
+            ->select(
+                'id',
+                'product_code',
+                'name',
+                'description',
+                'category_id',
+                'group_category_id',
+                'manufacturer_id',
+                'image',
+                'status'
+            )
+            ->withSum('productDetail', 'qty')
             ->filter($request)
             ->where('status', config('constants.user.status.active'));
         $total = count($products->get());
@@ -38,11 +54,38 @@ class ProductService
             $product = Product::create([
                 'product_code' => $request->product_code,
                 'name' => $request->name,
-                'status' => $request->status,
-                'telephone' =>  $request->telephone,
-                'address' =>  $request->address,
+                'description' => $request->description,
+                'category_id' =>  $request->category_id,
+                'group_category_id' =>  $request->group_category_id,
+                'manufacturer_id' =>  $request->manufacturer_id,
+                "image" => $request->avatar ? $request->avatar[0]["file"] : "",
+                "status" => $request->status,
             ]);
+            if ($request->property) {
 
+                foreach ($request->property as $item) {
+
+                    // get qty
+                    $qty = $item["qty"];
+                    unset($item["qty"]); // remove qty
+                    $productDetail = ProductDetail::create([
+                        "qty" => $qty,
+                        "sold_qty" => 0,
+                        "product_id" =>  $product->id,
+                    ]);
+                    $propertyValue = collect($item)->map(function ($element) {
+                        return $element["attributeValue"];
+                    });
+                    $productDetail->propertyValue()->sync($propertyValue);
+                }
+            }
+
+            if ($request->file) {
+                foreach ($request->file as $item) {
+                    $product->productMedia()->create(["url" => $item["file"]]);
+                }
+            }
+            $product->productPrice()->create(["price" => $request->price]);
             DB::commit();
             return response([
                 'product' => $product,
@@ -60,7 +103,29 @@ class ProductService
 
     public function detail($request)
     {
-        $product = Product::find($request->id);
+        $product = Product::with(
+            'productMedia:product_id,url',
+            'productPrice:product_id,price',
+            'productDetail:id,qty,sold_qty,product_id',
+            'productDetail.propertyValue.attribute:id,name',
+            'productDetail.propertyValue:id,attribute_id,attribute_value_name',
+            'productSuggest',
+            'category:id,name',
+            'groupCategory:id,name',
+            'manufacturer:id,name'
+        )
+            ->select(
+                'id',
+                'product_code',
+                'name',
+                'description',
+                'category_id',
+                'group_category_id',
+                'manufacturer_id',
+                'image',
+                'status'
+            )
+            ->find($request->id);
         if ($product) {
             return response([
                 'product' => $product,

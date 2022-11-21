@@ -1,11 +1,12 @@
 import { Autocomplete, Button, TextField } from '@mui/material';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { forwardRef, useCallback, useEffect, useState } from 'react';
 
 import ProductAttributeName from './ProductAttributeName';
 import ProductAttributeValue from './ProductAttributeValue';
 import { AddCircleSharp, RemoveCircle } from '@mui/icons-material';
 import { axiosClient } from '../../../hooks/useHttp';
-import { PRODUCT_API } from '../../../constants/api';
+import { ATTRIBUTE_API, PRODUCT_API } from '../../../constants/api';
+import { useRef } from 'react';
 
 const ProductPropertyItem = ({
     topFilms,
@@ -17,26 +18,28 @@ const ProductPropertyItem = ({
     updateAttributeName,
     updateAttributeValue,
     attributeList,
-    attributeSelectedList
+    attributeValueList,
+    attributeSelectedList,
 }) => {
-    const [attributeName, setAttributeName] = useState(item.attributeName);
-    const [attributeValue, setAttributeValue] = useState(item.attributeValue);
-    const [attributeValueList, setAttributeValueList] = useState([]);
+    const ref= useRef();
+    const [attributeName, setAttributeName] = useState(() => {
+        return attributeList.find(data => data.id === item.attributeName)
+    });
+    const [attributeValue, setAttributeValue] = useState(() => {
+        return "";
+    });
+    const [attributeValueOption, setAttributeValueOption] = useState([]);
 
     const getOptionByAttribute = useCallback(() => {
-        axiosClient.post(PRODUCT_API.OPTIONS, { id: attributeName })
+        axiosClient.post(ATTRIBUTE_API.OPTIONS, { id: attributeName?.id })
             .then((result) => {
-                setAttributeValueList(result.data)
+                setAttributeValueOption(result.data.attribute?.attribute_value.map(({ id, attribute_value_name }) => ({ id, name: attribute_value_name })))
             }).catch((err) => {
                 console.log(err);
             });
-    }, []);
+    }, [attributeName]);
 
-    useEffect(() => {
-        if (attributeName) {
-            getOptionByAttribute();
-        }
-    }, [attributeName])
+
 
     const handleUpdateAttributeName = (value) => {
         setAttributeName(value)
@@ -49,6 +52,11 @@ const ProductPropertyItem = ({
         updateAttributeValue(index, value)
     }
 
+    useEffect(() => {
+        if (attributeName) {
+            getOptionByAttribute();
+        }
+    }, [attributeName])
     return (
         <div style={{ padding: 5, display: 'inline-flex' }}>
             <div className='d-flex' style={{ border: '1px solid', padding: '5px', borderRadius: 5 }}>
@@ -64,7 +72,7 @@ const ProductPropertyItem = ({
                     topFilms={topFilms}
                     attributeValue={attributeValue}
                     setAttributeValue={setAttributeValue}
-                    attributeValueList={attributeValueList}
+                    attributeValueOption={attributeValueOption}
                     handleUpdateAttributeValue={handleUpdateAttributeValue}
                 />
             </div>

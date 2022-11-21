@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\AccountController;
+use App\Http\Controllers\admin\AttributeController;
 use App\Http\Controllers\Admin\CategoriesController;
 use App\Http\Controllers\Admin\GroupCategoryController;
 use App\Http\Controllers\Admin\LoginController;
@@ -9,6 +10,7 @@ use App\Http\Controllers\admin\ManufacturerController;
 use App\Http\Controllers\admin\ProductController;
 use App\Http\Controllers\admin\ShippingController;
 use App\Http\Controllers\DirectionController;
+use App\Http\Controllers\UploadController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -56,6 +58,11 @@ Route::group([
         Route::put('group-category/update', [GroupCategoryController::class, 'update'])->name('groupCategory.update');
         Route::get('group-category/show', [GroupCategoryController::class, 'show'])->name('groupCategory.show');
         Route::delete('group-category/delete/{id}', [GroupCategoryController::class, 'destroy'])->name('groupCategory.delete');
+        Route::post('group-category/attribute/create', [GroupCategoryController::class, 'attributeCreate'])->name('groupCategory.attribute.create');
+        Route::get('group-category/attribute', [GroupCategoryController::class, 'attribute'])->name('groupCategory.attribute');
+
+        Route::post('attribute/create', [AttributeController::class, 'store'])->name('attribute.store');
+        Route::post('attribute/option', [AttributeController::class, 'option'])->name('attribute.option');
 
         Route::get('shipping', [ShippingController::class, 'index'])->name('shipping');
         Route::post('shipping/create', [ShippingController::class, 'store'])->name('shipping.create');
@@ -73,6 +80,7 @@ Route::group([
     });
 });
 
+Route::post('upload', [UploadController::class, 'upload']);
 Route::get('get-province', [DirectionController::class, 'getProvince']);
 Route::get('get-district/{provinceId}', [DirectionController::class, 'getDistrict']);
 Route::get('get-commune/{districtId}', [DirectionController::class, 'getCommune']);

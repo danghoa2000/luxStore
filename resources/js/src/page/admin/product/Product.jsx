@@ -1,5 +1,6 @@
 import { AddCircleSharp, BorderColor, Description, Filter, FolderOpen, ReportProblem, RestoreFromTrash, Search, StarBorder } from '@mui/icons-material';
 import {
+    Avatar,
     Breadcrumbs,
     Button,
     Checkbox,
@@ -23,6 +24,7 @@ import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import ShowSnackbars from '../../../../components/partial/ShowSnackbars';
 import EnhancedTableHead from '../../../../components/partial/table/EnhancedTableHead';
+import { API_BASE_URL } from '../../../../constants/api';
 import { PRODUCT_URL } from '../../../../constants/pathUrl';
 import FormFilter from './FormFilter';
 
@@ -42,7 +44,9 @@ const Product = (props) => {
         productList,
         showNoti,
         status,
+        setStatus,
         setShowNoti,
+        setPage,
         setSearchFiled,
         totalRecord,
         deleteProduct,
@@ -76,13 +80,19 @@ const Product = (props) => {
                         setSearchFiled={setSearchFiled}
                         groupCategoryList={groupCategoryList}
                         categoryList={categoryList}
+                        manufacturerList={manufacturerList}
+                        showNoti={showNoti}
+                        status={status}
+                        setStatus={setStatus}
+                        setShowNoti={setShowNoti}
+                        setPage={setPage}
                     />
                 </div>
             </Collapse>
 
             <div className="card__admin">
                 <Paper style={{ margin: '-25px' }}>
-                    <TableContainer sx={{ maxHeight: 440 }} className='table__dark'>
+                    <TableContainer sx={{ maxHeight: 600 }} className='table__dark'>
                         <Table
                             sx={{ minWidth: 750 }}
                             aria-labelledby="tableTitle"
@@ -124,22 +134,40 @@ const Product = (props) => {
                                                     />
                                                 </TableCell>
                                                 {
-                                                    Object.keys(headCells).map((headCell, index) => (
-                                                        <TableCell
-                                                            component="td"
-                                                            key={index}
-                                                            scope="row"
-                                                            padding="normal"
-                                                        >
-                                                            {headCells[headCell].render
-                                                                ?
-                                                                headCells[headCell].convert ?
-                                                                    t(headCells[headCell].render(row)) :
-                                                                    headCells[headCell].render(row)
+                                                    Object.keys(headCells).map((headCell, index) => {
+                                                        if (headCells[headCell].id == "image") {
+                                                            return (
+                                                                <TableCell
+                                                                    component="td"
+                                                                    key={index}
+                                                                    scope="row"
+                                                                    style={{ padding: 10 }}
+                                                                >
+                                                                    <img src={API_BASE_URL + row[headCell]} alt="" style={{ maxHeight: 150, margin: 'auto', display: 'block' }} />
+                                                                </TableCell>
+                                                            )
+                                                        } else {
+                                                            return (
+                                                                <TableCell
+                                                                    component="td"
+                                                                    key={index}
+                                                                    scope="row"
+                                                                    padding="checkbox"
+                                                                >
+                                                                    {
+                                                                        headCells[headCell].render
+                                                                            ?
+                                                                            headCells[headCell].convert ?
+                                                                                t(headCells[headCell].render(row)) :
+                                                                                headCells[headCell].render(row)
 
-                                                                : row[headCell]}
-                                                        </TableCell>
-                                                    ))
+                                                                            : row[headCell]
+
+                                                                    }
+                                                                </TableCell>
+                                                            )
+                                                        }
+                                                    })
                                                 }
                                             </TableRow>
                                         );

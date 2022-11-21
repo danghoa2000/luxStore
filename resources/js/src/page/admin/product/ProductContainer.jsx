@@ -139,7 +139,9 @@ const ProductContainer = () => {
         productList={productList}
         showNoti={showNoti}
         status={status}
+        setStatus={setStatus}
         setShowNoti={setShowNoti}
+        setPage={setPage}
         setSearchFiled={setSearchFiled}
         totalRecord={totalRecord}
         deleteProduct={deleteProduct}

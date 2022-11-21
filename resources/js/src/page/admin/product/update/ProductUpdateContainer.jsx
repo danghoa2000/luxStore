@@ -1,41 +1,59 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { CATEGORIES_API, GROUP_CATEGORY_API } from '../../../../../constants/api';
+import { CATEGORIES_API, GROUP_CATEGORY_API, MANUFACTURER_API, PRODUCT_API } from '../../../../../constants/api';
 import { axiosClient } from '../../../../../hooks/useHttp';
-import CategoryUpdate from './CategoryUpdate';
+import ProductUpdate from './ProductUpdate';
 import * as Yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useTranslation } from 'react-i18next';
 import { CODE, STATUS } from '../../../../../constants/constants';
-import { useEffect } from 'react';
 
-const CategoryUpdateContainer = () => {
-
+const ProductUpdateContainer = () => {
     const navigate = useNavigate();
     const [toggleDirection, setToggleDirection] = useState(false);
     const [loading, setLoading] = useState(false);
+    const [t] = useTranslation();
     const [status, setStatus] = useState({});
     const [showNoti, setShowNoti] = useState(false);
-    const [category, setCategory] = useState();
+    const [groupCategorytList, setGroupCategoryList] = useState([]);
+    const [categoryList, setCategoryList] = useState([]);
+    const [manufacturerList, setManufacturerList] = useState([]);
+    const [groupCategoryId, setGroupCategoryId] = useState(-1);
+    const [product, setProduct] = useState();
     const { state } = useLocation();
-    const [groupCategoryList, setGroupCategoryList] = useState([]);
+    const avatarRef = useRef();
+    const imageRef = useRef();
+    const productPropertyRef = useRef();
+    const categoryGroupRef = useRef();
 
-    const [t] = useTranslation();
     const redirectBack = () => navigate(-1);
 
     const validationSchema = Yup.object().shape({
-        category_code: Yup.string().
-            required(t('validate.required', { name: 'Category code' })),
+        product_code: Yup.string().
+            required(t('validate.required', { name: 'Product code' })),
+        name: Yup.string().
+            required(t('validate.required', { name: 'Product name' })),
+        price: Yup.string().
+            required(t('validate.required', { name: 'Price' })),
+        group_category_id: Yup.string()
+            .required(t('validate.required', { name: 'Group category' }))
+            .test("isSelect", t('validate.required', { name: 'Group category' }), value => value != "-1"),
+        category_id: Yup.string()
+            .required(t('validate.required', { name: 'Category' }))
+            .test("isSelect", t('validate.required', { name: 'Category' }), value => value != "-1"),
+        manufacturer_id: Yup.string()
+            .required(t('validate.required', { name: 'Manufacturer' }))
+            .test("isSelect", t('validate.required', { name: 'Manufacturer' }), value => value != "-1"),
     });
 
-    const getCategory = useCallback(() => {
-        axiosClient.get(CATEGORIES_API.SHOW, {
+    const getProduct = useCallback(() => {
+        axiosClient.get(PRODUCT_API.SHOW, {
             params: {
                 id: state.id
             }
         }).then((response) => {
-            setCategory(response.data.category);
+            setProduct(response.data.product);
             if (response.data.code === CODE.HTTP_NOT_FOUND) {
                 setStatus({ type: 'error', message: response.data.message });
                 setShowNoti(true)
@@ -47,7 +65,7 @@ const CategoryUpdateContainer = () => {
     }, [state])
 
     useEffect(() => {
-        getCategory();
+        getProduct();
     }, [state])
 
     const {
@@ -57,14 +75,19 @@ const CategoryUpdateContainer = () => {
         setValue,
         getValues,
         setError,
+        clearErrors,
         formState: { errors } }
         = useForm({
             shouldUnregister: false,
             defaultValues: {
-                category_code: '',
+                image: '',
+                product_code: '',
                 name: '',
+                price: '',
                 status: STATUS.ACTIVE,
-                group_category_id: '',
+                group_category_id: -1,
+                category_id: -1,
+                manufacturer_id: -1,
                 description: '',
             },
             resolver: yupResolver(validationSchema),
@@ -72,29 +95,31 @@ const CategoryUpdateContainer = () => {
 
     const handleUpdate = useCallback((value) => {
         setLoading(true);
-        axiosClient.put(CATEGORIES_API.UPDATE, {
+        axiosClient.post(PRODUCT_API.UPDATE, {
             ...value
         })
             .then((response) => {
+                setShowNoti(true);
+                setLoading(false);
                 if (response.status === CODE.HTTP_OK) {
                     setStatus({ type: 'success', message: response.data.message });
+                    reset();
+                    imageRef.current.removeAll();
+                    avatarRef.current.removeAll();
+                    productPropertyRef.current.removeAll();
+                    setGroupCategoryId(-1);
                 }
-                if (response.data.code === CODE.HTTP_NOT_FOUND) {
-                    setStatus({ type: 'error', message: response.data.message });
-                };
-                setShowNoti(true)
-                setLoading(false);
             }).catch(({ response }) => {
+                setShowNoti(true);
+                setLoading(false);
                 if (response.status === CODE.UNPROCESSABLE_ENTITY) {
                     Object.keys(response.data.errors).forEach(element => {
                         setError(element, { type: 'custom', message: Object.values(response.data.errors[element]) })
                     });
                 }
                 setStatus({ type: 'error', message: response.data ? response.data.message : 'Server error' });
-                setShowNoti(true)
-                setLoading(false);
             });
-    }, []);
+    });
 
     const getGroupCategory = useCallback(() => {
         axiosClient.get(GROUP_CATEGORY_API.LIST)
@@ -108,21 +133,48 @@ const CategoryUpdateContainer = () => {
             });
     }, [])
 
+    const getCategoryList = useCallback(() => {
+        axiosClient.get(CATEGORIES_API.LIST).then((response) => {
+            if (response.status === CODE.HTTP_OK) {
+                setCategoryList(response.data.categories);
+            }
+        }).catch((response) => {
+            setStatus({ type: 'error', message: response.data ? response.data.message : 'Server error' });
+            setShowNoti(true)
+        });
+    }, []);
+
+    const getManufacturerList = useCallback(() => {
+        axiosClient.get(MANUFACTURER_API.LIST).then((response) => {
+            if (response.status === CODE.HTTP_OK) {
+                setManufacturerList(response.data.manufacturers);
+            }
+        }).catch((response) => {
+            setStatus({ type: 'error', message: response.data ? response.data.message : 'Server error' });
+            setShowNoti(true)
+        });
+    }, []);
+
+    useEffect(() => {
+        setValue('id', product ? product.id : '');
+        setValue('product_code', product?.product_code);
+        setValue('name', product?.name);
+        setValue('price', product?.product_price[0]?.price);
+        setValue('status', product?.status || -1);
+        setValue('group_category_id', product?.group_category_id);
+        setValue('category_id', product?.category_id);
+        setValue('manufacturer_id', product?.manufacturer_id);
+        setValue('description', product?.description);
+        setGroupCategoryId(product?.group_category_id);
+    }, [product]);
+
     useEffect(() => {
         getGroupCategory();
+        getCategoryList();
+        getManufacturerList();
     }, [])
 
-    useEffect(() => {
-        setValue('id', category ? category.id : '')
-        setValue('category_code', category ? category.category_code : '')
-        setValue('name', category ? category.name : '')
-        setValue('status', category ? category.status : -1)
-        setValue('group_category_id', category ? category.group_category_id : '')
-        setValue('description', category ? category.description : '')
-    }, [category]);
-
-
-    return <CategoryUpdate
+    return <ProductUpdate
         redirectBack={redirectBack}
         handleUpdate={handleUpdate}
         toggleDirection={toggleDirection}
@@ -132,13 +184,26 @@ const CategoryUpdateContainer = () => {
         reset={reset}
         setValue={setValue}
         getValues={getValues}
+        setError={setError}
+        clearErrors={clearErrors}
         errors={errors}
         loading={loading}
         showNoti={showNoti}
         status={status}
+        setStatus={setStatus}
         setShowNoti={setShowNoti}
-        groupCategoryList={groupCategoryList}
+        groupCategorytList={groupCategorytList}
+        categoryList={categoryList}
+        manufacturerList={manufacturerList}
+        avatarRef={avatarRef}
+        imageRef={imageRef}
+        categoryGroupRef={categoryGroupRef}
+        productPropertyRef={productPropertyRef}
+        getGroupCategory={getGroupCategory}
+        groupCategoryId={groupCategoryId}
+        setGroupCategoryId={setGroupCategoryId}
+        product={product}
     />
 };
 
-export default CategoryUpdateContainer;
+export default ProductUpdateContainer;

@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Product extends Model
 {
     use HasFactory;
+    const UPLOAD_PATH = "product/";
 
     /**
      * The attributes that are mass assignable.
@@ -16,7 +17,7 @@ class Product extends Model
      */
     protected $fillable = [
         'id',
-        'product_code ',
+        'product_code',
         'name',
         'status',
         'description',
@@ -30,6 +31,16 @@ class Product extends Model
 
     protected $table = 'products';
 
+    public function productDetail()
+    {
+        return $this->hasMany(ProductDetail::class, 'product_id', 'id');
+    }
+
+    public function manufacturer()
+    {
+        return $this->belongsTo(Manufacturer::class, 'manufacturer_id', 'id');
+    }
+
     public function productMedia()
     {
         return $this->hasMany(ProductMedia::class, 'product_id', 'id');
@@ -37,7 +48,7 @@ class Product extends Model
 
     public function productPrice()
     {
-        return $this->hasMany(ProductPrice::class, 'product_id', 'id');
+        return $this->hasMany(ProductPrice::class, 'product_id', 'id')->orderByDesc("created_at");
     }
 
     public function productProperties()
@@ -62,25 +73,38 @@ class Product extends Model
 
     public function scopeFilter($query, $request)
     {
-        // $data = json_decode($request->searchField, true);
-        // if (!empty($data['manufacturer_code'])) {
-        //     $query->where('manufacturer_code', $data['manufacturer_code']);
-        // }
-        // if (!empty($data['status']) && $data['status'] != -1) {
-        //     $query->where('status', $data['status']);
-        // }
-        // if (isset($data['status']) && $data['status'] == 0) {
-        //     $query->where('status', $data['status']);
-        // }
-        // if (!empty($data['name'])) {
-        //     $query->where('name', 'like', '%' . $data['name'] . '%');
-        // }
-        // if (!empty($data['telephone'])) {
-        //     $query->where('telephone', $data['telephone']);
-        // }
-        // if (!empty($data['address'])) {
-        //     $query->where('address', 'like', '%' . $data['address'] . '%');
-        // }
+        $data = json_decode($request->searchField, true);
+        if (!empty($data['product_code'])) {
+            $query->where('product_code', $data['product_code']);
+        }
+        if (!empty($data['status']) && $data['status'] != -1) {
+            $query->where('status', $data['status']);
+        }
+        if (isset($data['status']) && $data['status'] == 0) {
+            $query->where('status', $data['status']);
+        }
+        if (!empty($data['name'])) {
+            $query->where('name', 'like', '%' . $data['name'] . '%');
+        }
+        if (!empty($data['price_min'])) {
+            $query->whereHas('productPrice', function($q) use ($data) {
+                $q->latest()->where('price', ">=", $data['price_min']);
+            });
+        }
+        if (!empty($data['price_max'])) {
+            $query->whereHas('productPrice', function($q) use ($data) {
+                $q->latest()->where('price', "<=", $data['price_max']);
+            });
+        }
+        if (!empty($data['category_id']) && $data['category_id'] != -1) {
+            $query->where('category_id',  $data['category_id']);
+        }
+        if (!empty($data['manufacturer']) && $data['manufacturer'] != -1) {
+            $query->where('manufacturer_id',  $data['manufacturer_id']);
+        }
+        if (!empty($data['group_category_id']) && $data['group_category_id'] != -1) {
+            $query->where('category_id',  $data['group_category_id']);
+        }
         return $query;
     }
 }

@@ -35,6 +35,8 @@ export const GROUP_CATEGORY_API = {
     UPDATE: API_BASE_URL + "api/auth/admin/group-category/update",
     SHOW: API_BASE_URL + "api/auth/admin/group-category/show",
     DELETE: API_BASE_URL + "api/auth/admin/group-category/delete",
+    ATTRIBUTE: API_BASE_URL + "api/auth/admin/group-category/attribute",
+    ATTRIBUTE_CREATE: API_BASE_URL + "api/auth/admin/group-category/attribute/create",
 };
 
 export const SHIPPING_API = {
@@ -49,6 +51,12 @@ export const PRODUCT_API = {
     CREATE: API_BASE_URL + "api/auth/admin/product/create",
     UPDATE: API_BASE_URL + "api/auth/admin/product/update",
     SHOW: API_BASE_URL + "api/auth/admin/product/show",
-    OPTIONS: API_BASE_URL + "api/auth/admin/product/option",
     ATTRIBUTE: API_BASE_URL + "api/auth/admin/product/attribute",
+};
+
+export const API_UPPLOAD = API_BASE_URL + "api/upload";
+
+export const ATTRIBUTE_API = {
+    CREATE: API_BASE_URL + "api/auth/admin/attribute/create",
+    OPTIONS: API_BASE_URL + "api/auth/admin/attribute/option",
 };

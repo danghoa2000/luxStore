@@ -1,16 +1,28 @@
-import { Box, Button, FormControl, Grid, Input, InputAdornment, InputLabel, Modal, Typography } from '@mui/material';
+import { Box, Button, CircularProgress, FormControl, Grid, Input, InputAdornment, InputLabel, MenuItem, Modal, Select, Typography } from '@mui/material';
 import React, { useCallback, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import * as Yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { AccountCircle } from '@mui/icons-material';
+import { axiosClient } from '../../../hooks/useHttp';
+import { GROUP_CATEGORY_API } from '../../../constants/api';
+import { CODE, STATUS } from '../../../constants/constants';
 
-const CreateAttributeModal = () => {
+const CreateAttributeModal = ({
+    getAttributeList,
+    groupCategorytList,
+    setShowNoti,
+    setStatus,
+}) => {
     const [t] = useTranslation();
+    const [loading, setLoading] = useState(false);
     const validationSchema = Yup.object().shape({
         attribute: Yup.string().
             required(t('validate.required', { name: 'attribute' })),
+        group_category_id: Yup.string()
+            .required(t('validate.required', { name: 'Group category' }))
+            .test("isSelect", t('validate.required', { name: 'Group category' }), value => value != "-1"),
     });
     const {
         handleSubmit,
@@ -23,13 +35,40 @@ const CreateAttributeModal = () => {
         = useForm({
             shouldUnregister: false,
             defaultValues: {
-                attribute: ""
+                attribute: "",
+                group_category_id: -1
             },
             resolver: yupResolver(validationSchema),
         });
 
     const handleCreate = useCallback((value) => {
-        console.log(value);
+        setLoading(true);
+        axiosClient.post(GROUP_CATEGORY_API.ATTRIBUTE_CREATE, {
+            ...value
+        })
+            .then((response) => {
+                setShowNoti(true);
+                setLoading(false);
+                if (response.status === CODE.HTTP_OK) {
+                    setStatus({ type: 'success', message: response.data.message });
+                    reset();
+                    getAttributeList()
+                }
+
+                if (response.status === CODE.HTTP_NOT_FOUND) {
+                    setStatus({ type: 'error', message: response.data.message });
+                }
+            }).catch(({ response }) => {
+                setShowNoti(true);
+                setLoading(false);
+                if (response.status === CODE.UNPROCESSABLE_ENTITY) {
+                    Object.keys(response.data.errors).forEach(element => {
+                        setError(element, { type: 'custom', message: Object.values(response.data.errors[element]) })
+                    });
+                } else {
+                    setStatus({ type: 'error', message: response.data ? response.data.message : 'Server error' });
+                }
+            });
     }, []);
     return (
         <>
@@ -38,6 +77,35 @@ const CreateAttributeModal = () => {
             </Typography>
             <form>
                 <Grid container sx={{ margin: 0, padding: 1, width: '100%' }} spacing={10}>
+                    <Grid item xs={12}>
+                        <Controller
+                            name="group_category_id"
+                            control={control}
+                            render={({ field }) =>
+                                <FormControl variant="standard">
+                                    <Select
+                                        {...field}
+                                        label={<>{t('product.list.table.group_category_id')}<span className='required'></span></>}
+                                        size="small"
+                                    >
+                                        <MenuItem key={""} value={-1}>
+                                            {"select group category"}
+                                        </MenuItem>
+
+                                        {
+                                            groupCategorytList.length > 0 && (
+                                                groupCategorytList.map(item => (
+                                                    <MenuItem key={item.id} value={item.id}>
+                                                        {item.name}
+                                                    </MenuItem>
+                                                ))
+                                            )
+                                        }
+                                    </Select>
+                                </FormControl>}
+                        />
+                        {errors.group_category_id && <p className='text-danger'>{errors.group_category_id.message}</p>}
+                    </Grid>
                     <Grid item xs={12}>
                         <div className='d-inline'>
                             <Controller
@@ -64,9 +132,13 @@ const CreateAttributeModal = () => {
                             {errors.attribute && <p className='text-danger'>{errors.attribute.message}</p>}
                         </div>
                     </Grid>
-                    <Button variant="contained" className='m-1' style={{ textTransform: 'none', width: 180, maxWidth: '100%' }}
+
+                    <Button variant="contained" className='m-1' style={{ textTransform: 'none', maxWidth: '100%' }}
                         onClick={handleSubmit(handleCreate)}
-                    >
+                        disabled={loading}>{loading &&
+                            <CircularProgress
+                                disableShrink
+                                style={{ color: 'white', width: '14px', height: '14px', margin: '0 5px 0 0' }} />}
                         Create new attribute
                     </Button>
                 </Grid>

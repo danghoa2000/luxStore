@@ -21,15 +21,20 @@ const ProductCreate = (props) => {
         setError,
         clearErrors,
         errors,
-        loadding,
+        loading,
         showNoti,
+        setStatus,
         status,
         setShowNoti,
         groupCategorytList,
         categoryList,
         manufacturerList,
         avatarRef,
-        imageRef
+        imageRef,
+        productPropertyRef,
+        getGroupCategory,
+        groupCategoryId,
+        setGroupCategoryId,
     } = props;
 
     const [t] = useTranslation();
@@ -62,6 +67,8 @@ const ProductCreate = (props) => {
                 avatarRef={avatarRef}
             />
             <ProductType
+                groupCategoryId={groupCategoryId}
+                setGroupCategoryId={setGroupCategoryId}
                 control={control}
                 setValue={setValue}
                 getValues={getValues}
@@ -71,6 +78,9 @@ const ProductCreate = (props) => {
                 groupCategorytList={groupCategorytList}
                 categoryList={categoryList}
                 manufacturerList={manufacturerList}
+                onChangeGroupCategory={() => {
+                    productPropertyRef.current.removeAll()
+                }}
             />
             <ProductImage
                 control={control}
@@ -88,6 +98,13 @@ const ProductCreate = (props) => {
                 setError={setError}
                 clearErrors={clearErrors}
                 errors={errors}
+                setStatus={setStatus}
+                setShowNoti={setShowNoti}
+                ref={productPropertyRef}
+                name="property"
+                groupCategorytList={groupCategorytList}
+                getGroupCategory={getGroupCategory}
+
             />
             <ProductSetting
                 control={control}
@@ -99,7 +116,7 @@ const ProductCreate = (props) => {
             />
 
             <div className='d-flex justify-content-center w-100'>
-                <Button variant="contained" type='submit' className='m-1' disabled={loadding}>{loadding &&
+                <Button variant="contained" type='submit' className='m-1' disabled={loading}>{loading &&
                     <CircularProgress
                         disableShrink
                         style={{ color: 'white', width: '14px', height: '14px', margin: '0 5px 0 0' }} />}
@@ -107,9 +124,11 @@ const ProductCreate = (props) => {
                 </Button>
                 <Button variant="contained" type='reset' className='m-1 btn-cancel'
                     onClick={() => {
-                        imageRef.current.removeAll()
-                        avatarRef.current.removeAll()
-                        reset()
+                        imageRef.current.removeAll();
+                        avatarRef.current.removeAll();
+                        productPropertyRef.current.removeAll();
+                        reset();
+                        setGroupCategoryId(-1)
                     }}
                 >Clear</Button>
             </div>

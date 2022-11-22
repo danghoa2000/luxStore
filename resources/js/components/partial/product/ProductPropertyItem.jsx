@@ -26,7 +26,7 @@ const ProductPropertyItem = ({
         return attributeList.find(data => data.id === item.attributeName)
     });
     const [attributeValue, setAttributeValue] = useState(() => {
-        return "";
+        return { id: item?.attributeValue, name: item?.attributeValueDisplay };
     });
     const [attributeValueOption, setAttributeValueOption] = useState([]);
 

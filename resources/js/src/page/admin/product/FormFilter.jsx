@@ -176,7 +176,7 @@ const FormFilter = (props) => {
                     }
                     else if (headCells[headCell].id === 'price') {
                         formFilter.push(
-                            <Grid xs={4} key={index} style={{ display: 'flex', alignItems: 'center', padding: 25 }}>
+                            <Grid item xs={4} key={index} style={{ display: 'flex', alignItems: 'center', padding: 25 }}>
                                 <Grid item xs={6}>
                                     <Controller
                                         name="price_min"

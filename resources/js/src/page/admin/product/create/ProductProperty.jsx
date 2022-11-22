@@ -40,7 +40,7 @@ const ProductProperty = (props, ref) => {
         product
     } = props;
     const [t] = useTranslation();
-    const [properties, setProperties] = useState({});
+    const [properties, setProperties] = useState([]);
     const [propertiesList, setPropertiesList] = useState([]);
     const [propertyCount, setpropertyCount] = useState(0);
     const [attributeList, setAttributeList] = useState([]);
@@ -64,27 +64,33 @@ const ProductProperty = (props, ref) => {
             }).catch((err) => {
                 console.log(err);
             });
-    }, [getValues("group_category_id")]);
+    }, []);
 
     const removeProperty = useCallback((index) => {
         const { [index]: _, ...newProperties } = properties;
-        setProperties(newProperties)
+        setProperties(Object.keys(newProperties).map(key => newProperties[key]));
         setAttributeSelectedList(attributeSelectedList.filter(item => item !== properties[index].attributeName))
     }, [attributeSelectedList, properties]);
 
     const updateAttributeName = useCallback((index, value) => {
-        setProperties(pre => ({ ...pre, [index]: { attributeName: value?.id || "", attributeValue: "" } }));
+        let newProperties = [...properties];
+        newProperties[index] = { ...newProperties[index], attributeName: value?.id, attributeNameDisplay: value?.name };
+        setProperties(newProperties);
         let newAttributeSelectedList = [...attributeSelectedList];
         newAttributeSelectedList = newAttributeSelectedList.filter(item => item !== properties[index].attributeName);
-        if (value?.id) {
+        console.log(newAttributeSelectedList);
+        if (value?.id && !newAttributeSelectedList.includes(value?.id)) {
             newAttributeSelectedList.push(value.id);
         }
+        console.log(newAttributeSelectedList);
         setAttributeSelectedList(newAttributeSelectedList);
     }, [attributeSelectedList, properties])
 
-    const updateAttributeValue = (index, value) => {
-        setProperties(pre => ({ ...pre, [index]: { ...pre[index], attributeValue: value?.id || "" } }));
-    }
+    const updateAttributeValue = useCallback((index, value) => {
+        let newProperties = [...properties];
+        newProperties[index] = { ...newProperties[index], attributeValue: value?.id, attributeValueDisplay: value?.name };
+        setProperties(newProperties);
+    }, [properties])
 
     const saveProperty = useCallback(() => {
         const error = validateProperty();
@@ -101,15 +107,15 @@ const ProductProperty = (props, ref) => {
             newPropertiesList[idEdit].qty = qty;
             setPropertiesList(newPropertiesList);
         }
-        setProperties({});
+        setProperties([]);
         setIdEdit(null);
         setAttributeSelectedList([]);
     }, [properties, propertiesList, idEdit, qty]);
 
     const validateProperty = useCallback(() => {
         let error = false;
-        Object.entries(properties).forEach(([item, key]) => {
-            if (properties[item].attributeName && properties[item].attributeValue) {
+        Object.entries(properties).forEach(([key, item]) => {
+            if (properties[key].attributeName && properties[key].attributeValue) {
             } else {
                 error = true;
             }
@@ -118,7 +124,7 @@ const ProductProperty = (props, ref) => {
     }, [properties])
 
     const removeAll = useCallback(() => {
-        setProperties({});
+        setProperties([]);
         setPropertiesList([])
         setValue(name, []);
         setAttributeSelectedList([])
@@ -154,7 +160,12 @@ const ProductProperty = (props, ref) => {
     useEffect(() => {
         if (product) {
             const newData = product?.product_detail?.map(item => {
-                const newItem = (item.property_value).map(element => ({ attributeName: element.attribute_id, attributeValue: element.id }))
+                const newItem = (item.property_value).map(element => ({
+                    attributeName: element.attribute.id,
+                    attributeNameDisplay: element.attribute.name,
+                    attributeValue: element.id,
+                    attributeValueDisplay: element.attribute_value_name
+                }))
                 return {
                     ...newItem,
                     qty: item.qty
@@ -170,6 +181,16 @@ const ProductProperty = (props, ref) => {
             setIdEdit(null);
             setQty(0)
         }
+        else {
+            let data = [];
+            Object.keys(properties).map(item => {
+                if (properties[item]?.attributeName && !data.includes(properties[item]?.attributeName)) {
+                    data.push(properties[item]?.attributeName);
+                }
+                return item;
+            })
+            setAttributeSelectedList(data);
+        }
     }, [properties]);
 
     useEffect(() => {
@@ -177,7 +198,7 @@ const ProductProperty = (props, ref) => {
     }, [name, propertiesList]);
 
     useEffect(() => {
-        if (getValues("group_category_id") !== -1) {
+        if (getValues("group_category_id") && getValues("group_category_id") != -1) {
             getAttributeList();
         } else {
             setAttributeList([])
@@ -195,9 +216,9 @@ const ProductProperty = (props, ref) => {
                     <Grid>
                         {
                             properties && Object.keys(properties).length > 0 &&
-                            Object.entries(properties).map(([item, key]) => {
+                            Object.entries(properties).map(([key, item]) => {
                                 return (
-                                    renderProperty(item, item)
+                                    renderProperty(key, item)
                                 );
                             })
                         }
@@ -219,10 +240,7 @@ const ProductProperty = (props, ref) => {
                     <Grid>
                         <IconButton aria-label="delete" style={{ background: 'rgba(0, 0, 0, 0.04)', borderRadius: '50%', width: 80, height: 80 }}
                             onClick={() => {
-                                const newProperty = { ...properties };
-                                newProperty[propertyCount] = { attributeName: '', attributeValue: '' };
-                                setpropertyCount(propertyCount + 1)
-                                setProperties(newProperty);
+                                setProperties(pre => [...pre, { attributeName: '', attributeNameDisplay: '', attributeValue: '', attributeValueDisplay: '' }]);
                             }}
                         >
                             <Add style={{ color: '#fff' }} />
@@ -242,7 +260,7 @@ const ProductProperty = (props, ref) => {
                                             {
                                                 Object.values(newItem).map((item, index) => {
                                                     return (
-                                                        attributeList[index]?.name + ': ' + attributeValueList[index]?.name + ', '
+                                                        item?.attributeNameDisplay + ': ' + item?.attributeValueDisplay + ', '
                                                     )
                                                 })
                                             }
@@ -252,13 +270,7 @@ const ProductProperty = (props, ref) => {
                                             <span
                                                 className='edit__property'
                                                 onClick={() => {
-                                                    setProperties(newItem)
-                                                    Object.entries(newItem).map(([value, key], index, arr) => {
-                                                        if (index === (arr.length - 1)) {
-                                                            setpropertyCount(Number(key) + 1)
-                                                        };
-                                                        return 1;
-                                                    })
+                                                    setProperties(Object.keys(newItem).map(key => newItem[key]))
                                                     setIdEdit(index);
                                                     setQty(qty)
                                                 }}>Edit</span>

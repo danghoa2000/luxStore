@@ -21,6 +21,9 @@ const ProductUpdateContainer = () => {
     const [manufacturerList, setManufacturerList] = useState([]);
     const [groupCategoryId, setGroupCategoryId] = useState(-1);
     const [product, setProduct] = useState();
+    const [isCompleteSettingGroupCategory, setCompleteSettingGroupCategory] = useState(false);
+    const [isCompleteSettingCategory, setCompleteSettingCategory] = useState(false);
+    const [isCompleteSettingManufacturer, setCompleteSettingManufacturer] = useState(false);
     const { state } = useLocation();
     const avatarRef = useRef();
     const imageRef = useRef();
@@ -124,6 +127,7 @@ const ProductUpdateContainer = () => {
     const getGroupCategory = useCallback(() => {
         axiosClient.get(GROUP_CATEGORY_API.LIST)
             .then((response) => {
+                setCompleteSettingGroupCategory(true);
                 if (response.status === CODE.HTTP_OK) {
                     setGroupCategoryList(response.data.groupCategories);
                 }
@@ -135,6 +139,7 @@ const ProductUpdateContainer = () => {
 
     const getCategoryList = useCallback(() => {
         axiosClient.get(CATEGORIES_API.LIST).then((response) => {
+            setCompleteSettingCategory(true);
             if (response.status === CODE.HTTP_OK) {
                 setCategoryList(response.data.categories);
             }
@@ -146,6 +151,7 @@ const ProductUpdateContainer = () => {
 
     const getManufacturerList = useCallback(() => {
         axiosClient.get(MANUFACTURER_API.LIST).then((response) => {
+            setCompleteSettingManufacturer(true);
             if (response.status === CODE.HTTP_OK) {
                 setManufacturerList(response.data.manufacturers);
             }
@@ -156,23 +162,25 @@ const ProductUpdateContainer = () => {
     }, []);
 
     useEffect(() => {
-        setValue('id', product ? product.id : '');
-        setValue('product_code', product?.product_code);
-        setValue('name', product?.name);
-        setValue('price', product?.product_price[0]?.price);
-        setValue('status', product?.status || -1);
-        setValue('group_category_id', product?.group_category_id);
-        setValue('category_id', product?.category_id);
-        setValue('manufacturer_id', product?.manufacturer_id);
-        setValue('description', product?.description);
-        setGroupCategoryId(product?.group_category_id);
-    }, [product]);
-
-    useEffect(() => {
         getGroupCategory();
         getCategoryList();
         getManufacturerList();
     }, [])
+
+    useEffect(() => {
+        if (isCompleteSettingCategory && isCompleteSettingGroupCategory && isCompleteSettingManufacturer) {
+            setValue('id', product ? product.id : '');
+            setValue('product_code', product?.product_code);
+            setValue('name', product?.name);
+            setValue('price', product?.product_price[0]?.price);
+            setValue('status', product?.status || -1);
+            setValue('group_category_id', product?.group_category_id || -1);
+            setValue('category_id', product?.category_id || -1);
+            setValue('manufacturer_id', product?.manufacturer_id || -1);
+            setValue('description', product?.description);
+            setGroupCategoryId(product?.group_category_id);
+        }
+    }, [product, isCompleteSettingCategory, isCompleteSettingGroupCategory, isCompleteSettingManufacturer]);
 
     return <ProductUpdate
         redirectBack={redirectBack}

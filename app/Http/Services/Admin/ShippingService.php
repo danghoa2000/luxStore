@@ -49,7 +49,7 @@ class ShippingService
                 'code' => Response::HTTP_OK
             ], Response::HTTP_OK);
         } catch (\Throwable $th) {
-            dd(111);
+
             DB::rollBack();
             return response([
                 'message' => 'Create shipping error!',

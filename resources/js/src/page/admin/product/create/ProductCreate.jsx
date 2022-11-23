@@ -33,8 +33,7 @@ const ProductCreate = (props) => {
         imageRef,
         productPropertyRef,
         getGroupCategory,
-        groupCategoryId,
-        setGroupCategoryId,
+        product
     } = props;
 
     const [t] = useTranslation();
@@ -67,8 +66,6 @@ const ProductCreate = (props) => {
                 avatarRef={avatarRef}
             />
             <ProductType
-                groupCategoryId={groupCategoryId}
-                setGroupCategoryId={setGroupCategoryId}
                 control={control}
                 setValue={setValue}
                 getValues={getValues}
@@ -90,6 +87,7 @@ const ProductCreate = (props) => {
                 clearErrors={clearErrors}
                 errors={errors}
                 imageRef={imageRef}
+                initValue={product && product?.product_media.map(item => item.url)}
             />
             <ProductProperty
                 control={control}

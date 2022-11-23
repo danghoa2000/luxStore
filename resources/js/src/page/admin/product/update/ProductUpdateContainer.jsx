@@ -83,34 +83,32 @@ const ProductUpdateContainer = () => {
         = useForm({
             shouldUnregister: false,
             defaultValues: {
-                image: '',
+                avatar: '',
                 product_code: '',
                 name: '',
                 price: '',
                 status: STATUS.ACTIVE,
-                group_category_id: -1,
+                group_category_id: groupCategoryId,
                 category_id: -1,
                 manufacturer_id: -1,
                 description: '',
             },
-            resolver: yupResolver(validationSchema),
+            // resolver: yupResolver(validationSchema),
         });
 
     const handleUpdate = useCallback((value) => {
         setLoading(true);
-        axiosClient.post(PRODUCT_API.UPDATE, {
+        axiosClient.put(PRODUCT_API.UPDATE, {
             ...value
         })
             .then((response) => {
                 setShowNoti(true);
                 setLoading(false);
                 if (response.status === CODE.HTTP_OK) {
-                    setStatus({ type: 'success', message: response.data.message });
-                    reset();
-                    imageRef.current.removeAll();
-                    avatarRef.current.removeAll();
-                    productPropertyRef.current.removeAll();
-                    setGroupCategoryId(-1);
+                     setStatus({ type: 'success', message: response.data.message });
+                     setTimeout(() => {
+                        navigate(-1);
+                     }, 1500)
                 }
             }).catch(({ response }) => {
                 setShowNoti(true);
@@ -122,7 +120,7 @@ const ProductUpdateContainer = () => {
                 }
                 setStatus({ type: 'error', message: response.data ? response.data.message : 'Server error' });
             });
-    });
+    }, []);
 
     const getGroupCategory = useCallback(() => {
         axiosClient.get(GROUP_CATEGORY_API.LIST)
@@ -170,15 +168,15 @@ const ProductUpdateContainer = () => {
     useEffect(() => {
         if (isCompleteSettingCategory && isCompleteSettingGroupCategory && isCompleteSettingManufacturer) {
             setValue('id', product ? product.id : '');
-            setValue('product_code', product?.product_code);
-            setValue('name', product?.name);
-            setValue('price', product?.product_price[0]?.price);
+            setValue('product_code', product?.product_code || '');
+            setValue('name', product?.name || '');
+            setValue('price', product?.product_price[0]?.price || '');
             setValue('status', product?.status || -1);
             setValue('group_category_id', product?.group_category_id || -1);
             setValue('category_id', product?.category_id || -1);
             setValue('manufacturer_id', product?.manufacturer_id || -1);
-            setValue('description', product?.description);
-            setGroupCategoryId(product?.group_category_id);
+            setValue('description', product?.description || '');
+            setGroupCategoryId(product?.group_category_id || -1);
         }
     }, [product, isCompleteSettingCategory, isCompleteSettingGroupCategory, isCompleteSettingManufacturer]);
 

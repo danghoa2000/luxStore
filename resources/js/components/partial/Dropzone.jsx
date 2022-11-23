@@ -1,7 +1,7 @@
 import { Add, RemoveCircleOutline } from "@mui/icons-material";
 import React, { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useState } from "react";
 import { useDropzone } from "react-dropzone"
-import { API_UPPLOAD } from "../../constants/api";
+import { API_BASE_URL, API_UPPLOAD } from "../../constants/api";
 import { axiosClient } from "../../hooks/useHttp";
 
 const thumbsContainer = {
@@ -59,23 +59,24 @@ const Dropzone = ({
     multiple,
     accept,
     setValue,
-    setError,
-    clearErrors,
+    // setError,
+    // clearErrors,
+    getValues,
+    initValue,
 }, ref) => {
-
+    console.log("re-render");
     const [files, setFiles] = useState([]);
-
     const onDrop = useCallback(
         (acceptedFiles, rejectedFiles) => {
             if (rejectedFiles && rejectedFiles.length > 0) {
                 setValue(name, []);
                 setFiles([]);
-                setError(name, {
-                    type: 'manual',
-                    message: rejectedFiles && rejectedFiles[0].errors[0].message,
-                });
+                // setError(name, {
+                //     type: 'manual',
+                //     message: rejectedFiles && rejectedFiles[0].errors[0].message,
+                // });
             } else {
-                clearErrors(name);
+                // clearErrors(name);
                 acceptedFiles.forEach((file) => {
                     const reader = new FileReader();
                     reader.onload = async function (e) {
@@ -109,8 +110,10 @@ const Dropzone = ({
                     return file;
                 });
             }
+            console.log("add", name, files);
+
         },
-        [name, setValue, setError, clearErrors, files])
+        [name, files])
 
     const {
         getRootProps,
@@ -125,7 +128,7 @@ const Dropzone = ({
     })
     useEffect(() => {
         setValue(name, files);
-    }, [files])
+    }, [name, files])
     const style = useMemo(() => ({
         ...baseStyle,
         ...(isFocused ? focusedStyle : {}),
@@ -144,12 +147,10 @@ const Dropzone = ({
             newFiles = [];
         }
         setFiles(newFiles);
-        setValue(name, newFiles);
-    }, [files]);
+    }, [files, name]);
 
     const removeAll = useCallback(() => {
         setFiles([]);
-        setValue(name, []);
     }, [name]);
 
     useImperativeHandle(ref, () => ({
@@ -158,15 +159,26 @@ const Dropzone = ({
         }
     }), [name, ref])
 
+    useEffect(() => {
+        console.log(initValue);
+        if (initValue) {
+            setFiles(initValue);
+        }
+    }, [initValue])
+
+    useEffect(() => {
+        console.log(getValues(name));
+        setFiles(getValues(name));
+    }, [name, getValues])
     const thumbs = useMemo(() =>
         files && files.length > 0 && files.map((file, index) => (
             <div style={thumb} key={index}>
                 <div className='image__list'>
                     <img
-                        src={file.preview}
+                        src={file?.preview || (API_BASE_URL + file?.file)}
                         style={img}
                         // Revoke data uri after image is loaded
-                        onLoad={() => { URL.revokeObjectURL(file.preview) }}
+                        onLoad={() => { URL.revokeObjectURL(file?.preview) }}
                     />
                     <div className='remove__image'>
                         <RemoveCircleOutline
@@ -176,7 +188,7 @@ const Dropzone = ({
                 </div>
             </div>
         ))
-        , [files]);
+        , [files, initValue]);
 
     return (
         <section style={{ ...thumbsContainer }}>

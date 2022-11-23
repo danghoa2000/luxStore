@@ -43,7 +43,7 @@ class Product extends Model
 
     public function productMedia()
     {
-        return $this->hasMany(ProductMedia::class, 'product_id', 'id');
+        return $this->hasOne(ProductMedia::class, 'product_id', 'id');
     }
 
     public function productPrice()

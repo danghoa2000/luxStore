@@ -79,12 +79,10 @@ class ProductService
                     $productDetail->propertyValue()->sync($propertyValue);
                 }
             }
+                $product->productMedia()->create(["url" => collect($request->file)->map(function ($item) {
+                    return $item["file"];
+                })]);
 
-            if ($request->file) {
-                foreach ($request->file as $item) {
-                    $product->productMedia()->create(["url" => $item["file"]]);
-                }
-            }
             $product->productPrice()->create(["price" => $request->price]);
             DB::commit();
             return response([
@@ -149,30 +147,56 @@ class ProductService
             if ($product) {
                 $product->update([
                     'name' => $request->name,
-                    'status' => $request->status,
-                    'telephone' =>  $request->telephone,
-                    'address' =>  $request->address,
+                    'description' => $request->description,
+                    'category_id' =>  $request->category_id,
+                    'group_category_id' =>  $request->group_category_id,
+                    'manufacturer_id' =>  $request->manufacturer_id,
+                    "image" => $request->avatar ? $request->avatar[0]["file"] : "",
+                    "status" => $request->status,
                 ]);
+
+                if ($request->property) {
+                    $product->productDetail()->delete();
+                    foreach ($request->property as $item) {
+                        // get qty
+                        $qty = $item["qty"];
+                        unset($item["qty"]); // remove qty
+                        $productDetail = ProductDetail::create([
+                            "qty" => $qty,
+                            "sold_qty" => 0,
+                            "product_id" =>  $product->id,
+                        ]);
+                        $propertyValue = collect($item)->map(function ($element) {
+                            return $element["attributeValue"];
+                        });
+                        $productDetail->propertyValue()->sync($propertyValue);
+                    }
+                }
+                $product->productMedia()->update(["url" => collect($request->file)->map(function ($item) {
+                    return $item["file"];
+                })]);
+                $latePrice = $product->productPrice()->first();
+                if ($latePrice->price != $request->price) {
+                    $product->productPrice()->create(["price" => $request->price]);
+                }
 
                 DB::commit();
                 return response([
-                    'product' => $product,
                     'message' => 'Update product success!',
                     'code' => Response::HTTP_OK
                 ], Response::HTTP_OK);
             }
-
             return response([
-                'product' => [],
                 'message' => 'This product dont exist!',
                 'code' => Response::HTTP_NOT_FOUND
             ], Response::HTTP_NOT_FOUND);
         } catch (\Throwable $th) {
             DB::rollBack();
+            dd($th);
             return response([
-                'message' => 'Update product error!',
+                'message' => 'Create product error!',
                 'code' => Response::HTTP_INTERNAL_SERVER_ERROR
-            ], Response::HTTP_INTERNAL_SERVER_ERROR);
+            ], Response::HTTP_UNPROCESSABLE_ENTITY);
         }
     }
 

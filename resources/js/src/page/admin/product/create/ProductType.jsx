@@ -16,10 +16,9 @@ const ProductType = (props) => {
         categoryList,
         manufacturerList,
         onChangeGroupCategory,
-        groupCategoryId,
-        setGroupCategoryId,
     } = props;
     const [t] = useTranslation();
+    const [groupCategoryId, setGroupCategoryId] = useState(getValues('group_category_id'));
     return (
         <div className="card__admin">
             <Grid container sx={{ margin: 0, padding: 1, width: '100%' }} spacing={10}>

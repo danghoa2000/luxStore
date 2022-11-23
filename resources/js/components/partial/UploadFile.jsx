@@ -2,17 +2,17 @@ import { Grid } from '@mui/material';
 import React, { useRef } from 'react';
 import Dropzone from './Dropzone';
 
-
-
 const UploadFile = ({
     name,
     accept,
     multiple,
     control,
     setValue,
+    getValues,
     setError,
     clearErrors,
     currentRef,
+    initValue
 }) => {
 
     return (
@@ -25,6 +25,8 @@ const UploadFile = ({
                 setValue={setValue}
                 setError={setError}
                 clearErrors={clearErrors}
+                initValue={initValue}
+                getValues={getValues}
             />
         </Grid>
     );

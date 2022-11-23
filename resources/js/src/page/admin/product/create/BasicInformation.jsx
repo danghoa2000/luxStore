@@ -14,6 +14,7 @@ const BasicInformation = (props) => {
         clearErrors,
         errors,
         avatarRef,
+        product,
     } = props;
 
     const [t] = useTranslation();
@@ -29,6 +30,7 @@ const BasicInformation = (props) => {
                     </Typography>
                     <UploadFile
                         name={"avatar"}
+                        initValue={product?.image ? [{ file: product?.image }] : []}
                         accept={{ 'image/*': [] }}
                         multiple={false}
                         control={control}
@@ -36,6 +38,7 @@ const BasicInformation = (props) => {
                         setError={setError}
                         clearErrors={clearErrors}
                         currentRef={avatarRef}
+                        getValues={getValues}
                     />
 
                 </Grid>

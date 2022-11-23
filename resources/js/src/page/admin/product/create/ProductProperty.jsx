@@ -78,11 +78,9 @@ const ProductProperty = (props, ref) => {
         setProperties(newProperties);
         let newAttributeSelectedList = [...attributeSelectedList];
         newAttributeSelectedList = newAttributeSelectedList.filter(item => item !== properties[index].attributeName);
-        console.log(newAttributeSelectedList);
         if (value?.id && !newAttributeSelectedList.includes(value?.id)) {
             newAttributeSelectedList.push(value.id);
         }
-        console.log(newAttributeSelectedList);
         setAttributeSelectedList(newAttributeSelectedList);
     }, [attributeSelectedList, properties])
 
@@ -103,8 +101,8 @@ const ProductProperty = (props, ref) => {
             setPropertiesList(pre => [...pre, { ...properties, qty: qty }])
         } else {
             let newPropertiesList = [...propertiesList];
-            newPropertiesList[idEdit] = properties;
-            newPropertiesList[idEdit].qty = qty;
+            newPropertiesList[idEdit] = { ...properties };
+            newPropertiesList[idEdit]["qty"] = qty;
             setPropertiesList(newPropertiesList);
         }
         setProperties([]);

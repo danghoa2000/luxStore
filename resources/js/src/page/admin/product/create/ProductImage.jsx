@@ -12,6 +12,7 @@ const ProductImage = (props) => {
         clearErrors,
         errors,
         imageRef,
+        product,
     } = props;
     const [t] = useTranslation();
     return (
@@ -23,6 +24,7 @@ const ProductImage = (props) => {
             <Grid container sx={{ margin: 0, padding: 1, width: '100%' }} spacing={10}>
                 <UploadFile
                     name={"file"}
+                    initValue={product?.product_media?.url && JSON.parse(product?.product_media?.url).map(item => ({ file: item }))}
                     accept={{ 'image/*': [] }}
                     multiple={true}
                     control={control}
@@ -30,6 +32,7 @@ const ProductImage = (props) => {
                     setError={setError}
                     clearErrors={clearErrors}
                     currentRef={imageRef}
+                    getValues={getValues}
                 />
             </Grid>
         </div>

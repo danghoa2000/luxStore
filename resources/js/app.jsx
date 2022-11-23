@@ -36,6 +36,7 @@ const AdminProductCreateContainer = lazy(() => import("./src/page/admin/Product/
 const AdminProductUpdateContainer = lazy(() => import("./src/page/admin/Product/update/ProductUpdateContainer"));
 
 const AdminShippingContainer = lazy(() => import("./src/page/admin/shipping/ShippingContainer"));
+const AdminEventContainer = lazy(() => import("./src/page/admin/event/EventContainer"));
 // ====
 
 const HomePageContainer = lazy(() => import("./src/page/client/HomePageContainer"));
@@ -323,6 +324,18 @@ const App = () => {
                                             </Suspense>
 
                                         }
+                                    />
+                                </Route>
+                                <Route path="event"
+                                    element={<Outlet />}
+                                >
+                                    <Route index element={
+                                        <Suspense fallback={<Loading />}>
+                                            <PrivateAdminRoute roles={[ROLE.MANAGER, ROLE.EMPLOYEE]}>
+                                                <AdminEventContainer />
+                                            </PrivateAdminRoute>
+                                        </Suspense>}
+
                                     />
                                 </Route>
                                 <Route path="contact" element={<div>contact</div>} />

@@ -54,11 +54,13 @@ const ProductCreateContainer = () => {
         getValues,
         setError,
         clearErrors,
-        formState: { errors } }
+        formState: { errors }
+    }
         = useForm({
             shouldUnregister: false,
             defaultValues: {
-                image: '',
+                avatar: [],
+                file: [],
                 product_code: '',
                 name: '',
                 price: '',
@@ -71,6 +73,7 @@ const ProductCreateContainer = () => {
             resolver: yupResolver(validationSchema),
         });
 
+        console.log(errors);
     const handleCreate = useCallback((value) => {
         setLoading(true);
         axiosClient.post(PRODUCT_API.CREATE, {
@@ -81,11 +84,10 @@ const ProductCreateContainer = () => {
                 setLoading(false);
                 if (response.status === CODE.HTTP_OK) {
                     setStatus({ type: 'success', message: response.data.message });
-                    reset();
-                    imageRef.current.removeAll();
-                    avatarRef.current.removeAll();
-                    productPropertyRef.current.removeAll();
-                    setGroupCategoryId(-1);
+                    setTimeout(() => {
+                        navigate(-1);
+                    }, 1500);
+
                 }
             }).catch(({ response }) => {
                 setShowNoti(true);
@@ -139,6 +141,10 @@ const ProductCreateContainer = () => {
         getManufacturerList();
     }, [])
 
+    // useEffect(() => {
+    //     setValue('group_category_id', groupCategoryId)
+    // }, [groupCategoryId])
+
     return <ProductCreate
         redirectBack={redirectBack}
         handleCreate={handleCreate}
@@ -165,8 +171,8 @@ const ProductCreateContainer = () => {
         categoryGroupRef={categoryGroupRef}
         productPropertyRef={productPropertyRef}
         getGroupCategory={getGroupCategory}
-        groupCategoryId={groupCategoryId}
-        setGroupCategoryId={setGroupCategoryId}
+    // groupCategoryId={groupCategoryId}
+    // setGroupCategoryId={setGroupCategoryId}
     />
 };
 

@@ -1,5 +1,5 @@
 import { Grid, Typography } from '@mui/material';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import UploadFile from '../../../../../components/partial/UploadFile';
 
@@ -15,6 +15,10 @@ const ProductImage = (props) => {
         product,
     } = props;
     const [t] = useTranslation();
+    const [initvalue, setInitValue] = useState([]);
+    useEffect(() => {
+        setInitValue(product?.product_media?.url && JSON.parse(product?.product_media?.url).map(item => ({ file: item })));
+    }, [product])
     return (
         <div className="card__admin">
             <Typography variant="h5" className='cart_admin_title' gutterBottom>
@@ -24,7 +28,7 @@ const ProductImage = (props) => {
             <Grid container sx={{ margin: 0, padding: 1, width: '100%' }} spacing={10}>
                 <UploadFile
                     name={"file"}
-                    initValue={product?.product_media?.url && JSON.parse(product?.product_media?.url).map(item => ({ file: item }))}
+                    initValue={initvalue}
                     accept={{ 'image/*': [] }}
                     multiple={true}
                     control={control}

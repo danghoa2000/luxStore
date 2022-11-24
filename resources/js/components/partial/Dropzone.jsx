@@ -64,12 +64,10 @@ const Dropzone = ({
     getValues,
     initValue,
 }, ref) => {
-    console.log("re-render");
     const [files, setFiles] = useState([]);
     const onDrop = useCallback(
         (acceptedFiles, rejectedFiles) => {
             if (rejectedFiles && rejectedFiles.length > 0) {
-                setValue(name, []);
                 setFiles([]);
                 // setError(name, {
                 //     type: 'manual',
@@ -110,10 +108,8 @@ const Dropzone = ({
                     return file;
                 });
             }
-            console.log("add", name, files);
-
         },
-        [name, files])
+        [files, multiple])
 
     const {
         getRootProps,
@@ -126,9 +122,7 @@ const Dropzone = ({
         multiple,
         onDrop
     })
-    useEffect(() => {
-        setValue(name, files);
-    }, [name, files])
+
     const style = useMemo(() => ({
         ...baseStyle,
         ...(isFocused ? focusedStyle : {}),
@@ -147,17 +141,17 @@ const Dropzone = ({
             newFiles = [];
         }
         setFiles(newFiles);
-    }, [files, name]);
+    }, [files]);
 
     const removeAll = useCallback(() => {
         setFiles([]);
-    }, [name]);
+    }, []);
 
     useImperativeHandle(ref, () => ({
         removeAll: () => {
             removeAll();
         }
-    }), [name, ref])
+    }), [ref])
 
     useEffect(() => {
         console.log(initValue);
@@ -167,9 +161,10 @@ const Dropzone = ({
     }, [initValue])
 
     useEffect(() => {
-        console.log(getValues(name));
-        setFiles(getValues(name));
-    }, [name, getValues])
+        console.log(name, files);
+        setValue(name, files);
+    }, [name, files])
+
     const thumbs = useMemo(() =>
         files && files.length > 0 && files.map((file, index) => (
             <div style={thumb} key={index}>

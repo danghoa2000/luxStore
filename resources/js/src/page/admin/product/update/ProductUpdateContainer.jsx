@@ -93,7 +93,7 @@ const ProductUpdateContainer = () => {
                 manufacturer_id: -1,
                 description: '',
             },
-            // resolver: yupResolver(validationSchema),
+            resolver: yupResolver(validationSchema),
         });
 
     const handleUpdate = useCallback((value) => {

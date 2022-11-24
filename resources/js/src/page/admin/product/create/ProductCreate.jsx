@@ -8,6 +8,7 @@ import ProductType from './ProductType'
 import ProductImage from './ProductImage'
 import ProductProperty from './ProductProperty'
 import ProductSetting from './ProductSetting'
+import ProductAvatar from './ProductAvatar';
 
 const ProductCreate = (props) => {
     const {
@@ -33,7 +34,9 @@ const ProductCreate = (props) => {
         imageRef,
         productPropertyRef,
         getGroupCategory,
-        product
+        product,
+        groupCategoryId,
+        setGroupCategoryId,
     } = props;
 
     const [t] = useTranslation();
@@ -75,6 +78,8 @@ const ProductCreate = (props) => {
                 groupCategorytList={groupCategorytList}
                 categoryList={categoryList}
                 manufacturerList={manufacturerList}
+                groupCategoryId={groupCategoryId}
+                setGroupCategoryId={setGroupCategoryId}
                 onChangeGroupCategory={() => {
                     productPropertyRef.current.removeAll()
                 }}

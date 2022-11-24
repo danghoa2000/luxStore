@@ -65,7 +65,7 @@ const ProductCreateContainer = () => {
                 name: '',
                 price: '',
                 status: STATUS.ACTIVE,
-                group_category_id: -1,
+                group_category_id: groupCategoryId,
                 category_id: -1,
                 manufacturer_id: -1,
                 description: '',
@@ -73,7 +73,6 @@ const ProductCreateContainer = () => {
             resolver: yupResolver(validationSchema),
         });
 
-        console.log(errors);
     const handleCreate = useCallback((value) => {
         setLoading(true);
         axiosClient.post(PRODUCT_API.CREATE, {
@@ -171,8 +170,8 @@ const ProductCreateContainer = () => {
         categoryGroupRef={categoryGroupRef}
         productPropertyRef={productPropertyRef}
         getGroupCategory={getGroupCategory}
-    // groupCategoryId={groupCategoryId}
-    // setGroupCategoryId={setGroupCategoryId}
+        groupCategoryId={groupCategoryId}
+        setGroupCategoryId={setGroupCategoryId}
     />
 };
 

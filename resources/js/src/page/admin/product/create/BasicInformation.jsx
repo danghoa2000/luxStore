@@ -4,6 +4,7 @@ import React from 'react';
 import { Controller } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import UploadFile from '../../../../../components/partial/UploadFile';
+import ProductAvatar from './ProductAvatar';
 
 const BasicInformation = (props) => {
     const {
@@ -28,19 +29,16 @@ const BasicInformation = (props) => {
                     <Typography variant="h6" className='cart_admin_title' gutterBottom>
                         {t('product.list.table.avatar')}
                     </Typography>
-                    <UploadFile
-                        name={"avatar"}
-                        initValue={product?.image ? [{ file: product?.image }] : []}
-                        accept={{ 'image/*': [] }}
-                        multiple={false}
+                    <ProductAvatar
                         control={control}
                         setValue={setValue}
+                        getValues={getValues}
                         setError={setError}
                         clearErrors={clearErrors}
-                        currentRef={avatarRef}
-                        getValues={getValues}
+                        errors={errors}
+                        avatarRef={avatarRef}
+                        product={product}
                     />
-
                 </Grid>
                 <Grid item xs={6}></Grid>
                 <Grid item xs={6}>

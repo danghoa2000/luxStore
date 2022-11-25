@@ -17,7 +17,6 @@ const LeftColumn = ({
                 return { ...item, selected: true };
             }
             return item;
-
         });
         setListItem(newData)
     }, [productSelected, productListClone])

@@ -37,8 +37,11 @@ class ProductService
             ->filter($request)
             ->where('status', config('constants.user.status.active'));
         $total = count($products->get());
-        $products->limit($request->pageSize)
-            ->offset(($request->currentPage) * $request->pageSize);
+        if ($request->pageSize) {
+            $products->limit($request->pageSize)
+                ->offset(($request->currentPage) * $request->pageSize);
+        }
+
 
         return response([
             'products' => $products->get(),
@@ -79,9 +82,9 @@ class ProductService
                     $productDetail->propertyValue()->sync($propertyValue);
                 }
             }
-                $product->productMedia()->create(["url" => collect($request->file)->map(function ($item) {
-                    return $item["file"];
-                })]);
+            $product->productMedia()->create(["url" => collect($request->file)->map(function ($item) {
+                return $item["file"];
+            })]);
 
             $product->productPrice()->create(["price" => $request->price]);
             DB::commit();

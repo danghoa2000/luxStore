@@ -379,3 +379,23 @@ table {
         text-decoration: un;
     }
 }
+.css-172kgz0-MuiPaper-root,
+.css-uob957-MuiListSubheader-root {
+    background-color: #32363a !important;
+}
+
+.css-7209ej-MuiInputBase-input-MuiFilledInput-input,
+.css-o943dk-MuiFormLabel-root-MuiInputLabel-root,
+.css-yw020d-MuiAccordionSummary-expandIconWrapper {
+    color: white !important;
+}
+
+.css-e4w4as-MuiFormLabel-root-MuiInputLabel-root {
+    color: #706e6e !important;
+}
+
+.css-1yq5fb3-MuiButtonBase-root-MuiIconButton-root.Mui-disabled {
+    cursor: not-allowed !important;
+    pointer-events: unset !important;
+}
+

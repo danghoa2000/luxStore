@@ -60,3 +60,8 @@ export const ATTRIBUTE_API = {
     CREATE: API_BASE_URL + "api/auth/admin/attribute/create",
     OPTIONS: API_BASE_URL + "api/auth/admin/attribute/option",
 };
+
+export const EVENT_API = {
+    LIST: API_BASE_URL + "api/auth/admin/event",
+    UPDATE: API_BASE_URL + "api/auth/admin/event/update",
+};

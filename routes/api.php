@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\AccountController;
 use App\Http\Controllers\admin\AttributeController;
 use App\Http\Controllers\Admin\CategoriesController;
+use App\Http\Controllers\admin\EventController;
 use App\Http\Controllers\Admin\GroupCategoryController;
 use App\Http\Controllers\Admin\LoginController;
 use App\Http\Controllers\Admin\HomeController;
@@ -77,6 +78,8 @@ Route::group([
 
         Route::post('product/options', [ProductController::class, 'options'])->name('product.option');
         Route::post('product/attribute', [ProductController::class, 'attribute'])->name('product.attribute');
+
+        Route::get('event', [EventController::class, 'index'])->name('event');
     });
 });
 

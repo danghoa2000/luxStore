@@ -13,7 +13,7 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('product_even', function (Blueprint $table) {
+        Schema::create('product_event', function (Blueprint $table) {
             $table->id();
             $table->integer('product_id')->nullable();
             $table->integer('event_type')->nullable();

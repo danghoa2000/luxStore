@@ -80,6 +80,7 @@ Route::group([
         Route::post('product/attribute', [ProductController::class, 'attribute'])->name('product.attribute');
 
         Route::get('event', [EventController::class, 'index'])->name('event');
+        Route::put('event/update', [EventController::class, 'update'])->name('event.update');
     });
 });
 

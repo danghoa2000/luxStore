@@ -11,12 +11,14 @@ const AccordionItem = (props) => {
     const {
         productList,
         item,
+        setProductEventList,
+        productEventList
     } = props;
 
     const [productSelected, setProductSelected] = useState([]);
     const [productListClone, setProductListClone] = useState([]);
     useEffect(() => {
-        setProductSelected(item?.product ? item?.product.map(({ id, name }) => ({ id, name })) : [])
+        setProductSelected(item?.products ? item?.products.map(({ id, name }) => ({ id, name })) : [])
     }, [item, productList]);
 
     useEffect(() => {
@@ -30,6 +32,11 @@ const AccordionItem = (props) => {
     const removeFromSelectedList = useCallback((item) => {
         setProductSelected(productSelected.filter(product => product.id !== item.id));
     }, [productSelected]);
+
+    useEffect(() => {
+        productEventList[item.id] = productSelected;
+        setProductEventList(productEventList);
+    }, [productSelected, productEventList]);
 
     return (
         <Grid container spacing={2} alignItems="center">

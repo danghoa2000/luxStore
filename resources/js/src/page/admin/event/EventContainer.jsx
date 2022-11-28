@@ -6,10 +6,11 @@ import Event from './Event';
 
 const EventContainer = () => {
     const [eventList, setEventList] = useState([]);
-    const [productEventList, setProductEventList] = useState([]);
+    const [productEventList, setProductEventList] = useState({});
     const [productList, setProductList] = useState([]);
     const [status, setStatus] = useState({});
     const [showNoti, setShowNoti] = useState(false);
+    const [loading, setLoading] = useState(false);
     const getEventList = useCallback(() => {
         axiosClient.get(EVENT_API.LIST).then((response) => {
             if (response.status === CODE.HTTP_OK) {
@@ -33,7 +34,26 @@ const EventContainer = () => {
     }, [])
 
     const updateProductEvent = useCallback(() => {
-
+        setLoading(true);
+        axiosClient.put(EVENT_API.UPDATE, {
+            data: productEventList
+        })
+            .then((response) => {
+                setShowNoti(true);
+                setLoading(false);
+                if (response.status === CODE.HTTP_OK) {
+                    setStatus({ type: 'success', message: response.data.message });
+                }
+            }).catch(({ response }) => {
+                setShowNoti(true);
+                setLoading(false);
+                if (response.status === CODE.UNPROCESSABLE_ENTITY) {
+                    Object.keys(response.data.errors).forEach(element => {
+                        setError(element, { type: 'custom', message: Object.values(response.data.errors[element]) })
+                    });
+                }
+                setStatus({ type: 'error', message: response.data ? response.data.message : 'Server error' });
+            });
     }, [])
 
     useEffect(() => {
@@ -47,6 +67,11 @@ const EventContainer = () => {
         setProductEventList={setProductEventList}
         updateProductEvent={updateProductEvent}
         productList={productList}
+        loading={loading}
+        showNoti={showNoti}
+        status={status}
+        setStatus={setStatus}
+        setShowNoti={setShowNoti}
     />
 };
 

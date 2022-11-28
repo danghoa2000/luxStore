@@ -1,7 +1,8 @@
 import { ExpandMore } from '@mui/icons-material';
-import { Accordion, AccordionDetails, AccordionSummary, Breadcrumbs, Paper, Typography } from '@mui/material';
+import { Accordion, AccordionDetails, AccordionSummary, Breadcrumbs, Button, CircularProgress, Paper, Typography } from '@mui/material';
 import React from 'react';
 import { Link } from 'react-router-dom';
+import ShowSnackbars from '../../../../components/partial/ShowSnackbars';
 import AccordionItem from './AccordionItem';
 
 const Event = (props) => {
@@ -11,7 +12,12 @@ const Event = (props) => {
         productEventList,
         setProductEventList,
         updateProductEvent,
-        productList
+        productList,
+        loading,
+        showNoti,
+        status,
+        setStatus,
+        setShowNoti,
     } = props;
     return (
         <>
@@ -42,6 +48,8 @@ const Event = (props) => {
                                 <AccordionItem
                                     productList={productList}
                                     item={item}
+                                    setProductEventList={setProductEventList}
+                                    productEventList={productEventList}
                                 />
                             </AccordionDetails>
                         </Accordion>
@@ -49,6 +57,20 @@ const Event = (props) => {
 
                 </Paper>
             </div>
+            <div className='d-flex justify-content-center w-100'>
+                <Button
+                    variant="contained"
+                    className='m-1'
+                    disabled={loading}
+                    onClick={() => updateProductEvent()}
+                >{loading &&
+                    <CircularProgress
+                        disableShrink
+                        style={{ color: 'white', width: '14px', height: '14px', margin: '0 5px 0 0' }} />}
+                    Update
+                </Button>
+            </div>
+            {showNoti && <ShowSnackbars type={status.type} message={status.message} setShowNoti={setShowNoti} />}
         </>
     );
 };

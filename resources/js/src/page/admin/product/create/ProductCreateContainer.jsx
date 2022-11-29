@@ -7,7 +7,8 @@ import ProductCreate from './ProductCreate';
 import * as Yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useTranslation } from 'react-i18next';
-import { CODE, STATUS } from '../../../../../constants/constants';
+import { CODE, DATE_TIME, STATUS } from '../../../../../constants/constants';
+import { format, parseISO } from 'date-fns';
 
 const ProductCreateContainer = () => {
     const navigate = useNavigate();
@@ -44,7 +45,43 @@ const ProductCreateContainer = () => {
         manufacturer_id: Yup.string()
             .required(t('validate.required', { name: 'Manufacturer' }))
             .test("isSelect", t('validate.required', { name: 'Manufacturer' }), value => value != "-1"),
-    });
+        price_saled: Yup.string()
+            .when(['sale_type', 'expried'], {
+                is: (sale_type, expried) => {
+                    if ((sale_type && sale_type != -1) || expried) {
+                        return true
+                    }
+                },
+                then: () => Yup.string()
+                    .required(t('validate.required', { name: 'Price saled' }))
+                    .test("", "Invalid value", (value, testContext) => {
+                        if (testContext.parent.sale_type == 1) {
+                            return value <= testContext.parent.price
+                        }
+                        else if (testContext.parent.sale_type == 2) {
+                            return 0 <= value <= 100
+                        }
+                    })
+            }),
+        sale_type: Yup.string().when(['expried', 'price_saled'], {
+            is: (expried, price_saled) => {
+                if (expried || price_saled) {
+                    return true
+                }
+            },
+            then: () => Yup.string().required(t('validate.required', { name: 'Sale type' }))
+                .test("isSelect", t('validate.required', { name: 'Sale type' }), value => value != "-1"),
+        }),
+        expried: Yup.string().when(['sale_type', 'price_saled'], {
+            is: (sale_type, price_saled) => {
+                if ((sale_type && sale_type != -1) || price_saled) {
+                    return true
+                }
+            },
+            then: () => Yup.string().required(t('validate.required', { name: 'Expried sale' }))
+            .test("", "Invalid value", value => value > new Date())
+        }),
+    }, [['sale_type', 'expried'], ['expried', 'price_saled'], ['sale_type', 'price_saled']]);
 
     const {
         handleSubmit,
@@ -69,6 +106,9 @@ const ProductCreateContainer = () => {
                 category_id: -1,
                 manufacturer_id: -1,
                 description: '',
+                price_saled: '',
+                sale_type: -1,
+                expried: ''
             },
             resolver: yupResolver(validationSchema),
         });

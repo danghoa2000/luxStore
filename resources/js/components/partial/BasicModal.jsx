@@ -17,7 +17,7 @@ const BasicModal = ({ children, open, setOpen, handleClose }) => {
             <Modal
                 open={open}
                 onClose={handleClose}
-                aria-labelledby="modal-modal-title"
+                aria-labelledby="modal-modal-title" 
                 aria-describedby="modal-modal-description"
                 style={{ outline: 0 }}
             >

@@ -41,8 +41,6 @@ class ProductService
             $products->limit($request->pageSize)
                 ->offset(($request->currentPage) * $request->pageSize);
         }
-
-
         return response([
             'products' => $products->get(),
             'total' => $total,
@@ -63,12 +61,12 @@ class ProductService
                 'manufacturer_id' =>  $request->manufacturer_id,
                 "image" => $request->avatar ? $request->avatar[0]["file"] : "",
                 "status" => $request->status,
+                'sale_type' => $request->sale_type,
+                'sale_off' => $request->price_saled,
+                'expried' => $request->expried,
             ]);
             if ($request->property) {
-
                 foreach ($request->property as $item) {
-
-                    // get qty
                     $qty = $item["qty"];
                     unset($item["qty"]); // remove qty
                     $productDetail = ProductDetail::create([
@@ -124,7 +122,10 @@ class ProductService
                 'group_category_id',
                 'manufacturer_id',
                 'image',
-                'status'
+                'status',
+                'sale_type',
+                'sale_off',
+                'expried',
             )
             ->find($request->id);
         if ($product) {
@@ -156,9 +157,15 @@ class ProductService
                     'manufacturer_id' =>  $request->manufacturer_id,
                     "image" => $request->avatar ? $request->avatar[0]["file"] : "",
                     "status" => $request->status,
+                    'sale_type' => $request->sale_type,
+                    'sale_off' => $request->price_saled,
+                    'expried' => $request->expried,
                 ]);
 
                 if ($request->property) {
+                    foreach ($product->productDetail() as $item) {
+                        $item->propertyValue()->delete();
+                    }
                     $product->productDetail()->delete();
                     foreach ($request->property as $item) {
                         // get qty
@@ -182,7 +189,6 @@ class ProductService
                 if ($latePrice->price != $request->price) {
                     $product->productPrice()->create(["price" => $request->price]);
                 }
-
                 DB::commit();
                 return response([
                     'message' => 'Update product success!',
@@ -195,7 +201,6 @@ class ProductService
             ], Response::HTTP_NOT_FOUND);
         } catch (\Throwable $th) {
             DB::rollBack();
-            dd($th);
             return response([
                 'message' => 'Create product error!',
                 'code' => Response::HTTP_INTERNAL_SERVER_ERROR
@@ -227,15 +232,5 @@ class ProductService
                 'code' => Response::HTTP_NOT_FOUND
             ], Response::HTTP_NOT_FOUND);
         }
-    }
-
-    public function attribute($request)
-    {
-        return;
-    }
-
-    public function options($request)
-    {
-        return;
     }
 }

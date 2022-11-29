@@ -27,6 +27,9 @@ class Product extends Model
         'group_category_id',
         'manufacturer_id',
         'image',
+        'sale_type',
+        'sale_off',
+        'expried'
     ];
 
     protected $table = 'products';
@@ -71,6 +74,16 @@ class Product extends Model
         return $this->belongsTo(GroupCategory::class, 'group_category_id', 'id');
     }
 
+    public function events()
+    {
+        return $this->belongsToMany(Event::class, 'product_event', 'product_id', 'event_type');
+    }
+
+    public function reviews()
+    {
+        return $this->belongsToMany(Rview::class, 'product_event', 'product_id', 'event_type');
+    }
+
     public function scopeFilter($query, $request)
     {
         $data = json_decode($request->searchField, true);
@@ -87,12 +100,12 @@ class Product extends Model
             $query->where('name', 'like', '%' . $data['name'] . '%');
         }
         if (!empty($data['price_min'])) {
-            $query->whereHas('productPrice', function($q) use ($data) {
+            $query->whereHas('productPrice', function ($q) use ($data) {
                 $q->latest()->where('price', ">=", $data['price_min']);
             });
         }
         if (!empty($data['price_max'])) {
-            $query->whereHas('productPrice', function($q) use ($data) {
+            $query->whereHas('productPrice', function ($q) use ($data) {
                 $q->latest()->where('price', "<=", $data['price_max']);
             });
         }

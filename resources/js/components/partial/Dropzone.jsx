@@ -154,14 +154,12 @@ const Dropzone = ({
     }), [ref])
 
     useEffect(() => {
-        console.log(initValue);
         if (initValue) {
             setFiles(initValue);
         }
     }, [initValue])
 
     useEffect(() => {
-        console.log(name, files);
         setValue(name, files);
     }, [name, files])
 

@@ -9,6 +9,9 @@ class Event extends Model
 {
     use HasFactory;
     protected $table = "event";
+    const FLASH_DELAS = 1;
+    const NEW_ARRIVALS = 2;
+    const BIG_DISCOUNTS = 3;
 
     public function products()
     {

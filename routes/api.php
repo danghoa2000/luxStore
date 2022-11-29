@@ -33,9 +33,7 @@ Route::group([
 
     Route::group([
         'middleware' => ['auth:api', 'cors'], 'prefix' => 'admin'
-    ], function () {
-        Route::get('home', [HomeController::class, 'index'])->name('home');
-        
+    ], function () {        
         Route::get('categories', [CategoriesController::class, 'index'])->name('category');
         Route::post('categories/create', [CategoriesController::class, 'store'])->name('category.create');
         Route::put('categories/update', [CategoriesController::class, 'update'])->name('category.update');
@@ -88,3 +86,5 @@ Route::post('upload', [UploadController::class, 'upload']);
 Route::get('get-province', [DirectionController::class, 'getProvince']);
 Route::get('get-district/{provinceId}', [DirectionController::class, 'getDistrict']);
 Route::get('get-commune/{districtId}', [DirectionController::class, 'getCommune']);
+
+Route::get('home', [HomeController::class, 'index'])->name('home');

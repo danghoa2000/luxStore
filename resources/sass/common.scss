@@ -17,7 +17,7 @@ html {
 }
 body {
     font-family: "Poppins", sans-serif;
-    background-color: #ffffff;
+    background-color: #fff;
     width: 100%;
 }
 .background {
@@ -287,5 +287,31 @@ img {
 }
 
 .product .img {
-    margin-bottom: 30px;
+    height: 150px;
+}
+
+.product img {
+    height: 100%;
+    max-width: 100%;
+    margin: auto;
+}
+
+.tleft,
+.tright {
+    display: block;
+}
+
+.mb-30 {
+    margin-bottom: 30px !important;
+}
+
+.old-price {
+    text-decoration: line-through;
+    font-size: 12px !important;
+    color: #c5bebef6 !important;
+}
+
+.new-price {
+    font-size: 16px !important;
+    color: #e94560;
 }

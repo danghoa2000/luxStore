@@ -37,6 +37,7 @@ export const GROUP_CATEGORY_API = {
     DELETE: API_BASE_URL + "api/auth/admin/group-category/delete",
     ATTRIBUTE: API_BASE_URL + "api/auth/admin/group-category/attribute",
     ATTRIBUTE_CREATE: API_BASE_URL + "api/auth/admin/group-category/attribute/create",
+    TOP_GROUP_CATEGORY: API_BASE_URL + "api/auth/admin/top-group-category",
 };
 
 export const SHIPPING_API = {
@@ -65,3 +66,5 @@ export const EVENT_API = {
     LIST: API_BASE_URL + "api/auth/admin/event",
     UPDATE: API_BASE_URL + "api/auth/admin/event/update",
 };
+
+export const HOME_API = API_BASE_URL + "api/home"

@@ -4,27 +4,27 @@ import "slick-carousel/slick/slick.css"
 import "slick-carousel/slick/slick-theme.css"
 import Tdata from "./Tdata"
 
-const TopCart = () => {
+const TopCart = ({topGroupCategory}) => {
   const settings = {
     dots: false,
     infinite: true,
-    slidesToShow: 3,
+    slidesToShow: 2,
     slidesToScroll: 1,
     autoplay: true,
   }
   return (
     <>
       <Slider {...settings}>
-        {Tdata.map((value, index) => {
+        {topGroupCategory?.map((value, index) => {
           return (
             <>
               <div className='box product' key={index}>
                 <div className='nametop d-flex'>
-                  <span className='tleft'>{value.para}</span>
-                  <span className='tright'>{value.desc}</span>
+                  <span className='tleft'>{value?.products_count}</span>
+                  <span className='tright'>{value?.name}</span>
                 </div>
                 <div className='img'>
-                  <img src={value.cover} alt='' />
+                  <img src={value?.image} alt='' />
                 </div>
               </div>
             </>

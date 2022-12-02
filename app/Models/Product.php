@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -33,6 +34,8 @@ class Product extends Model
     ];
 
     protected $table = 'products';
+
+    protected $appends = ['total_rate', 'sale_price', 'sale_persen'];
 
     public function productDetail()
     {
@@ -81,7 +84,49 @@ class Product extends Model
 
     public function reviews()
     {
-        return $this->belongsToMany(Rview::class, 'product_event', 'product_id', 'event_type');
+        return $this->belongsToMany(Customer::class, 'reviews', 'product_id', 'user_id')
+            ->withPivot('rate', 'name', 'content', 'email', 'parent_id')
+            ->wherePivot('parent_id', null);
+    }
+
+    public function orderDetail()
+    {
+        return $this->belongsToMany(OrderDetail::class, 'product_order', 'product_id', 'order_detail_id');
+    }
+
+    public function getTotalRateAttribute()
+    {
+        return $this->reviews->avg('pivot.rate');
+    }
+
+    public function getSalePriceAttribute()
+    {
+        if (
+            $this->attributes['expried'] && date_format(Carbon::parse($this->attributes['expried']), config('constants.date_format')) < date_format(Carbon::now(), config('constants.date_format'))
+        ) {
+            return 0;
+        } else {
+            if ($this->attributes['sale_type'] && $this->attributes['sale_type'] != -1) {
+                if ($this->attributes['sale_type'] == config('constants.sale_type.price')) {
+                    return $this->attributes['sale_off'];
+                } else {
+                    return $this->attributes['price'] ? $this->attributes['price'] - floor(($this->attributes['price'] * $this->attributes['sale_off']) / 100) : 0;
+                }
+            }
+            return 0;
+        }
+    }
+
+    public function getSalePersenAttribute()
+    {
+        if ($this->attributes['sale_type'] && $this->attributes['sale_type'] != -1) {
+            if ($this->attributes['sale_type'] == config('constants.sale_type.persen')) {
+                return $this->attributes['sale_off'];
+            } else {
+                return 100 - ceil(($this->attributes['sale_off'] / $this->attributes['price']) * 100);
+            }
+        }
+        return 0;
     }
 
     public function scopeFilter($query, $request)

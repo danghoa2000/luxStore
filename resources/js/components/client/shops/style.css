@@ -48,8 +48,9 @@
   grid-gap: 20px;
 }
 .shop .product img {
-  width: 100%;
   height: 100%;
+  margin: auto;
+  display: block;
 }
 .shop .product {
   transition: 0.5s;

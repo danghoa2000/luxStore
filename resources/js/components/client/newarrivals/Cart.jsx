@@ -1,19 +1,26 @@
 import React from "react"
+import Slider from "react-slick"
+import { formatPrice } from "../../../utils/helper"
 import Ndata from "./Ndata"
+import ProductItem from "./ProductItem"
 
-const Cart = () => {
+const Cart = ({ productItems }) => {
+  const settings = {
+    dots: false,
+    infinite: true,
+    slidesToShow: 6,
+    slidesToScroll: 1,
+    autoplay: true,
+  }
   return (
     <>
-      <div className='content grid product'>
-        {Ndata.map((val, index) => {
+      <div 
+      // {...settings}
+        className="content grid product"
+      >
+        {productItems.map((val, index) => {
           return (
-            <div className='box' key={index}>
-              <div className='img'>
-                <img src={val.cover} alt='' />
-              </div>
-              <h4>{val.name}</h4>
-              <span>${val.price}</span>
-            </div>
+            <ProductItem val={val} key={index} />
           )
         })}
       </div>

@@ -45,3 +45,7 @@ export const CODE = {
 
 export const BASE_URL = "http://127.0.0.1:8000/";
 export const DATE_TIME = "Y-M-dd";
+export const SALE_TYPE = {
+    PRICE: 1,
+    PERSEN: 2,
+}

@@ -4,27 +4,40 @@ import "slick-carousel/slick/slick.css"
 import "slick-carousel/slick/slick-theme.css"
 import Ddata from "./Ddata"
 import "../newarrivals/style.css"
+import { formatPrice } from "../../../utils/helper"
 
-const Dcard = () => {
+const Dcard = ({ productItems }) => {
   const settings = {
     dots: false,
     infinite: true,
-    slidesToShow: 6,
+    slidesToShow: 4,
     slidesToScroll: 1,
     autoplay: true,
   }
   return (
     <>
       <Slider {...settings}>
-        {Ddata.map((value, index) => {
+        {productItems.map((value, index) => {
           return (
             <>
               <div className='box product' key={index}>
                 <div className='img'>
-                  <img src={value.cover} alt='' width='100%' />
+                  {value?.sale_persen ? <span className='discount'>{value?.sale_persen}% Off</span> : ""}
+                  <img src={value?.image} alt='' />
                 </div>
-                <h4>{value.name}</h4>
-                <span>{value.price}</span>
+                <h4>{value?.name}</h4>
+                <div style={{ display: 'flex', alignItems: 'baseline' }}>
+                  {value?.sale_price ?
+                    (
+                      <>
+                        <span className="old-price">{formatPrice(value?.price)}</span>
+                        <span className="new-price" style={{ marginLeft: 5 }}>{formatPrice(value?.sale_price)}</span>
+                      </>
+                    )
+                    :
+                    (<span className="new-price">{formatPrice(value?.price)}</span>)
+                  }
+                </div>
               </div>
             </>
           )

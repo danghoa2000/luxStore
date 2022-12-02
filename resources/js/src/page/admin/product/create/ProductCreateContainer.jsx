@@ -7,7 +7,7 @@ import ProductCreate from './ProductCreate';
 import * as Yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useTranslation } from 'react-i18next';
-import { CODE, DATE_TIME, STATUS } from '../../../../../constants/constants';
+import { CODE, DATE_TIME, SALE_TYPE, STATUS } from '../../../../../constants/constants';
 import { format, parseISO } from 'date-fns';
 
 const ProductCreateContainer = () => {
@@ -55,10 +55,10 @@ const ProductCreateContainer = () => {
                 then: () => Yup.string()
                     .required(t('validate.required', { name: 'Price saled' }))
                     .test("", "Invalid value", (value, testContext) => {
-                        if (testContext.parent.sale_type == 1) {
+                        if (testContext.parent.sale_type == SALE_TYPE.PRICE) {
                             return value <= testContext.parent.price
                         }
-                        else if (testContext.parent.sale_type == 2) {
+                        else if (testContext.parent.sale_type == SALE_TYPE.PERSEN) {
                             return 0 <= value <= 100
                         }
                     })

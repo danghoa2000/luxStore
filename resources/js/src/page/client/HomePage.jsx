@@ -8,16 +8,39 @@ import Discount from "../../../components/client/discount/Discount"
 import Shop from "../../../components/client/shops/Shop"
 import Annocument from "../../../components/client/annocument/Annocument"
 import Wrapper from "../../../components/client/wrapper/Wrapper"
+import TopRate from '../../../components/client/topRate/TopRate';
 
-const HomePage = ({ productItems, addToCart, CartItem, shopItems }) => {
+const HomePage = ({
+    productItems,
+    addToCart,
+    CartItem,
+    shopItems,
+    flashDelas,
+    newArrivals,
+    bigDiscounts,
+    ortherProduct,
+    topRateProduct,
+    topGroupCategory,
+    status,
+    showNoti,
+}) => {
     return (
         <>
             <Home CartItem={CartItem} />
-            <FlashDeals productItems={productItems} addToCart={addToCart} />
-            <TopCate />
-            <NewArrivals />
-            <Discount />
-            <Shop shopItems={shopItems} addToCart={addToCart} />
+            <FlashDeals productItems={flashDelas} addToCart={addToCart} />
+            <section className='background'>
+                <div className="container" style={{ display: 'flex', flexWrap: 'wrap' }}>
+                    <div style={{ width: "50%" }}>
+                        <TopCate topGroupCategory={topGroupCategory} />
+                    </div>
+                    <div style={{ width: "50%" }}>
+                        <TopRate topRateProduct={topRateProduct} />
+                    </div>
+                </div>
+            </section>
+            <NewArrivals productItems={newArrivals} />
+            <Discount productItems={bigDiscounts} />
+            <Shop shopItems={ortherProduct} addToCart={addToCart} />
             <Annocument />
             <Wrapper />
         </>

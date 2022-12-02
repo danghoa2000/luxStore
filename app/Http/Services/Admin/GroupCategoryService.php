@@ -139,9 +139,9 @@ class GroupCategoryService
     public function attribute($request)
     {
         $groupCategories = GroupCategory::with('attributes:id,name')
-        ->where('status', config('constants.user.status.active'))
-        ->select('id', 'name')
-        ->find($request->group_category_id);
+            ->where('status', config('constants.user.status.active'))
+            ->select('id', 'name')
+            ->find($request->group_category_id);
         if ($groupCategories) {
             return response([
                 'groupCategories' => $groupCategories,
@@ -182,5 +182,27 @@ class GroupCategoryService
                 'code' => Response::HTTP_INTERNAL_SERVER_ERROR
             ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
+    }
+
+    public function topGroupCategory()
+    {
+        $groupCategories = GroupCategory::select(
+            'id',
+            'group_category_code',
+            'name',
+            'status',
+        )
+        ->withCount(['products' => function ($query) {
+            $query->whereHas('orderDetail');
+        }])
+        ->orderBy('products_count', 'desc')
+        ->take(3)
+        ->get();
+
+        return response([
+            "groupCategories" => $groupCategories,
+            'message' => 'success',
+            'code' => Response::HTTP_OK
+        ], Response::HTTP_OK);
     }
 }

@@ -1,7 +1,8 @@
-import React, { useState } from "react"
+import React, { useCallback, useState } from "react"
 import Slider from "react-slick"
 import "slick-carousel/slick/slick.css"
 import "slick-carousel/slick/slick-theme.css"
+import { formatPrice } from "../../../utils/helper"
 
 const SampleNextArrow = (props) => {
   const { onClick } = props
@@ -37,37 +38,47 @@ const FlashCard = ({ productItems, addToCart }) => {
     nextArrow: <SampleNextArrow />,
     prevArrow: <SamplePrevArrow />,
   }
-
   return (
     <>
       <Slider {...settings}>
-        {productItems.map((productItems) => {
+        {productItems.map((items) => {
+          const rate = [];
+          for (var i = 0; i < items?.total_rate; i++) {
+            rate.push(<i className='fa fa-star' key={i}></i>);
+          }
           return (
-            <div className='box'>
+            <div className='box' key={items.id}>
               <div className='product mtop'>
                 <div className='img'>
-                  <span className='discount'>{productItems.discount}% Off</span>
-                  <img src={productItems.cover} alt='' />
+                  {items?.sale_persen ? <span className='discount'>{items?.sale_persen}% Off</span> : ""}
+                  <img src={items?.image} alt='' />
                   <div className='product-like'>
                     <label>{count}</label> <br />
                     <i className='fa-regular fa-heart' onClick={increment}></i>
                   </div>
                 </div>
                 <div className='product-details'>
-                  <h3>{productItems.name}</h3>
+                  <h3>{items?.name}</h3>
                   <div className='rate'>
-                    <i className='fa fa-star'></i>
-                    <i className='fa fa-star'></i>
-                    <i className='fa fa-star'></i>
-                    <i className='fa fa-star'></i>
-                    <i className='fa fa-star'></i>
+                    {rate}
                   </div>
                   <div className='price'>
-                    <h4>${productItems.price}.00 </h4>
+                    <div style={{ display: 'flex', alignItems: 'baseline' }}>
+                      {items?.sale_price ?
+                        (
+                          <>
+                            <span className="old-price">{formatPrice(items?.price)}</span>
+                            <span className="new-price" style={{ marginLeft: 5 }}>{formatPrice(items?.sale_price)}</span>
+                          </>
+                        )
+                        :
+                        (<span className="new-price">{formatPrice(items?.price)}</span>)
+                      }
+                    </div>
                     {/* step : 3  
-                     if hami le button ma click garryo bahne 
-                    */}
-                    <button onClick={() => addToCart(productItems)}>
+                 if hami le button ma click garryo bahne 
+                */}
+                    <button onClick={() => addToCart(items)}>
                       <i className='fa fa-plus'></i>
                     </button>
                   </div>

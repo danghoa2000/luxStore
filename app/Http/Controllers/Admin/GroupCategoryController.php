@@ -81,7 +81,7 @@ class GroupCategoryController extends Controller
         return $this->groupCategoryService->attribute($request);
     }
 
-        /**
+    /**
      * Store a newly attribute created resource in storage.
      *
      * @param  $request
@@ -90,5 +90,10 @@ class GroupCategoryController extends Controller
     public function attributeCreate(Request $request)
     {
         return $this->groupCategoryService->storeAttribute($request);
+    }
+
+    public function topGroupCategory(Request $request)
+    {
+        return $this->groupCategoryService->topGroupCategory($request);
     }
 }

@@ -7,7 +7,7 @@ import ProductUpdate from './ProductUpdate';
 import * as Yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useTranslation } from 'react-i18next';
-import { CODE, DATE_TIME, STATUS } from '../../../../../constants/constants';
+import { CODE, DATE_TIME, SALE_TYPE, STATUS } from '../../../../../constants/constants';
 import { format, parseISO } from 'date-fns';
 
 const ProductUpdateContainer = () => {
@@ -59,10 +59,10 @@ const ProductUpdateContainer = () => {
                 then: () => Yup.string()
                     .required(t('validate.required', { name: 'Price saled' }))
                     .test("", "Invalid value", (value, testContext) => {
-                        if (testContext.parent.sale_type == 1) {
+                        if (testContext.parent.sale_type == SALE_TYPE.PRICE) {
                             return value <= testContext.parent.price
                         }
-                        else if (testContext.parent.sale_type == 2) {
+                        else if (testContext.parent.sale_type == SALE_TYPE.PERSEN) {
                             return 0 <= value <= 100
                         }
                     })
@@ -213,7 +213,7 @@ const ProductUpdateContainer = () => {
             setValue('product_code', product?.product_code || '');
             setValue('name', product?.name || '');
             setValue('price', product?.product_price[0]?.price || '');
-            setValue('status', product?.status || -1);
+            setValue('status', product?.status);
             setValue('group_category_id', product?.group_category_id || -1);
             setValue('category_id', product?.category_id || -1);
             setValue('manufacturer_id', product?.manufacturer_id || -1);

@@ -2,11 +2,11 @@ import React from "react"
 import "./style.css"
 import TopCart from "./TopCart"
 
-const TopCate = () => {
+const TopCate = ({ topGroupCategory }) => {
   return (
     <>
-      <section className='TopCate background'>
-        <div className='container'>
+      <section className='TopCate' style={{ width: "100%" }}>
+        <div className=''>
           <div className='heading d-flex justify-content-between align-items-center'>
             <div className='heading-left d-flex align-items-center'>
               <i className='fa-solid fa-border-all'></i>
@@ -17,7 +17,7 @@ const TopCate = () => {
               <i className='fa-solid fa-caret-right'></i>
             </div>
           </div>
-          <TopCart />
+          <TopCart topGroupCategory={topGroupCategory} />
         </div>
       </section>
     </>

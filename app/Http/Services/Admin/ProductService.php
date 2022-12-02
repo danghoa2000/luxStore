@@ -31,11 +31,15 @@ class ProductService
                 'group_category_id',
                 'manufacturer_id',
                 'image',
-                'status'
+                'status',
+                'price',
+                'expried',
+                'sale_type',
+                'sale_off'
             )
             ->withSum('productDetail', 'qty')
-            ->filter($request)
-            ->where('status', config('constants.user.status.active'));
+            ->filter($request);
+        // ->where('status', config('constants.user.status.active'));
         $total = count($products->get());
         if ($request->pageSize) {
             $products->limit($request->pageSize)
@@ -64,6 +68,7 @@ class ProductService
                 'sale_type' => $request->sale_type,
                 'sale_off' => $request->price_saled,
                 'expried' => $request->expried,
+                'price' => $request->price,
             ]);
             if ($request->property) {
                 foreach ($request->property as $item) {
@@ -84,7 +89,6 @@ class ProductService
                 return $item["file"];
             })]);
 
-            $product->productPrice()->create(["price" => $request->price]);
             DB::commit();
             return response([
                 'product' => $product,
@@ -126,6 +130,7 @@ class ProductService
                 'sale_type',
                 'sale_off',
                 'expried',
+                'price'
             )
             ->find($request->id);
         if ($product) {
@@ -160,6 +165,7 @@ class ProductService
                     'sale_type' => $request->sale_type,
                     'sale_off' => $request->price_saled,
                     'expried' => $request->expried,
+                    'price' => $request->price,
                 ]);
 
                 if ($request->property) {
@@ -185,10 +191,6 @@ class ProductService
                 $product->productMedia()->update(["url" => collect($request->file)->map(function ($item) {
                     return $item["file"];
                 })]);
-                $latePrice = $product->productPrice()->first();
-                if ($latePrice->price != $request->price) {
-                    $product->productPrice()->create(["price" => $request->price]);
-                }
                 DB::commit();
                 return response([
                     'message' => 'Update product success!',
@@ -202,7 +204,7 @@ class ProductService
         } catch (\Throwable $th) {
             DB::rollBack();
             return response([
-                'message' => 'Create product error!',
+                'message' => 'Update product error!',
                 'code' => Response::HTTP_INTERNAL_SERVER_ERROR
             ], Response::HTTP_UNPROCESSABLE_ENTITY);
         }

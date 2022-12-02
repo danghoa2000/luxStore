@@ -2,7 +2,7 @@ import React from "react"
 import Cart from "./Cart"
 import "./style.css"
 
-const NewArrivals = () => {
+const NewArrivals = ({ productItems }) => {
   return (
     <>
       <section className='NewArrivals background'>
@@ -18,7 +18,7 @@ const NewArrivals = () => {
             </div>
           </div>
 
-          <Cart />
+          <Cart productItems={productItems} />
         </div>
       </section>
     </>

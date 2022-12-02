@@ -6,10 +6,10 @@ use App\Http\Controllers\Admin\CategoriesController;
 use App\Http\Controllers\admin\EventController;
 use App\Http\Controllers\Admin\GroupCategoryController;
 use App\Http\Controllers\Admin\LoginController;
-use App\Http\Controllers\Admin\HomeController;
 use App\Http\Controllers\admin\ManufacturerController;
 use App\Http\Controllers\admin\ProductController;
 use App\Http\Controllers\admin\ShippingController;
+use App\Http\Controllers\Client\HomeController;
 use App\Http\Controllers\DirectionController;
 use App\Http\Controllers\UploadController;
 use Illuminate\Support\Facades\Route;
@@ -59,7 +59,7 @@ Route::group([
         Route::delete('group-category/delete/{id}', [GroupCategoryController::class, 'destroy'])->name('groupCategory.delete');
         Route::post('group-category/attribute/create', [GroupCategoryController::class, 'attributeCreate'])->name('groupCategory.attribute.create');
         Route::get('group-category/attribute', [GroupCategoryController::class, 'attribute'])->name('groupCategory.attribute');
-
+        
         Route::post('attribute/create', [AttributeController::class, 'store'])->name('attribute.store');
         Route::post('attribute/option', [AttributeController::class, 'option'])->name('attribute.option');
 
@@ -68,7 +68,6 @@ Route::group([
         Route::put('shipping/update', [ShippingController::class, 'update'])->name('shipping.update');
         Route::get('shipping/show', [ShippingController::class, 'show'])->name('shipping.show');
 
-        Route::get('product', [ProductController::class, 'index'])->name('product');
         Route::post('product/create', [ProductController::class, 'store'])->name('product.create');
         Route::put('product/update', [ProductController::class, 'update'])->name('product.update');
         Route::get('product/show', [ProductController::class, 'show'])->name('product.show');
@@ -88,3 +87,5 @@ Route::get('get-district/{provinceId}', [DirectionController::class, 'getDistric
 Route::get('get-commune/{districtId}', [DirectionController::class, 'getCommune']);
 
 Route::get('home', [HomeController::class, 'index'])->name('home');
+Route::get('auth/admin/product', [ProductController::class, 'index'])->name('product');
+Route::get('auth/admin/top-group-category', [GroupCategoryController::class, 'topGroupCategory'])->name('topGroupCategory');

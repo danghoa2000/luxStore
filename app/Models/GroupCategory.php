@@ -9,7 +9,7 @@ class GroupCategory extends Model
 {
     use HasFactory;
 
-    
+
     /**
      * The attributes that are mass assignable.
      *
@@ -27,6 +27,11 @@ class GroupCategory extends Model
     public function attributes()
     {
         return $this->belongsToMany(Attribute::class, "group_category_attribute", "group_category_id", "attribute_id")->withTimestamps();
+    }
+
+    public function products()
+    {
+        return $this->hasMany(Product::class, 'group_category_id', 'id');
     }
 
     public function scopeFilter($query, $request)

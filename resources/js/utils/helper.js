@@ -1,4 +1,5 @@
 export const formatPrice = (item) => {
-    item = item.toLocaleString('it-IT', {style : 'currency', currency : 'VND'});
-    return item;
+    return item
+        ? new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(item)
+        : new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(0)
 };

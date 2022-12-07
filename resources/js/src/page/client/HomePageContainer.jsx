@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useCallback } from 'react';
-import { GROUP_CATEGORY_API, HOME_API } from '../../../constants/api';
+import { GROUP_CATEGORY_API, HOME_API, SEARCH_API } from '../../../constants/api';
 import { CODE } from '../../../constants/constants';
 import { axiosClient } from '../../../hooks/useHttp';
 import HomePage from './HomePage';
@@ -9,7 +9,7 @@ const HomePageContainer = ({ productItems, addToCart, CartItem, shopItems }) => 
 
     const [flashDelas, setFlashDelas] = useState([]);
     const [newArrivals, setNewArrivals] = useState([]);
-    const [bigDiscounts, setBigDiscountss] = useState([]);
+    const [bigDiscounts, setBigDiscounts] = useState([]);
     const [ortherProduct, setOrtherProduct] = useState([]);
     const [topGroupCategory, setTopGroupCategory] = useState([]);
     const [topRateProduct, setTopRateProduct] = useState([]);
@@ -22,7 +22,7 @@ const HomePageContainer = ({ productItems, addToCart, CartItem, shopItems }) => 
                 if (response.status === CODE.HTTP_OK) {
                     setFlashDelas(response.data.flashDelas);
                     setNewArrivals(response.data.newArrivals);
-                    setBigDiscountss(response.data.bigDiscounts);
+                    setBigDiscounts(response.data.bigDiscounts);
                     setOrtherProduct(response.data.ortherProduct);
                     setTopRateProduct(response.data.topRateProduct)
                 }

@@ -15,35 +15,33 @@ const Dcard = ({ productItems }) => {
     autoplay: true,
   }
   return (
-    <>
-      <Slider {...settings}>
-        {productItems.map((value, index) => {
-          return (
-            <>
-              <div className='box product' key={index}>
-                <div className='img'>
-                  {value?.sale_persen ? <span className='discount'>{value?.sale_persen}% Off</span> : ""}
-                  <img src={value?.image} alt='' />
-                </div>
-                <h4>{value?.name}</h4>
-                <div style={{ display: 'flex', alignItems: 'baseline' }}>
-                  {value?.sale_price ?
-                    (
-                      <>
-                        <span className="old-price">{formatPrice(value?.price)}</span>
-                        <span className="new-price" style={{ marginLeft: 5 }}>{formatPrice(value?.sale_price)}</span>
-                      </>
-                    )
-                    :
-                    (<span className="new-price">{formatPrice(value?.price)}</span>)
-                  }
-                </div>
+    <Slider {...settings}>
+      {productItems.map((value, index) => {
+        return (
+          <div className='box' key={index}>
+            <div className="product">
+              <div className='img'>
+                {value?.sale_persen ? <span className='discount'>{value?.sale_persen}% Off</span> : ""}
+                <img src={value?.image} alt='' />
               </div>
-            </>
-          )
-        })}
-      </Slider>
-    </>
+              <h4>{value?.name}</h4>
+              <div style={{ display: 'flex', alignItems: 'baseline' }}>
+                {value?.sale_price ?
+                  (
+                    <>
+                      <span className="old-price">{formatPrice(value?.price)}</span>
+                      <span className="new-price" style={{ marginLeft: 5 }}>{formatPrice(value?.sale_price)}</span>
+                    </>
+                  )
+                  :
+                  (<span className="new-price">{formatPrice(value?.price)}</span>)
+                }
+              </div>
+            </div>
+          </div>
+        )
+      })}
+    </Slider>
   )
 }
 

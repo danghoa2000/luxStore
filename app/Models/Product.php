@@ -35,7 +35,7 @@ class Product extends Model
 
     protected $table = 'products';
 
-    protected $appends = ['total_rate', 'sale_price', 'sale_persen'];
+    protected $appends = ['total_rate', 'sale_price', 'sale_persen', 'image'];
 
     public function productDetail()
     {
@@ -129,6 +129,11 @@ class Product extends Model
         return 0;
     }
 
+    public function getImageAttribute()
+    {
+       return 'http://127.0.0.1:8000/' . $this->attributes['image'];
+    }
+
     public function scopeFilter($query, $request)
     {
         $data = json_decode($request->searchField, true);
@@ -145,24 +150,43 @@ class Product extends Model
             $query->where('name', 'like', '%' . $data['name'] . '%');
         }
         if (!empty($data['price_min'])) {
-            $query->whereHas('productPrice', function ($q) use ($data) {
-                $q->latest()->where('price', ">=", $data['price_min']);
-            });
+            $query->where('price', "<=", $data['price_min']);
         }
         if (!empty($data['price_max'])) {
-            $query->whereHas('productPrice', function ($q) use ($data) {
-                $q->latest()->where('price', "<=", $data['price_max']);
-            });
+            $query->where('price', "<=", $data['price_max']);
         }
-        if (!empty($data['category_id']) && $data['category_id'] != -1) {
-            $query->where('category_id',  $data['category_id']);
+        if (!empty($data['category_id'])) {
+            if (is_array($data['category_id'])) {
+                $query->whereIn('category_id',  $data['category_id']);
+            } else {
+                if ($data['category_id'] != -1) {
+                    $query->where('category_id',  $data['category_id']);
+                }
+            }
         }
         if (!empty($data['manufacturer']) && $data['manufacturer'] != -1) {
             $query->where('manufacturer_id',  $data['manufacturer_id']);
         }
-        if (!empty($data['group_category_id']) && $data['group_category_id'] != -1) {
-            $query->where('category_id',  $data['group_category_id']);
+        if (!empty($data['group_category_id'])) {
+            if (is_array($data['group_category_id'])) {
+                $query->whereIn('group_category_id',  $data['group_category_id']);
+            } else {
+                if ($data['group_category_id'] != -1) {
+                    $query->where('group_category_id',  $data['group_category_id']);
+                }
+            }
         }
+        if (!empty($data['rating'])) {
+            $query->whereIn('total_rate', $data['rating']);
+        }
+        // if (!empty($data['color'])) {
+        //     $query->whereHas('productDetail.propertyValue', function($q) use ($data){
+        //         $q->whereIn('id', $data['color'])
+        //         ->whereHas('attribute', function($q) {
+        //             $q->where('name', 'like', '%color%');
+        //         });
+        //     });
+        // }
         return $query;
     }
 }

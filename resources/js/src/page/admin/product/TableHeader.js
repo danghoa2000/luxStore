@@ -40,7 +40,7 @@ const TableHeader = {
         id: "price",
         numeric: true,
         label: "product.list.table.price",
-        render: (value) => value?.product_price[0]?.price || '',
+        render: (value) => value?.price || '',
         inputMode: 'text'
     },
     qty: {

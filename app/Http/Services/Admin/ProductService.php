@@ -38,8 +38,8 @@ class ProductService
                 'sale_off'
             )
             ->withSum('productDetail', 'qty')
-            ->filter($request);
-        // ->where('status', config('constants.user.status.active'));
+            ->filter($request)
+        ->where('status', config('constants.user.status.active'));
         $total = count($products->get());
         if ($request->pageSize) {
             $products->limit($request->pageSize)

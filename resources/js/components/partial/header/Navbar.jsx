@@ -9,7 +9,7 @@ const Navbar = () => {
       <header className='header'>
         <div className='container d-flex justify-content-between'>
           <div className='catgrories d-flex'>
-            <span class='fa-solid fa-border-all'></span>
+            <span className='fa-solid fa-border-all'></span>
             <h4>
               Categories
             </h4>

@@ -33,7 +33,7 @@ Route::group([
 
     Route::group([
         'middleware' => ['auth:api', 'cors'], 'prefix' => 'admin'
-    ], function () {        
+    ], function () {
         Route::get('categories', [CategoriesController::class, 'index'])->name('category');
         Route::post('categories/create', [CategoriesController::class, 'store'])->name('category.create');
         Route::put('categories/update', [CategoriesController::class, 'update'])->name('category.update');
@@ -59,7 +59,7 @@ Route::group([
         Route::delete('group-category/delete/{id}', [GroupCategoryController::class, 'destroy'])->name('groupCategory.delete');
         Route::post('group-category/attribute/create', [GroupCategoryController::class, 'attributeCreate'])->name('groupCategory.attribute.create');
         Route::get('group-category/attribute', [GroupCategoryController::class, 'attribute'])->name('groupCategory.attribute');
-        
+
         Route::post('attribute/create', [AttributeController::class, 'store'])->name('attribute.store');
         Route::post('attribute/option', [AttributeController::class, 'option'])->name('attribute.option');
 
@@ -81,11 +81,16 @@ Route::group([
     });
 });
 
-Route::post('upload', [UploadController::class, 'upload']);
-Route::get('get-province', [DirectionController::class, 'getProvince']);
-Route::get('get-district/{provinceId}', [DirectionController::class, 'getDistrict']);
-Route::get('get-commune/{districtId}', [DirectionController::class, 'getCommune']);
+Route::group([
+    'middleware' => ['cors']
+], function () {
+    Route::post('upload', [UploadController::class, 'upload']);
+    Route::get('get-province', [DirectionController::class, 'getProvince']);
+    Route::get('get-district/{provinceId}', [DirectionController::class, 'getDistrict']);
+    Route::get('get-commune/{districtId}', [DirectionController::class, 'getCommune']);
 
-Route::get('home', [HomeController::class, 'index'])->name('home');
-Route::get('auth/admin/product', [ProductController::class, 'index'])->name('product');
-Route::get('auth/admin/top-group-category', [GroupCategoryController::class, 'topGroupCategory'])->name('topGroupCategory');
+    Route::get('home', [HomeController::class, 'index'])->name('home');
+    Route::get('search', [HomeController::class, 'search'])->name('search');
+    Route::get('auth/admin/product', [ProductController::class, 'index'])->name('product');
+    Route::get('auth/admin/top-group-category', [GroupCategoryController::class, 'topGroupCategory'])->name('topGroupCategory');
+});

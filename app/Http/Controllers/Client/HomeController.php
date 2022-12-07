@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Client;
 use App\Http\Controllers\Controller;
 use App\Http\Services\HomeService;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
+use Illuminate\Http\Request;
 
 class HomeController extends Controller
 {
@@ -36,5 +37,17 @@ class HomeController extends Controller
     public function index()
     {
         return $this->homeService->index();
+    }
+
+    /**
+     * search product.
+     *
+     * @param Request $request
+     * 
+     * @return void
+     */
+    public function search(Request $request)
+    {
+        return $this->homeService->search($request);
     }
 }

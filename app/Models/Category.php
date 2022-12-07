@@ -35,6 +35,21 @@ class Category extends Model
         return $this->hasMany(Category::class, 'parent_id');
     }
 
+    public function groupCategory()
+    {
+        return $this->belongsTo(GroupCategory::class, 'group_category_id', 'id');
+    }
+
+    public function createdBy()
+    {
+        return $this->belongsTo(User::class, 'created_by', 'id');
+    }
+
+    public function products()
+    {
+        return $this->hasMany(Product::class, 'category_id', 'id');
+    }
+
     public function scopeFilter($query, $request)
     {
         $data = json_decode($request->searchField, true);
@@ -62,15 +77,5 @@ class Category extends Model
             });
         }
         return $query;
-    }
-
-    public function groupCategory()
-    {
-        return $this->belongsTo(GroupCategory::class, 'group_category_id', 'id');
-    }
-
-    public function createdBy()
-    {
-        return $this->belongsTo(User::class, 'created_by', 'id');
     }
 }

@@ -1,4 +1,4 @@
-import { Opacity } from '@mui/icons-material';
+import { Opacity, Star } from '@mui/icons-material';
 import {
     Box,
     Checkbox,
@@ -13,13 +13,24 @@ import {
     ListSubheader,
     MenuItem,
     Pagination,
+    Rating,
     Select,
     Stack
 } from '@mui/material';
 import React, { useState } from 'react';
+import { formatPrice } from '../../../../utils/helper';
 import './product.scss';
 
-const Product = () => {
+const Product = (props) => {
+    const {
+        // order,
+        orderBy,
+        page,
+        rowsPerPage,
+        setSearchFiled,
+        totalRecord,
+        productList
+    } = props;
     const [checked, setChecked] = useState([0]);
 
     const handleToggle = (value) => () => {
@@ -40,7 +51,7 @@ const Product = () => {
         }}>
             <div className="container">
                 <Box>
-                    <div className='d-flex justify-content-between  bg-white' style={{ padding: "20px 30px", boxShadow: "-1px 15px 17px -8px rgb(0 0 0 / 10%);", borderRadius: 5 }}>
+                    <div className='d-flex justify-content-between bg-white search__header'>
                         <div className="search__result">
                             <h4 className="search__result__text">
                                 Searching for “ mobile phone ”
@@ -77,7 +88,7 @@ const Product = () => {
                 <div className="addvance__search">
                     <List sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}
                         subheader={
-                            <ListSubheader component="div" id="nested-list-subheader" style={{ fontWeight: "bold", padding: "10px 0", lineHeight: "22px", fontSize: "18px" }}>
+                            <ListSubheader className='search-title' component="div" id="nested-list-subheader" style={{ fontWeight: "bold", padding: "10px 0", lineHeight: "22px", fontSize: "18px" }}>
                                 Nested List Items
                             </ListSubheader>
                         }>
@@ -114,30 +125,41 @@ const Product = () => {
 
                 <div className="product__list">
                     <Grid container spacing={2}>
-                        {[0, 1, 2, 3].map((value) => {
+                        {productList && productList.map((value) => {
                             return (
-                                <Grid item xs={4}>
+                                <Grid item xs={4} key={value.id}>
                                     <div className='box'>
                                         <div className='product m-3'>
                                             <div className='img'>
-                                                <span className='discount'>{5}% Off</span>
-                                                <img src={"https://bonik-react.vercel.app/assets/images/products/headphone.png"} alt='' />
+                                                {value?.sale_persen ? <span className='discount'>{value?.sale_persen}% Off</span> : ""}
+                                                <img src={value?.image} alt='' />
                                                 <div className='product-like'>
                                                     <label>{10}</label> <br />
                                                     <i className='fa-regular fa-heart'></i>
                                                 </div>
                                             </div>
                                             <div className='product-details'>
-                                                <h3>{"Watch"}</h3>
-                                                <div className='rate'>
-                                                    <i className='fa fa-star'></i>
-                                                    <i className='fa fa-star'></i>
-                                                    <i className='fa fa-star'></i>
-                                                    <i className='fa fa-star'></i>
-                                                    <i className='fa fa-star'></i>
-                                                </div>
+                                                <h3>{value?.name}</h3>
+                                                <Rating
+                                                    name="text-feedback"
+                                                    value={value?.total_rate || 0}
+                                                    readOnly
+                                                    precision={0.5}
+                                                    emptyIcon={<Star style={{ opacity: 0.55 }} fontSize="inherit" />}
+                                                />
                                                 <div className='price'>
-                                                    <h4>${200}.00 </h4>
+                                                    <div style={{ display: 'flex', alignItems: 'baseline' }}>
+                                                        {value?.sale_price ?
+                                                            (
+                                                                <>
+                                                                    <span className="old-price">{formatPrice(value?.price)}</span>
+                                                                    <span className="new-price" style={{ marginLeft: 5 }}>{formatPrice(value?.sale_price)}</span>
+                                                                </>
+                                                            )
+                                                            :
+                                                            (<span className="new-price">{formatPrice(value?.price)}</span>)
+                                                        }
+                                                    </div>
                                                     <button onClick={() => ({})}>
                                                         <i className='fa fa-plus'></i>
                                                     </button>

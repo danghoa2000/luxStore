@@ -315,3 +315,13 @@ img {
     font-size: 16px !important;
     color: #e94560;
 }
+
+.box {
+    position: relative;
+}
+
+.search__header {
+    padding: 20px 30px;
+    box-shadow: -1px 15px 17px -8px rgb(0 0 0 / 10%);
+    border-radius: 5;
+}

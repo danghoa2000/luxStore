@@ -212,7 +212,7 @@ const ProductUpdateContainer = () => {
             setValue('id', product ? product.id : '');
             setValue('product_code', product?.product_code || '');
             setValue('name', product?.name || '');
-            setValue('price', product?.product_price[0]?.price || '');
+            setValue('price', product?.price || '');
             setValue('status', product?.status);
             setValue('group_category_id', product?.group_category_id || -1);
             setValue('category_id', product?.category_id || -1);

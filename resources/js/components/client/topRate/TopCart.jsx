@@ -19,8 +19,8 @@ const TopCart = ({ topRateProduct }) => {
       <Slider {...settings}>
         {topRateProduct?.map((value, index) => {
           return (
-            <>
-              <div className='box product' key={index}>
+            <div className='box' key={index}>
+              <div className="product">
                 <div className='img'>
                   {value?.sale_persen ? <span className='discount'>{value?.sale_persen}% Off</span> : ""}
                   <img src={value?.image} alt='' />
@@ -35,7 +35,7 @@ const TopCart = ({ topRateProduct }) => {
                   emptyIcon={<Star style={{ opacity: 0.55 }} fontSize="inherit" />}
                 />
               </div>
-            </>
+            </div>
           )
         })}
       </Slider>

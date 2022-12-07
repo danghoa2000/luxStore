@@ -14,8 +14,8 @@ const Cart = ({ productItems }) => {
   }
   return (
     <>
-      <div 
-      // {...settings}
+      <Slider 
+      {...settings}
         className="content grid product"
       >
         {productItems.map((val, index) => {
@@ -23,7 +23,7 @@ const Cart = ({ productItems }) => {
             <ProductItem val={val} key={index} />
           )
         })}
-      </div>
+      </Slider>
     </>
   )
 }

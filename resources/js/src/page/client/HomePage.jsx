@@ -9,6 +9,7 @@ import Shop from "../../../components/client/shops/Shop"
 import Annocument from "../../../components/client/annocument/Annocument"
 import Wrapper from "../../../components/client/wrapper/Wrapper"
 import TopRate from '../../../components/client/topRate/TopRate';
+import TemporaryDrawer from '../../../components/partial/TemporaryDrawer';
 
 const HomePage = ({
     productItems,
@@ -43,6 +44,7 @@ const HomePage = ({
             <Shop shopItems={ortherProduct} addToCart={addToCart} />
             <Annocument />
             <Wrapper />
+            <TemporaryDrawer />
         </>
     );
 };

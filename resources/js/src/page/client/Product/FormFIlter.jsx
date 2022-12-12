@@ -1,0 +1,73 @@
+import { Divider } from '@mui/material';
+import React, { useMemo } from 'react';
+import { Fragment } from 'react';
+import Option from './Option';
+import OptionAttribute from './OptionAttribute';
+import OptionGroupCategory from './OptionGroupCategory';
+import OptionPrice from './OptionPrice';
+import OptionRate from './OptionRate';
+
+const FormFIlter = ({ formFilter, setSearchFiled, searchField }) => {
+    const ADVANCE_SEARCH = useMemo(() => {
+        return formFilter && Object.keys(formFilter).map((option, index) => {
+            if (option == 'groupCategory') {
+                return <Fragment key={index}>
+                    <OptionGroupCategory
+                        option={formFilter[option]}
+                        setSearchFiled={setSearchFiled}
+                        name="group_category_id"
+                        searchField={searchField}
+                    />
+                    <Divider style={{ borderColor: "rgb(246, 249, 252)", borderBottomWidth: "medium", opacity: 1 }} />
+                </Fragment>
+            } else if (option == 'category') {
+                return <Fragment key={index}>
+                    <Option
+                        option={formFilter[option]}
+                        label="Category"
+                        setSearchFiled={setSearchFiled}
+                        name="category_id"
+                        searchField={searchField}
+                    />
+                    <Divider style={{ borderColor: "rgb(246, 249, 252)", borderBottomWidth: "medium", opacity: 1 }} />
+                </Fragment>
+            } else if (option == 'attribute') {
+                return <OptionAttribute
+                    option={option}
+                    setSearchFiled={setSearchFiled}
+                    name="attribute"
+                    searchField={searchField}
+                    formFilter={formFilter}
+                    key={index}
+                />
+            } else if (option == 'price') {
+                return <Fragment key={index}>
+                    {
+                        <OptionPrice
+                            setSearchFiled={setSearchFiled}
+                            name="price"
+                            searchField={searchField}
+                        />
+                    }
+                </Fragment>
+            } else if (option == 'rate') {
+                return <Fragment key={index}>
+                    <OptionRate
+                        setSearchFiled={setSearchFiled}
+                        name="rate"
+                        searchField={searchField}
+                    />
+                    <Divider style={{ borderColor: "rgb(246, 249, 252)", borderBottomWidth: "medium", opacity: 1 }} />
+                </Fragment>
+            }
+        })
+    }, [formFilter, searchField]);
+
+    return (
+        <div className="addvance__search">
+            {ADVANCE_SEARCH}
+        </div>
+    );
+};
+
+export default FormFIlter;

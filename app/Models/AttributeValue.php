@@ -25,4 +25,8 @@ class AttributeValue extends Model
     {
         return $this->belongsTo(Attribute::class, "attribute_id", "id");
     }
+    public function products()
+    {
+        return $this->belongsToMany(ProductDetail::class, "product_attribute_value", "attribute_value_id", "product_detail_id")->withTimestamps();
+    }
 }

@@ -10,6 +10,7 @@ import PrivateAdminRoute from "./PrivateAdminRoute"
 import Data from "./components/client/Data"
 import Sdata from "./components/client/shops/Sdata"
 import Loading from "./components/partial/Loading";
+import { SearchFieldContext } from "./hooks/useSearchField";
 
 // admin
 const AdminLoginContainer = lazy(() => import("./src/page/admin/login/LoginContainer"));
@@ -47,50 +48,28 @@ const ProductContainer = lazy(() => import("./src/page/client/Product/ProductCon
 const App = () => {
     const [auth, setAuth] = useState({});
     const [user, setUser] = useState({});
+    const [searchField, setSearchFiled] = useState({});
     const urlNotExist = useCallback(() => {
         return <Navigate to="/elite" replace />;
     }, []);
     const { productItems } = Data
     const { shopItems } = Sdata
-
-    //Step 2 :
     const [CartItem, setCartItem] = useState([])
-
-    //Step 4 :
     const addToCart = (product) => {
-        // if hamro product alredy cart xa bhane  find garna help garxa
         const productExit = CartItem.find((item) => item.id === product.id)
-        // if productExit chai alredy exit in cart then will run fun() => setCartItem
-        // ani inside => setCartItem will run => map() ani yo map() chai each cart ma
-        // gayara check garxa if item.id ra product.id chai match bhayo bhane
-        // productExit product chai display garxa
-        // ani increase  exits product QTY by 1
-        // if item and product doesnt match then will add new items
         if (productExit) {
             setCartItem(CartItem.map((item) => (item.id === product.id ? { ...productExit, qty: productExit.qty + 1 } : item)))
         } else {
-            // but if the product doesnt exit in the cart that mean if card is empty
-            // then new product is added in cart  and its qty is initalize to 1
             setCartItem([...CartItem, { ...product, qty: 1 }])
         }
     }
 
     // Stpe: 6
     const decreaseQty = (product) => {
-        // if hamro product alredy cart xa bhane  find garna help garxa
         const productExit = CartItem.find((item) => item.id === product.id)
-
-        // if product is exit and its qty is 1 then we will run a fun  setCartItem
-        // inside  setCartItem we will run filter to check if item.id is match to product.id
-        // if the item.id is doesnt match to product.id then that items are display in cart
-        // else
         if (productExit.qty === 1) {
             setCartItem(CartItem.filter((item) => item.id !== product.id))
         } else {
-            // if product is exit and qty  of that produt is not equal to 1
-            // then will run function call setCartItem
-            // inside setCartItem we will run map method
-            // this map() will check if item.id match to produt.id  then we have to desc the qty of product by 1
             setCartItem(CartItem.map((item) => (item.id === product.id ? { ...productExit, qty: productExit.qty - 1 } : item)))
         }
     }
@@ -99,254 +78,256 @@ const App = () => {
             {/* Admin route  */}
             <BrowserRouter>
                 <AuthContext.Provider value={{ auth, setAuth, user, setUser }}>
-                    <Routes>
-                        <Route path="/" element={<Outlet />} >
-                            <Route index element={<Navigate to="/elite" />} />
-                            <Route path="/elite" element={<DefaultLayout CartItem={CartItem} />} >
-                                <Route index element={
-                                    <Suspense fallback={<Loading />}>
-                                        <HomePageContainer productItems={productItems} addToCart={addToCart} shopItems={shopItems} />
-                                    </Suspense>}
-                                />
-
-                                <Route path='cart' element={
-                                    <Suspense fallback={<Loading />}>
-                                        <CartContainer CartItem={CartItem} addToCart={addToCart} decreaseQty={decreaseQty} />
-                                    </Suspense>}
-                                />
-
-                                <Route path='product' element={
-                                    <Suspense fallback={<Loading />}>
-                                        <DetailContainer />
-                                    </Suspense>}
-                                />
-                                <Route path="search" element={
-                                    <Suspense fallback={<Loading />}>
-                                        <ProductContainer />
-                                    </Suspense>
-                                } />
-                            </Route>
-                            <Route path="*" element={urlNotExist} />
-
-                            {/* admin route */}
-                            <Route path="admin/*" element={<AdminLayout />}>
-                                <Route index element={
-                                    <Suspense fallback={<Loading />}>
-                                        <AdminHomeContainer />
-                                    </Suspense>} />
-                                <Route path="blogs"
-                                    element={
-                                        <PrivateAdminRoute roles={[ROLE.MANAGER, ROLE.EMPLOYEE]}>
-                                            <div>blogs</div>
-                                        </PrivateAdminRoute>
-                                    }
-                                />
-                                <Route path="categories"
-                                    element={<Outlet />}
-                                >
+                    <SearchFieldContext.Provider value={{ searchField, setSearchFiled }}>
+                        <Routes>
+                            <Route path="/" element={<Outlet />} >
+                                <Route index element={<Navigate to="/elite" />} />
+                                <Route path="/elite" element={<DefaultLayout CartItem={CartItem} />} >
                                     <Route index element={
-                                        <PrivateAdminRoute roles={[ROLE.MANAGER, ROLE.EMPLOYEE]}>
-                                            <AdminCategoryContainer />
-                                        </PrivateAdminRoute>
+                                        <Suspense fallback={<Loading />}>
+                                            <HomePageContainer productItems={productItems} addToCart={addToCart} shopItems={shopItems} />
+                                        </Suspense>}
+                                    />
+
+                                    <Route path='cart' element={
+                                        <Suspense fallback={<Loading />}>
+                                            <CartContainer CartItem={CartItem} addToCart={addToCart} decreaseQty={decreaseQty} />
+                                        </Suspense>}
+                                    />
+
+                                    <Route path='product' element={
+                                        <Suspense fallback={<Loading />}>
+                                            <DetailContainer />
+                                        </Suspense>}
+                                    />
+                                    <Route path="search" element={
+                                        <Suspense fallback={<Loading />}>
+                                            <ProductContainer />
+                                        </Suspense>
                                     } />
-
-                                    <Route path="create"
-                                        element={
-                                            <PrivateAdminRoute roles={[ROLE.MANAGER, ROLE.EMPLOYEE]}>
-                                                <AdminCategoryCreateContainer />
-                                            </PrivateAdminRoute>
-                                        }
-                                    />
-                                    <Route path="update"
-                                        element={
-                                            <PrivateAdminRoute roles={[ROLE.MANAGER, ROLE.EMPLOYEE]}>
-                                                <AdminCategoryUpdateContainer />
-                                            </PrivateAdminRoute>
-                                        }
-                                    />
                                 </Route>
-                                <Route path="account"
-                                    element={<Outlet />}
-                                >
+                                <Route path="*" element={urlNotExist} />
+
+                                {/* admin route */}
+                                <Route path="admin/*" element={<AdminLayout />}>
                                     <Route index element={
                                         <Suspense fallback={<Loading />}>
+                                            <AdminHomeContainer />
+                                        </Suspense>} />
+                                    <Route path="blogs"
+                                        element={
                                             <PrivateAdminRoute roles={[ROLE.MANAGER, ROLE.EMPLOYEE]}>
-                                                <AdminAccountContainer />
+                                                <div>blogs</div>
                                             </PrivateAdminRoute>
-                                        </Suspense>}
-
-                                    />
-
-                                    <Route path="create"
-                                        element={
-                                            <Suspense fallback={<Loading />}>
-                                                <PrivateAdminRoute roles={[ROLE.MANAGER, ROLE.EMPLOYEE]}>
-                                                    <AdminAccountCreateContainer />
-                                                </PrivateAdminRoute>
-                                            </Suspense>
                                         }
                                     />
-                                    <Route path="update"
-                                        element={
-                                            <Suspense fallback={<Loading />}>
-                                                <PrivateAdminRoute roles={[ROLE.MANAGER, ROLE.EMPLOYEE]}>
-                                                    <AdminAccountUpdateContainer />
-                                                </PrivateAdminRoute>
-                                            </Suspense>
-
-                                        }
-                                    />
-                                </Route>
-                                <Route path="manufacturer"
-                                    element={<Outlet />}
-                                >
-                                    <Route index element={
-                                        <Suspense fallback={<Loading />}>
+                                    <Route path="categories"
+                                        element={<Outlet />}
+                                    >
+                                        <Route index element={
                                             <PrivateAdminRoute roles={[ROLE.MANAGER, ROLE.EMPLOYEE]}>
-                                                <AdminManufacturerContainer />
+                                                <AdminCategoryContainer />
                                             </PrivateAdminRoute>
-                                        </Suspense>}
+                                        } />
 
-                                    />
-
-                                    <Route path="create"
-                                        element={
+                                        <Route path="create"
+                                            element={
+                                                <PrivateAdminRoute roles={[ROLE.MANAGER, ROLE.EMPLOYEE]}>
+                                                    <AdminCategoryCreateContainer />
+                                                </PrivateAdminRoute>
+                                            }
+                                        />
+                                        <Route path="update"
+                                            element={
+                                                <PrivateAdminRoute roles={[ROLE.MANAGER, ROLE.EMPLOYEE]}>
+                                                    <AdminCategoryUpdateContainer />
+                                                </PrivateAdminRoute>
+                                            }
+                                        />
+                                    </Route>
+                                    <Route path="account"
+                                        element={<Outlet />}
+                                    >
+                                        <Route index element={
                                             <Suspense fallback={<Loading />}>
                                                 <PrivateAdminRoute roles={[ROLE.MANAGER, ROLE.EMPLOYEE]}>
-                                                    <AdminManufacturerCreateContainer />
+                                                    <AdminAccountContainer />
                                                 </PrivateAdminRoute>
-                                            </Suspense>
-                                        }
-                                    />
-                                    <Route path="update"
-                                        element={
+                                            </Suspense>}
+
+                                        />
+
+                                        <Route path="create"
+                                            element={
+                                                <Suspense fallback={<Loading />}>
+                                                    <PrivateAdminRoute roles={[ROLE.MANAGER, ROLE.EMPLOYEE]}>
+                                                        <AdminAccountCreateContainer />
+                                                    </PrivateAdminRoute>
+                                                </Suspense>
+                                            }
+                                        />
+                                        <Route path="update"
+                                            element={
+                                                <Suspense fallback={<Loading />}>
+                                                    <PrivateAdminRoute roles={[ROLE.MANAGER, ROLE.EMPLOYEE]}>
+                                                        <AdminAccountUpdateContainer />
+                                                    </PrivateAdminRoute>
+                                                </Suspense>
+
+                                            }
+                                        />
+                                    </Route>
+                                    <Route path="manufacturer"
+                                        element={<Outlet />}
+                                    >
+                                        <Route index element={
                                             <Suspense fallback={<Loading />}>
                                                 <PrivateAdminRoute roles={[ROLE.MANAGER, ROLE.EMPLOYEE]}>
-                                                    <AdminManufacturerUpdateContainer />
+                                                    <AdminManufacturerContainer />
                                                 </PrivateAdminRoute>
-                                            </Suspense>
+                                            </Suspense>}
 
-                                        }
-                                    />
+                                        />
+
+                                        <Route path="create"
+                                            element={
+                                                <Suspense fallback={<Loading />}>
+                                                    <PrivateAdminRoute roles={[ROLE.MANAGER, ROLE.EMPLOYEE]}>
+                                                        <AdminManufacturerCreateContainer />
+                                                    </PrivateAdminRoute>
+                                                </Suspense>
+                                            }
+                                        />
+                                        <Route path="update"
+                                            element={
+                                                <Suspense fallback={<Loading />}>
+                                                    <PrivateAdminRoute roles={[ROLE.MANAGER, ROLE.EMPLOYEE]}>
+                                                        <AdminManufacturerUpdateContainer />
+                                                    </PrivateAdminRoute>
+                                                </Suspense>
+
+                                            }
+                                        />
+                                    </Route>
+                                    <Route path="group-category"
+                                        element={<Outlet />}
+                                    >
+                                        <Route index element={
+                                            <Suspense fallback={<Loading />}>
+                                                <PrivateAdminRoute roles={[ROLE.MANAGER, ROLE.EMPLOYEE]}>
+                                                    <AdminGroupCategoryContainer />
+                                                </PrivateAdminRoute>
+                                            </Suspense>}
+
+                                        />
+
+                                        <Route path="create"
+                                            element={
+                                                <Suspense fallback={<Loading />}>
+                                                    <PrivateAdminRoute roles={[ROLE.MANAGER, ROLE.EMPLOYEE]}>
+                                                        <AdminGroupCategoryCreateContainer />
+                                                    </PrivateAdminRoute>
+                                                </Suspense>
+                                            }
+                                        />
+                                        <Route path="update"
+                                            element={
+                                                <Suspense fallback={<Loading />}>
+                                                    <PrivateAdminRoute roles={[ROLE.MANAGER, ROLE.EMPLOYEE]}>
+                                                        <AdminGroupCategoryUpdateContainer />
+                                                    </PrivateAdminRoute>
+                                                </Suspense>
+
+                                            }
+                                        />
+                                    </Route>
+                                    <Route path="shipping"
+                                        element={<Outlet />}
+                                    >
+                                        <Route index element={
+                                            <Suspense fallback={<Loading />}>
+                                                <PrivateAdminRoute roles={[ROLE.MANAGER, ROLE.EMPLOYEE]}>
+                                                    <AdminShippingContainer />
+                                                </PrivateAdminRoute>
+                                            </Suspense>}
+
+                                        />
+
+                                        <Route path="create"
+                                            element={
+                                                <Suspense fallback={<Loading />}>
+                                                    <PrivateAdminRoute roles={[ROLE.MANAGER, ROLE.EMPLOYEE]}>
+                                                        <AdminManufacturerCreateContainer />
+                                                    </PrivateAdminRoute>
+                                                </Suspense>
+                                            }
+                                        />
+                                        <Route path="update"
+                                            element={
+                                                <Suspense fallback={<Loading />}>
+                                                    <PrivateAdminRoute roles={[ROLE.MANAGER, ROLE.EMPLOYEE]}>
+                                                        <AdminManufacturerUpdateContainer />
+                                                    </PrivateAdminRoute>
+                                                </Suspense>
+
+                                            }
+                                        />
+                                    </Route>
+
+                                    <Route path="product"
+                                        element={<Outlet />}
+                                    >
+                                        <Route index element={
+                                            <Suspense fallback={<Loading />}>
+                                                <PrivateAdminRoute roles={[ROLE.MANAGER, ROLE.EMPLOYEE]}>
+                                                    <AdminProductContainer />
+                                                </PrivateAdminRoute>
+                                            </Suspense>}
+
+                                        />
+
+                                        <Route path="create"
+                                            element={
+                                                <Suspense fallback={<Loading />}>
+                                                    <PrivateAdminRoute roles={[ROLE.MANAGER, ROLE.EMPLOYEE]}>
+                                                        <AdminProductCreateContainer />
+                                                    </PrivateAdminRoute>
+                                                </Suspense>
+                                            }
+                                        />
+                                        <Route path="update"
+                                            element={
+                                                <Suspense fallback={<Loading />}>
+                                                    <PrivateAdminRoute roles={[ROLE.MANAGER, ROLE.EMPLOYEE]}>
+                                                        <AdminProductUpdateContainer />
+                                                    </PrivateAdminRoute>
+                                                </Suspense>
+
+                                            }
+                                        />
+                                    </Route>
+                                    <Route path="event"
+                                        element={<Outlet />}
+                                    >
+                                        <Route index element={
+                                            <Suspense fallback={<Loading />}>
+                                                <PrivateAdminRoute roles={[ROLE.MANAGER, ROLE.EMPLOYEE]}>
+                                                    <AdminEventContainer />
+                                                </PrivateAdminRoute>
+                                            </Suspense>}
+
+                                        />
+                                    </Route>
+                                    <Route path="contact" element={<div>contact</div>} />
                                 </Route>
-                                <Route path="group-category"
-                                    element={<Outlet />}
-                                >
-                                    <Route index element={
-                                        <Suspense fallback={<Loading />}>
-                                            <PrivateAdminRoute roles={[ROLE.MANAGER, ROLE.EMPLOYEE]}>
-                                                <AdminGroupCategoryContainer />
-                                            </PrivateAdminRoute>
-                                        </Suspense>}
+                                <Route path="admin/login" element={
+                                    <Suspense fallback={<Loading />}>
+                                        <AdminLoginContainer />
+                                    </Suspense>} />
 
-                                    />
-
-                                    <Route path="create"
-                                        element={
-                                            <Suspense fallback={<Loading />}>
-                                                <PrivateAdminRoute roles={[ROLE.MANAGER, ROLE.EMPLOYEE]}>
-                                                    <AdminGroupCategoryCreateContainer />
-                                                </PrivateAdminRoute>
-                                            </Suspense>
-                                        }
-                                    />
-                                    <Route path="update"
-                                        element={
-                                            <Suspense fallback={<Loading />}>
-                                                <PrivateAdminRoute roles={[ROLE.MANAGER, ROLE.EMPLOYEE]}>
-                                                    <AdminGroupCategoryUpdateContainer />
-                                                </PrivateAdminRoute>
-                                            </Suspense>
-
-                                        }
-                                    />
-                                </Route>
-                                <Route path="shipping"
-                                    element={<Outlet />}
-                                >
-                                    <Route index element={
-                                        <Suspense fallback={<Loading />}>
-                                            <PrivateAdminRoute roles={[ROLE.MANAGER, ROLE.EMPLOYEE]}>
-                                                <AdminShippingContainer />
-                                            </PrivateAdminRoute>
-                                        </Suspense>}
-
-                                    />
-
-                                    <Route path="create"
-                                        element={
-                                            <Suspense fallback={<Loading />}>
-                                                <PrivateAdminRoute roles={[ROLE.MANAGER, ROLE.EMPLOYEE]}>
-                                                    <AdminManufacturerCreateContainer />
-                                                </PrivateAdminRoute>
-                                            </Suspense>
-                                        }
-                                    />
-                                    <Route path="update"
-                                        element={
-                                            <Suspense fallback={<Loading />}>
-                                                <PrivateAdminRoute roles={[ROLE.MANAGER, ROLE.EMPLOYEE]}>
-                                                    <AdminManufacturerUpdateContainer />
-                                                </PrivateAdminRoute>
-                                            </Suspense>
-
-                                        }
-                                    />
-                                </Route>
-
-                                <Route path="product"
-                                    element={<Outlet />}
-                                >
-                                    <Route index element={
-                                        <Suspense fallback={<Loading />}>
-                                            <PrivateAdminRoute roles={[ROLE.MANAGER, ROLE.EMPLOYEE]}>
-                                                <AdminProductContainer />
-                                            </PrivateAdminRoute>
-                                        </Suspense>}
-
-                                    />
-
-                                    <Route path="create"
-                                        element={
-                                            <Suspense fallback={<Loading />}>
-                                                <PrivateAdminRoute roles={[ROLE.MANAGER, ROLE.EMPLOYEE]}>
-                                                    <AdminProductCreateContainer />
-                                                </PrivateAdminRoute>
-                                            </Suspense>
-                                        }
-                                    />
-                                    <Route path="update"
-                                        element={
-                                            <Suspense fallback={<Loading />}>
-                                                <PrivateAdminRoute roles={[ROLE.MANAGER, ROLE.EMPLOYEE]}>
-                                                    <AdminProductUpdateContainer />
-                                                </PrivateAdminRoute>
-                                            </Suspense>
-
-                                        }
-                                    />
-                                </Route>
-                                <Route path="event"
-                                    element={<Outlet />}
-                                >
-                                    <Route index element={
-                                        <Suspense fallback={<Loading />}>
-                                            <PrivateAdminRoute roles={[ROLE.MANAGER, ROLE.EMPLOYEE]}>
-                                                <AdminEventContainer />
-                                            </PrivateAdminRoute>
-                                        </Suspense>}
-
-                                    />
-                                </Route>
-                                <Route path="contact" element={<div>contact</div>} />
                             </Route>
-                            <Route path="admin/login" element={
-                                <Suspense fallback={<Loading />}>
-                                    <AdminLoginContainer />
-                                </Suspense>} />
-
-                        </Route>
-                    </Routes>
+                        </Routes>
+                    </SearchFieldContext.Provider>
                 </AuthContext.Provider>
             </BrowserRouter>
         </>

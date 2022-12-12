@@ -18,7 +18,9 @@ import {
     Stack
 } from '@mui/material';
 import React, { useState } from 'react';
+import NotFoundResult from '../../../../components/partial/NotFoundResult';
 import { formatPrice } from '../../../../utils/helper';
+import FormFIlter from './FormFIlter';
 import './product.scss';
 
 const Product = (props) => {
@@ -29,22 +31,11 @@ const Product = (props) => {
         rowsPerPage,
         setSearchFiled,
         totalRecord,
-        productList
+        productList,
+        formFilter,
+        searchField,
+        setPage
     } = props;
-    const [checked, setChecked] = useState([0]);
-
-    const handleToggle = (value) => () => {
-        const currentIndex = checked.indexOf(value);
-        const newChecked = [...checked];
-
-        if (currentIndex === -1) {
-            newChecked.push(value);
-        } else {
-            newChecked.splice(currentIndex, 1);
-        }
-
-        setChecked(newChecked);
-    };
     return (
         <section className='search py-5' style={{
             background: "rgb(246, 249, 252)"
@@ -54,29 +45,28 @@ const Product = (props) => {
                     <div className='d-flex justify-content-between bg-white search__header'>
                         <div className="search__result">
                             <h4 className="search__result__text">
-                                Searching for “ mobile phone ”
+                                Searching for “ {searchField?.name || 'All'} ”
                             </h4>
                             <p className="search__result__res">
-                                48 results found
+                                {totalRecord} results found
                             </p>
                         </div>
                         <div className='sort'>
                             <FormControl sx={{ m: 1 }} className='flex-row align-items-center justify-content-end'>
-                                <label htmlFor="" className='mr-2'>Short by:</label>
+                                <label htmlFor="" className='mr-2'>Sort by:</label>
                                 <Select
                                     // value={age}
                                     // onChange={handleChange}
                                     displayEmpty
+                                    defaultValue={1}
                                     inputProps={{ 'aria-label': 'Without label' }}
                                     // style={{ padding: "10" }}
                                     className="custom__select"
                                 >
-                                    <MenuItem value="">
-                                        <em>None</em>
-                                    </MenuItem>
-                                    <MenuItem value={10}>Ten</MenuItem>
-                                    <MenuItem value={20}>Twenty</MenuItem>
-                                    <MenuItem value={30}>Thirty</MenuItem>
+                                    <MenuItem value={1}>Newest</MenuItem>
+                                    <MenuItem value={2}>Best saller</MenuItem>
+                                    <MenuItem value={3}>Price: Low to High</MenuItem>
+                                    <MenuItem value={4}>Price: High to Low</MenuItem>
                                 </Select>
                             </FormControl>
                         </div>
@@ -85,50 +75,17 @@ const Product = (props) => {
             </div>
 
             <div className="container mt-5 d-flex">
-                <div className="addvance__search">
-                    <List sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}
-                        subheader={
-                            <ListSubheader className='search-title' component="div" id="nested-list-subheader" style={{ fontWeight: "bold", padding: "10px 0", lineHeight: "22px", fontSize: "18px" }}>
-                                Nested List Items
-                            </ListSubheader>
-                        }>
-                        {[0, 1, 2, 3].map((value) => {
-                            const labelId = `checkbox-list-label-${value}`;
-
-                            return (
-                                <ListItem
-                                    key={value}
-                                    secondaryAction={
-                                        <IconButton edge="end" aria-label="comments">
-                                        </IconButton>
-                                    }
-                                    className='list__checkbox border-bottom-1'
-                                >
-                                    <ListItemText role={undefined} onClick={handleToggle(value)} dense>
-                                        <ListItemIcon>
-                                            <Checkbox
-                                                edge="start"
-                                                checked={checked.indexOf(value) !== -1}
-                                                tabIndex={-1}
-                                                disableRipple
-                                                inputProps={{ 'aria-labelledby': labelId }}
-                                            />
-                                        </ListItemIcon>
-                                        <ListItemText id={labelId} primary={`Line item ${value + 1}`} />
-                                    </ListItemText>
-                                </ListItem>
-                            );
-                        })}
-                    </List>
-                    <Divider style={{ borderColor: "rgb(246, 249, 252)", borderBottomWidth: "medium", opacity: 1 }} />
-                </div>
-
-                <div className="product__list">
-                    <Grid container spacing={2}>
-                        {productList && productList.map((value) => {
-                            return (
-                                <Grid item xs={4} key={value.id}>
-                                    <div className='box'>
+                <FormFIlter
+                    formFilter={formFilter}
+                    setSearchFiled={setSearchFiled}
+                    searchField={searchField}
+                />
+                {totalRecord !== 0 ? (
+                    <div className="product__list">
+                        <div style={{ width: "100%" }}>
+                            {productList && Object.values(productList).map((value) => {
+                                return (
+                                    <div className='product__list__item' key={value.id}>
                                         <div className='product m-3'>
                                             <div className='img'>
                                                 {value?.sale_persen ? <span className='discount'>{value?.sale_persen}% Off</span> : ""}
@@ -167,20 +124,24 @@ const Product = (props) => {
                                             </div>
                                         </div>
                                     </div>
-                                </Grid>
-                            )
-                        })}
-                    </Grid>
-                    <div className="d-flex mt-3 justify-content-end w-100">
-                        <div className='pagination'>
-                            <Stack spacing={2}>
-                                <Pagination count={10} />
-                            </Stack>
+                                )
+                            })}
+                        </div>
+                        <div className="d-flex mt-3 justify-content-end w-100">
+                            <div className='pagination'>
+                                <Stack spacing={2}>
+                                    <Pagination count={Math.ceil(totalRecord / rowsPerPage)} page={page} onChange={(e, value) => setPage(value)} />
+                                </Stack>
+                            </div>
                         </div>
                     </div>
-                </div>
+                )
+                    :
+                    <NotFoundResult />
+                }
+
             </div>
-        </section>
+        </section >
     );
 };
 

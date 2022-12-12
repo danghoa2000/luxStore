@@ -5,7 +5,7 @@ import TopCart from "./TopCart"
 const TopRate = ({ topRateProduct }) => {
   return (
     <>
-      <section className='TopCate' style={{ width: "100%" }}>
+      <section className='' style={{ width: "100%" }}>
         <div className=''>
           <div className='heading d-flex justify-content-between align-items-center'>
             <div className='heading-left d-flex align-items-center'>

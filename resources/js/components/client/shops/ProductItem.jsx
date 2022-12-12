@@ -5,9 +5,9 @@ import { formatPrice } from '../../../utils/helper';
 
 const ProductItem = ({ addToCart, shopItems }) => {
     return (
-        <div className='box'>
+        <div className='product__list__item'>
             <div className='product mtop'>
-                <div className='img mb-30'>
+                <div className='img'>
                     {shopItems?.sale_persen ? <span className='discount'>{shopItems?.sale_persen}% Off</span> : ""}
                     <img src={shopItems?.image} alt='' />
                     <div className='product-like'>

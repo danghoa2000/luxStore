@@ -8,6 +8,8 @@ use App\Models\GroupCategory;
 use App\Models\Product;
 use Illuminate\Http\Response;
 
+use function PHPSTORM_META\map;
+
 class HomeService
 {
     public function index()
@@ -63,35 +65,80 @@ class HomeService
             ->filter($request)
             ->where('status', config('constants.user.status.active'));
         $total = count($products->get());
-        $products->limit($request->pageSize)
-            ->offset(($request->currentPage) * $request->pageSize)
-        ->get();
-        $arrId = $products->pluck('id')->toArray();
-        $formFilter = [];
-        $groupCategory = GroupCategory::whereHas('products', function($query) use ($arrId) {
-            $query->whereIn('id', $arrId);
-        })
-        ->select('id', 'name')
-        ->get();
-        $category = Category::whereHas('products', function($query) use ($arrId) {
-            $query->whereIn('id', $arrId);
-        })
-        ->select('id', 'name')
-        ->get();
-        if (count($groupCategory) >= 2) {
-            $formFilter['groupCategory'] = $groupCategory;
-        } else {
-            // $attributes = $groupCategory->attributes;
-            // foreach($attributes as $item) {
-            // }
-            // $formFilter['attribute'] = $groupCategory->attributes;
-        }
-        $formFilter['category'] = $category;
-        $formFilter['rate'] = true;
-        $formFilter['price'] = true;
+        $products = $products->limit($request->pageSize)
+            ->offset(($request->currentPage - 1) * $request->pageSize)
+            ->get();
+        $data = json_decode($request->searchField, true);
+        $products = $products->filter(function ($item) use ($data) {
+            $isReturn = true;
+            if (!empty($data['rate'])) {
+                $isReturn = $item['total_rate'] == $data['rate'];
+            }
+            if (!empty($data['price_max'])) {
+                if ($item['sale_price']) {
+                    return $isReturn && $item['sale_price'] <= $data['price_max'];
+                } else {
+                    return $isReturn && $item['price'] <= $data['price_max'];
+                }
+            }
+            if (!empty($data['price_min'])) {
+                if ($item['sale_price']) {
+                    return $isReturn && $item['sale_price'] >= $data['price_min'];
+                } else {
+                    return $isReturn && $item['price'] >= $data['price_min'];
+                }
+            }
+            return $isReturn;
+        })->map(function ($item) {
+            return $item;
+        });
+
         return response([
             'products' => $products,
             'total' => $total,
+            'code' => Response::HTTP_OK
+        ], Response::HTTP_OK);
+    }
+
+    public function getFormFilter($request)
+    {
+        $data = json_decode($request->searchField, true);
+        $formFilter = [];
+        $groupCategory = GroupCategory::select('id', 'name');
+        if (!empty($data['name'])) {
+            $groupCategory->where('name', 'like', '%' . $data['name'] . '%');
+        }
+        $groupCategory = $groupCategory->get();
+        $category = Category::whereHas('products', function ($query) use ($groupCategory) {
+            $query->whereIn('group_category_id', $groupCategory->pluck('id')->toArray());
+        })
+            ->select('id', 'name')
+            ->get();
+        $formFilter['groupCategory'] = $groupCategory;
+        $formFilter['category'] = $category;
+
+        $attributes = $groupCategory->first() ? $groupCategory->first()->attributes : null;
+        if ($attributes) {
+            foreach ($attributes as $item) {
+                $formFilter['attribute'][$item->id] = [
+                    'name' => $item->name,
+                    'option' => $item->attributeValue
+                        ->filter(function ($value) {
+                            return $value->products->count();
+                        })
+                        ->map(function ($data) {
+                            $newData = [];
+                            $newData['id'] = $data['id'];
+                            $newData['name'] = $data['attribute_value_name'];
+                            return $newData;
+                        })
+                ];
+            }
+        }
+        $formFilter['rate'] = true;
+        $formFilter['price'] = true;
+
+        return response([
             'formFilter' => $formFilter,
             'code' => Response::HTTP_OK
         ], Response::HTTP_OK);

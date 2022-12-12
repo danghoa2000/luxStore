@@ -91,6 +91,7 @@ Route::group([
 
     Route::get('home', [HomeController::class, 'index'])->name('home');
     Route::get('search', [HomeController::class, 'search'])->name('search');
+    Route::get('getFormFilter', [HomeController::class, 'getFormFilter'])->name('formSearch');
     Route::get('auth/admin/product', [ProductController::class, 'index'])->name('product');
     Route::get('auth/admin/top-group-category', [GroupCategoryController::class, 'topGroupCategory'])->name('topGroupCategory');
 });

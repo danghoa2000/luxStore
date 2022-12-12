@@ -50,4 +50,16 @@ class HomeController extends Controller
     {
         return $this->homeService->search($request);
     }
+
+    /**
+     * FormFilter product.
+     *
+     * @param Request $request
+     * 
+     * @return void
+     */
+    public function getFormFilter(Request $request)
+    {
+        return $this->homeService->getFormFilter($request);
+    }
 }

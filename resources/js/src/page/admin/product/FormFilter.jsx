@@ -217,7 +217,6 @@ const FormFilter = (props) => {
                                         )}
                                     />
                                 </Grid>
-
                             </Grid>
                         )
                     }

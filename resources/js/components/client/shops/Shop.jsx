@@ -11,16 +11,16 @@ const Shop = ({ addToCart, shopItems }) => {
           <Catg />
 
           <div className='contentWidth'>
-            <div className='heading d-flex'>
+            <div className='heading d-flex justify-content-between'>
               <div className='heading-left row  '>
                 <h2>Mobile Phones</h2>
               </div>
-              <div className='heading-right row '>
+              <div className='heading-right'>
                 <span>View all</span>
                 <i className='fa-solid fa-caret-right'></i>
               </div>
             </div>
-            <div className='product-content  grid1'>
+            <div style={{ display: 'flex', flexWrap: 'wrap' }}>
               <ShopCart addToCart={addToCart} shopItems={shopItems} />
             </div>
           </div>

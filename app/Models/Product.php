@@ -150,7 +150,7 @@ class Product extends Model
             $query->where('name', 'like', '%' . $data['name'] . '%');
         }
         if (!empty($data['price_min'])) {
-            $query->where('price', "<=", $data['price_min']);
+            $query->where('price', ">=", $data['price_min']);
         }
         if (!empty($data['price_max'])) {
             $query->where('price', "<=", $data['price_max']);
@@ -176,17 +176,11 @@ class Product extends Model
                 }
             }
         }
-        if (!empty($data['rating'])) {
-            $query->whereIn('total_rate', $data['rating']);
+        if (!empty($data['attribute'])) {
+            $query->whereHas('productDetail.propertyValue', function($q) use ($data){
+                $q->whereIn('attribute_value_id', $data['attribute']);
+            });
         }
-        // if (!empty($data['color'])) {
-        //     $query->whereHas('productDetail.propertyValue', function($q) use ($data){
-        //         $q->whereIn('id', $data['color'])
-        //         ->whereHas('attribute', function($q) {
-        //             $q->where('name', 'like', '%color%');
-        //         });
-        //     });
-        // }
         return $query;
     }
 }

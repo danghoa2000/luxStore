@@ -1,29 +1,20 @@
-import { Checkbox, Divider, IconButton, List, ListItem, ListItemIcon, ListItemText, ListSubheader } from '@mui/material';
+import { Checkbox, Divider, FormControl, FormControlLabel, FormGroup, FormLabel, IconButton, List, ListItem, ListItemIcon, ListItemText, ListSubheader } from '@mui/material';
 import React, { Fragment, useEffect, useState } from 'react';
+import { Controller } from 'react-hook-form';
 import Option from './Option';
 
-const OptionAttribute = ({ formFilter, option, setSearchFiled, searchField, name }) => {
-    const [checked, setChecked] = useState([]);
-    const handleToggle = (value) => () => {
-        const currentIndex = checked.indexOf(value);
-        const newChecked = [...checked];
-        if (currentIndex === -1) {
-            newChecked.push(value);
-        } else {
-            newChecked.splice(currentIndex, 1);
-        }
-        setChecked(newChecked);
-    }
-    useEffect(() => {
-        if (checked.length > 0) {
-            const newSearchField = { ...searchField };
-            newSearchField[name] = checked;
-            setSearchFiled(newSearchField);
-        } else {
-            const { [name]: _, ...newObj } = { ...searchField };
-            setSearchFiled(newObj)
-        }
-    }, [checked, name])
+const OptionAttribute = ({
+    formFilter,
+    option,
+    setSearchFiled,
+    searchField,
+    name,
+    reset,
+    setValue,
+    getValues,
+    getProductList,
+    control,
+    handleSubmit }) => {
 
     return (
         formFilter[option] && Object.keys(formFilter[option]).map((value, index) => {
@@ -40,28 +31,39 @@ const OptionAttribute = ({ formFilter, option, setSearchFiled, searchField, name
                     }>
                     {
 
-                        Object.values(formFilter[option][value]['option']).map((value, index) => {
-                            const labelId = `checkbox-list-label-${index}`;
-                            return <ListItem
-                                key={index}
-                                secondaryAction={
-                                    <IconButton edge="end" aria-label="comments"></IconButton>
-                                }
-                                className='list__checkbox border-bottom-1'
-                            >
-                                <ListItemText role={undefined} onClick={handleToggle(value.id)}>
-                                    <ListItemIcon>
-                                        <Checkbox
-                                            edge="start"
-                                            checked={checked.indexOf(value.id) !== -1}
-                                            tabIndex={-1}
-                                            disableRipple
-                                        />
-                                    </ListItemIcon>
-                                    <ListItemText id={labelId} primary={value.name || value.attribute_value_name} />
-                                </ListItemText>
-                            </ListItem>
-                        })
+                        <FormControl component="fieldset">
+                            <FormGroup>
+                                <Controller
+                                    name={name}
+                                    control={control}
+                                    render={({ field }) => (
+                                        Object.values(formFilter[option][value]['option']).map((value, index) => {
+                                            return (
+                                                <FormControlLabel
+                                                    {...field}
+                                                    key={value.id}
+                                                    label={value.name}
+                                                    control={(
+                                                        <Checkbox
+                                                            className='light__mode'
+                                                            onChange={() => {
+                                                                if (!field.value.includes(value.id)) {
+                                                                    field.onChange([...field.value, value.id])
+                                                                    return
+                                                                }
+                                                                const newSeleted = field.value.filter(item => item !== value.id)
+                                                                field.onChange(newSeleted)
+                                                            }}
+                                                            // checked={field['value'].includes(value)}
+                                                        />
+                                                    )}
+                                                />
+                                            )
+                                        })
+                                    )}
+                                />
+                            </FormGroup>
+                        </FormControl>
                     }
                 </List>
         })

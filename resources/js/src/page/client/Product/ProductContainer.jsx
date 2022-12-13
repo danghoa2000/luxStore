@@ -1,6 +1,7 @@
 import axios from 'axios';
 import React, { useCallback, useState } from 'react';
 import { useEffect } from 'react';
+import { useForm } from 'react-hook-form';
 import { useLocation } from 'react-router-dom';
 import { FORM_SEARCH_API, PRODUCT_API, SEARCH_API } from '../../../../constants/api';
 import { CODE } from '../../../../constants/constants';
@@ -20,9 +21,29 @@ const ProductContainer = () => {
     const [formFilter, setFormFilter] = useState([]);
     const [isCompleteSetting, setComplateSetting] = useState(false);
 
-    const getProductList = useCallback(() => {
+    const {
+        handleSubmit,
+        control,
+        reset,
+        setValue,
+        getValues,
+    }
+        = useForm({
+            shouldUnregister: false,
+            defaultValues: {
+                group_category: '',
+                category_id: '',
+                attribute: [],
+                rate: '',
+                price_min: '',
+                price_max: '',
+                order: '1'
+            },
+        });
+
+    const getProductList = (value) => {
         const paramater = {
-            searchField: searchField,
+            searchField: value,
             pageSize: rowsPerPage,
             currentPage: page,
             currentSort: orderBy,
@@ -31,8 +52,7 @@ const ProductContainer = () => {
 
         axiosClient.get(SEARCH_API, {
             params: {
-                ...paramater,
-                name: 'one',
+                searchField: { ...value },
             },
         }).then((response) => {
             if (response.status === CODE.HTTP_OK) {
@@ -43,23 +63,11 @@ const ProductContainer = () => {
             setStatus({ type: 'error', message: response.data ? response.data.message : 'Server error' });
             setShowNoti(true)
         });
-    }, [orderBy, page, rowsPerPage, searchField]);
+    };
 
     const getFormFilter = useCallback(() => {
         setComplateSetting(false);
-        const paramater = {
-            searchField: searchField,
-            pageSize: rowsPerPage,
-            currentPage: page,
-            currentSort: orderBy,
-            // currentDirection: order,
-        };
-
-        axiosClient.get(FORM_SEARCH_API, {
-            params: {
-                ...paramater,
-            },
-        }).then((response) => {
+        axiosClient.get(FORM_SEARCH_API).then((response) => {
             if (response.status === CODE.HTTP_OK) {
                 setFormFilter(response.data.formFilter);
                 setComplateSetting(true)
@@ -78,7 +86,7 @@ const ProductContainer = () => {
         if (isCompleteSetting) {
             getProductList();
         }
-    }, [orderBy, page, rowsPerPage, searchField])
+    }, [orderBy, page, rowsPerPage, searchField, isCompleteSetting])
 
 
     return (
@@ -93,6 +101,12 @@ const ProductContainer = () => {
             formFilter={formFilter}
             searchField={searchField}
             setPage={setPage}
+            handleSubmit={handleSubmit}
+            control={control}
+            reset={reset}
+            setValue={setValue}
+            getValues={getValues}
+            getProductList={getProductList}
         />
     );
 };

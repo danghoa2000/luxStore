@@ -119,7 +119,10 @@ class Product extends Model
 
     public function getSalePersenAttribute()
     {
-        if ($this->attributes['sale_type'] && $this->attributes['sale_type'] != -1) {
+        if (
+            $this->attributes['sale_type'] && $this->attributes['sale_type'] != -1 &&
+            $this->attributes['expried'] && date_format(Carbon::parse($this->attributes['expried']), config('constants.date_format')) >= date_format(Carbon::now(), config('constants.date_format'))
+        ) {
             if ($this->attributes['sale_type'] == config('constants.sale_type.persen')) {
                 return $this->attributes['sale_off'];
             } else {
@@ -131,7 +134,7 @@ class Product extends Model
 
     public function getImageAttribute()
     {
-       return 'http://127.0.0.1:8000/' . $this->attributes['image'];
+        return 'http://127.0.0.1:8000/' . $this->attributes['image'];
     }
 
     public function scopeFilter($query, $request)
@@ -177,7 +180,7 @@ class Product extends Model
             }
         }
         if (!empty($data['attribute'])) {
-            $query->whereHas('productDetail.propertyValue', function($q) use ($data){
+            $query->whereHas('productDetail.propertyValue', function ($q) use ($data) {
                 $q->whereIn('attribute_value_id', $data['attribute']);
             });
         }

@@ -4,7 +4,7 @@ import { formatPrice } from '../../../utils/helper';
 const ProductItem = ({ val }) => {
     return (
         <div className='box' style={{ margin: "0 5px" }}>
-            <div className='img'>
+            <div className='img has__hover'>
                 {val?.sale_persen != 0 ? <span className='discount'>{val?.sale_persen}% Off</span> : ""}
                 <img src={val?.image} alt='' />
             </div>

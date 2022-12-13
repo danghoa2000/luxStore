@@ -1,4 +1,4 @@
-import { Divider } from '@mui/material';
+import { Button, Divider } from '@mui/material';
 import React, { useMemo } from 'react';
 import { Fragment } from 'react';
 import Option from './Option';
@@ -7,7 +7,16 @@ import OptionGroupCategory from './OptionGroupCategory';
 import OptionPrice from './OptionPrice';
 import OptionRate from './OptionRate';
 
-const FormFIlter = ({ formFilter, setSearchFiled, searchField }) => {
+const FormFIlter = ({
+    formFilter,
+    setSearchFiled,
+    searchField,
+    reset,
+    setValue,
+    getValues,
+    control,
+    getProductList,
+    handleSubmit }) => {
     const ADVANCE_SEARCH = useMemo(() => {
         return formFilter && Object.keys(formFilter).map((option, index) => {
             if (option == 'groupCategory') {
@@ -17,6 +26,12 @@ const FormFIlter = ({ formFilter, setSearchFiled, searchField }) => {
                         setSearchFiled={setSearchFiled}
                         name="group_category_id"
                         searchField={searchField}
+                        reset={reset}
+                        setValue={setValue}
+                        getValues={getValues}
+                        getProductList={getProductList}
+                        control={control}
+                        handleSubmit={handleSubmit}
                     />
                     <Divider style={{ borderColor: "rgb(246, 249, 252)", borderBottomWidth: "medium", opacity: 1 }} />
                 </Fragment>
@@ -28,6 +43,12 @@ const FormFIlter = ({ formFilter, setSearchFiled, searchField }) => {
                         setSearchFiled={setSearchFiled}
                         name="category_id"
                         searchField={searchField}
+                        reset={reset}
+                        setValue={setValue}
+                        getValues={getValues}
+                        getProductList={getProductList}
+                        control={control}
+                        handleSubmit={handleSubmit}
                     />
                     <Divider style={{ borderColor: "rgb(246, 249, 252)", borderBottomWidth: "medium", opacity: 1 }} />
                 </Fragment>
@@ -39,6 +60,12 @@ const FormFIlter = ({ formFilter, setSearchFiled, searchField }) => {
                     searchField={searchField}
                     formFilter={formFilter}
                     key={index}
+                    reset={reset}
+                    setValue={setValue}
+                    getValues={getValues}
+                    getProductList={getProductList}
+                    control={control}
+                    handleSubmit={handleSubmit}
                 />
             } else if (option == 'price') {
                 return <Fragment key={index}>
@@ -47,6 +74,12 @@ const FormFIlter = ({ formFilter, setSearchFiled, searchField }) => {
                             setSearchFiled={setSearchFiled}
                             name="price"
                             searchField={searchField}
+                            reset={reset}
+                            setValue={setValue}
+                            getValues={getValues}
+                            getProductList={getProductList}
+                            control={control}
+                            handleSubmit={handleSubmit}
                         />
                     }
                 </Fragment>
@@ -56,6 +89,12 @@ const FormFIlter = ({ formFilter, setSearchFiled, searchField }) => {
                         setSearchFiled={setSearchFiled}
                         name="rate"
                         searchField={searchField}
+                        reset={reset}
+                        setValue={setValue}
+                        getValues={getValues}
+                        getProductList={getProductList}
+                        control={control}
+                        handleSubmit={handleSubmit}
                     />
                     <Divider style={{ borderColor: "rgb(246, 249, 252)", borderBottomWidth: "medium", opacity: 1 }} />
                 </Fragment>
@@ -66,6 +105,28 @@ const FormFIlter = ({ formFilter, setSearchFiled, searchField }) => {
     return (
         <div className="addvance__search">
             {ADVANCE_SEARCH}
+            <div className='d-flex w-100'>
+                <Button variant="contained" type='submit' style={{ background: "#28a745", marginRight: 5 }} size='small'
+                    onClick={handleSubmit(getProductList)}
+                >
+                    Apply
+                </Button>
+                <Button variant="contained" type='reset' className='bg-gray-100' size='small'
+                    onClick={() => {
+                        setValue('price_min', '');
+                        setValue('group_category', '');
+                        setValue('category_id', []);
+                        setValue('attribute', []);
+                        setValue('rate', '');
+                        setValue('price_min', '');
+                        setValue('price_max', '');
+                        setValue('order', '1');
+                        handleSubmit(getProductList);
+                    }}
+                >
+                    Clear
+                </Button>
+            </div>
         </div>
     );
 };

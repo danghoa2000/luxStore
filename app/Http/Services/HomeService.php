@@ -65,8 +65,9 @@ class HomeService
             ->filter($request)
             ->where('status', config('constants.user.status.active'));
         $total = count($products->get());
-        $products = $products->limit($request->pageSize)
-            ->offset(($request->currentPage - 1) * $request->pageSize)
+        $products = $products
+        // ->limit($request->pageSize)
+        //     ->offset(($request->currentPage - 1) * $request->pageSize)
             ->get();
         $data = json_decode($request->searchField, true);
         $products = $products->filter(function ($item) use ($data) {

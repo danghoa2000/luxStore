@@ -1,18 +1,17 @@
-import { List, ListItem, ListSubheader, Typography } from '@mui/material';
+import { FormControl, FormControlLabel, FormLabel, List, ListItem, ListSubheader, Radio, RadioGroup, Typography } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { useContext } from 'react';
+import { Controller } from 'react-hook-form';
 
-const OptionGroupCategory = ({ setSearchFiled, name, option }) => {
-    const [item, setItem] = useState('');
-    useEffect(() => {
-        if (item) {
-            setSearchFiled(pre => ({ ...pre, [name]: item }))
-        } else {
-            setSearchFiled(({ [name]: _, ...newObj }) => newObj)
-        }
-    }, [item, name])
+const OptionGroupCategory = ({ setSearchFiled, name, option, reset,
+    setValue,
+    getValues,
+    control,
+    handleSubmit,
+    getProductList }) => {
 
-    return <List sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}
+    return <List
+        sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}
         subheader={
             <ListSubheader
                 className='search-title'
@@ -22,24 +21,44 @@ const OptionGroupCategory = ({ setSearchFiled, name, option }) => {
             </ListSubheader>
         }>
         {
-            option.map((value) => {
-                return <ListItem
-                    disablePadding
-                    key={value.id}
-                >
-                    <div onClick={() => setItem(value.id)}>
-                        <Typography
-                            className={item == value.id ? 'rate__active' : ''}
-                            style={{ fontSize: 16 }}
-                        >
-                            - {value.name}
-                        </Typography>
-                    </div>
+            <Controller
+                name="group_category"
+                control={control}
+                render={({ field }) =>
+                    <FormControl variant="standard">
+                        <RadioGroup>
+                            {
+                                option.map((value) => {
+                                    return <FormControlLabel
+                                        {...field}
+                                        key={value.id}
+                                        control={<Radio
+                                            value={value.id}
+                                            readOnly
+                                            style={{ display: 'none' }}
+                                            onClick={() => {
+                                                if (field.value == value.id) {
+                                                    field.onChange('')
+                                                } else {
+                                                    field.onChange(value.id)
+                                                }
+                                            }}
 
-                </ListItem>
-            })
+                                        />}
+                                        label={value.name}
+                                        style={{ marginLeft: 0 }}
+                                        className={`${getValues('group_category') == value.id ? 'active' : ''}`}
+                                    />
+                                })
+                            }
+                        </RadioGroup>
+                    </FormControl>
+                }
+            />
         }
     </List>
+
+
 };
 
 export default OptionGroupCategory;

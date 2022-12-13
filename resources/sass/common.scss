@@ -286,10 +286,20 @@ img {
     max-width: 100%;
 }
 
+.img {
+    border-radius: 8px;
+    margin-bottom: 8px;
+    &.has__hover {
+        &:hover {
+            background-color: rgba(0, 0, 0, 0.3);
+        }
+    }
+}
 .product img {
     max-width: 100%;
     margin: auto;
     display: block;
+    cursor: pointer;
 }
 
 .tleft,
@@ -386,4 +396,87 @@ input::-webkit-inner-spin-button {
 }
 .cart__product__detail-price {
     color: rgb(233, 69, 96);
+}
+
+.light__mode {
+    // &.css-1glvl0p-MuiButtonBase-root-MuiIconButton-root-MuiAutocomplete-clearIndicator,
+    // &.css-6wwd73-MuiAutocomplete-noOptions,
+    // &.css-aqpgxn-MuiFormLabel-root-MuiInputLabel-root,
+    // &.css-8q2m5j-MuiInputBase-root-MuiInput-root,
+    // &.css-10by3a5-MuiButtonBase-root-MuiMenuItem-root-MuiTablePagination-menuItem,
+    // &.css-jd1zyo-MuiSelect-select-MuiInputBase-input-MuiInput-input.MuiSelect-select,
+    // &.css-1mf6u8l-MuiSvgIcon-root-MuiSelect-icon,
+    // &.css-pqjvzy-MuiSvgIcon-root-MuiSelect-icon,
+    // &.css-9ddj71-MuiInputBase-root-MuiOutlinedInput-root,
+    // &.css-1sumxir-MuiFormLabel-root-MuiInputLabel-root,
+    // &.css-9ddj71-MuiInputBase-root-MuiOutlinedInput-root,
+    // &.css-14s5rfu-MuiFormLabel-root-MuiInputLabel-root,
+    &.css-12wnr2w-MuiButtonBase-root-MuiCheckbox-root 
+    // &.css-1qgma8u-MuiButtonBase-root-MuiTableSortLabel-root.Mui-active, 
+    // &.css-1qgma8u-MuiButtonBase-root-MuiTableSortLabel-root.Mui-active 
+    // &.MuiTableSortLabel-icon, 
+    // &.css-1qgma8u-MuiButtonBase-root-MuiTableSortLabel-root:hover, 
+    // &.css-1qgma8u-MuiButtonBase-root-MuiTableSortLabel-root.Mui-active:hover
+    {
+        color: rgba(0, 0, 0, 0.6) !important;
+    }
+    &.css-12wnr2w-MuiButtonBase-root-MuiCheckbox-root.Mui-checked {
+        color: #1976d2 !important;
+    }
+}
+
+label.active {
+    color: #e94560;
+}
+
+.btn__checkcout.css-sghohy-MuiButtonBase-root-MuiButton-root {
+    margin: 10px 20px;
+    color: #fff;
+    background-color: #e94560;
+    text-transform: capitalize;
+
+    &:hover {
+        background-color: #e94560;
+    }
+}
+
+.btn__view_cart.css-sghohy-MuiButtonBase-root-MuiButton-root {
+    margin: 10px 20px;
+    color: #e94560;
+    background-color: transparent;
+    text-transform: capitalize;
+    box-shadow: unset;
+    border: 1px solid #e94560;
+    border-radius: 4px;
+    &:hover {
+        color: #fff;
+        background-color: #e94560;
+    }
+}
+
+.cart__product__list {
+    overflow: scroll;
+    overflow-x: hidden;
+    width: 380px;
+    flex-grow: 1;
+    -ms-overflow-x: hidden;
+}
+/* width */
+.cart__product__list::-webkit-scrollbar {
+    width: 10px;
+}
+
+/* Track */
+.cart__product__list::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+/* Handle */
+.cart__product__list::-webkit-scrollbar-thumb {
+    background: #e94560;
+}
+
+/* Handle on hover */
+.cart__product__list::-webkit-scrollbar-thumb:hover {
+    background: #e94560;
 }

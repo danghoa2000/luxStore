@@ -10,7 +10,7 @@ const Dcard = ({ productItems }) => {
   const settings = {
     dots: false,
     infinite: true,
-    slidesToShow: 4,
+    slidesToShow: 5,
     slidesToScroll: 1,
     autoplay: true,
   }
@@ -20,7 +20,7 @@ const Dcard = ({ productItems }) => {
         return (
           <div className='box' key={index}>
             <div className="product">
-              <div className='img'>
+              <div className='img has__hover'>
                 {value?.sale_persen ? <span className='discount'>{value?.sale_persen}% Off</span> : ""}
                 <img src={value?.image} alt='' />
               </div>

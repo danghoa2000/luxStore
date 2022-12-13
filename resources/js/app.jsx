@@ -49,12 +49,11 @@ const App = () => {
     const [auth, setAuth] = useState({});
     const [user, setUser] = useState({});
     const [searchField, setSearchFiled] = useState({});
-    const urlNotExist = useCallback(() => {
-        return <Navigate to="/elite" replace />;
-    }, []);
+
     const { productItems } = Data
     const { shopItems } = Sdata
     const [CartItem, setCartItem] = useState([])
+
     const addToCart = (product) => {
         const productExit = CartItem.find((item) => item.id === product.id)
         if (productExit) {
@@ -63,8 +62,6 @@ const App = () => {
             setCartItem([...CartItem, { ...product, qty: 1 }])
         }
     }
-
-    // Stpe: 6
     const decreaseQty = (product) => {
         const productExit = CartItem.find((item) => item.id === product.id)
         if (productExit.qty === 1) {
@@ -73,6 +70,14 @@ const App = () => {
             setCartItem(CartItem.map((item) => (item.id === product.id ? { ...productExit, qty: productExit.qty - 1 } : item)))
         }
     }
+
+    const removeCartItem = () => {
+        
+    }
+    const urlNotExist = useCallback(() => {
+        return <Navigate to="/elite" replace />;
+    }, []);
+
     return (
         <>
             {/* Admin route  */}
@@ -82,7 +87,7 @@ const App = () => {
                         <Routes>
                             <Route path="/" element={<Outlet />} >
                                 <Route index element={<Navigate to="/elite" />} />
-                                <Route path="/elite" element={<DefaultLayout CartItem={CartItem} />} >
+                                <Route path="/elite" element={<DefaultLayout CartItem={CartItem} addToCart={addToCart} decreaseQty={decreaseQty}/>} >
                                     <Route index element={
                                         <Suspense fallback={<Loading />}>
                                             <HomePageContainer productItems={productItems} addToCart={addToCart} shopItems={shopItems} />

@@ -1,17 +1,13 @@
-import { List, ListItem, ListItemText, ListSubheader, Rating } from '@mui/material';
+import { FormControl, FormControlLabel, List, ListItem, ListItemText, ListSubheader, Radio, RadioGroup, Rating } from '@mui/material';
 import React from 'react';
 import { useEffect } from 'react';
 import { useState } from 'react';
+import { Controller } from 'react-hook-form';
 
-const OptionRate = ({ setSearchFiled, name }) => {
-    const [rate, setRate] = useState('');
-    useEffect(() => {
-        if (rate) {
-            setSearchFiled(pre => ({ ...pre, [name]: rate }))
-        } else {
-            setSearchFiled(({ [name]: _, ...newObj }) => newObj)
-        }
-    }, [rate, name])
+const OptionRate = ({ setSearchFiled, name, setValue,
+    getValues,
+    control, }) => {
+
     return <List sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}
         subheader={
             <ListSubheader
@@ -22,21 +18,43 @@ const OptionRate = ({ setSearchFiled, name }) => {
             </ListSubheader>
         }>
         {
-            [5, 4, 3, 2, 1].map((value) => {
-                return <ListItem
-                    disablePadding
-                    key={value}
-                >
-                    <div onClick={()=>setRate(value)}>
-                        <Rating
-                            value={value}
-                            readOnly
-                            className={rate == value ? 'rate__active' : ''}
-                        />
-                    </div>
+            <Controller
+                name="rate"
+                control={control}
+                render={({ field }) =>
+                    <FormControl variant="standard">
+                        <RadioGroup>
+                            {
+                                [5, 4, 3, 2, 1].map((value) => {
+                                    return <FormControlLabel
+                                        {...field}
+                                        key={value}
+                                        control={<Radio
+                                            value={value}
+                                            readOnly
+                                            style={{ display: 'none' }}
+                                            onClick={() => {
+                                                if (field.value == value) {
+                                                    field.onChange('')
+                                                } else {
+                                                    field.onChange(value)
+                                                }
+                                            }}
 
-                </ListItem>
-            })
+                                        />}
+                                        label={<Rating
+                                            value={value}
+                                            readOnly
+                                            className={`${getValues('rate') == value ? 'rate__active' : ''}`}
+                                        />}
+                                        style={{ marginLeft: 0 }}
+                                    />
+                                })
+                            }
+                        </RadioGroup>
+                    </FormControl>
+                }
+            />
         }
     </List>
 };

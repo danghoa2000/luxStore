@@ -23,7 +23,7 @@ const TopCart = ({ topGroupCategory }) => {
                   <span className='tleft'>{value?.products_count}</span>
                   <span className='tright'>{value?.name}</span>
                 </div>
-                <div className='img'>
+                <div className='img has__hover'>
                   <img src={value?.image} alt='' />
                 </div>
               </div>

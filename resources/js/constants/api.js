@@ -36,7 +36,8 @@ export const GROUP_CATEGORY_API = {
     SHOW: API_BASE_URL + "api/auth/admin/group-category/show",
     DELETE: API_BASE_URL + "api/auth/admin/group-category/delete",
     ATTRIBUTE: API_BASE_URL + "api/auth/admin/group-category/attribute",
-    ATTRIBUTE_CREATE: API_BASE_URL + "api/auth/admin/group-category/attribute/create",
+    ATTRIBUTE_CREATE:
+        API_BASE_URL + "api/auth/admin/group-category/attribute/create",
     TOP_GROUP_CATEGORY: API_BASE_URL + "api/auth/admin/top-group-category",
 };
 
@@ -67,6 +68,14 @@ export const EVENT_API = {
     UPDATE: API_BASE_URL + "api/auth/admin/event/update",
 };
 
-export const HOME_API = API_BASE_URL + "api/home"
-export const SEARCH_API = API_BASE_URL + "api/search"
-export const FORM_SEARCH_API = API_BASE_URL + "api/getFormFilter"
+export const HOME_API = API_BASE_URL + "api/home";
+export const SEARCH_API = API_BASE_URL + "api/search";
+export const FORM_SEARCH_API = API_BASE_URL + "api/getFormFilter";
+
+export const CART_API = {
+    LIST: API_BASE_URL + "api/cart",
+    CREATE: API_BASE_URL + "api/cart/create",
+    UPDATE: API_BASE_URL + "api/cart/update",
+    SHOW: API_BASE_URL + "api/cart/show",
+    DELETE: API_BASE_URL + "api/cart/delete",
+};

@@ -4,13 +4,17 @@ import AdminLayout from "./src/layout/AdminLayout";
 import DefaultLayout from "./src/layout/DefaultLayout";
 
 import { AuthContext } from "./hooks/useAuth";
-import { ROLE } from "./constants/constants";
+import { CODE, ROLE } from "./constants/constants";
 import PrivateAdminRoute from "./PrivateAdminRoute"
 
 import Data from "./components/client/Data"
 import Sdata from "./components/client/shops/Sdata"
 import Loading from "./components/partial/Loading";
 import { SearchFieldContext } from "./hooks/useSearchField";
+import { axiosClient } from "./hooks/useHttp";
+import { CART_API } from "./constants/api";
+import { object } from "yup";
+import { SESSION_ACCESS_TOKEN } from "./utils/sessionHelper";
 
 // admin
 const AdminLoginContainer = lazy(() => import("./src/page/admin/login/LoginContainer"));
@@ -44,39 +48,111 @@ const HomePageContainer = lazy(() => import("./src/page/client/HomePageContainer
 const CartContainer = lazy(() => import("./components/partial/Cart/Cart"));
 const DetailContainer = lazy(() => import("./src/page/client/Detail/DetailContainer"));
 const ProductContainer = lazy(() => import("./src/page/client/Product/ProductContainer"));
+const CustomerLoginContainer = lazy(() => import("./src/page/client/login/LoginContainer"));
 
 const App = () => {
     const [auth, setAuth] = useState({});
     const [user, setUser] = useState({});
     const [searchField, setSearchFiled] = useState({});
-
+    const [status, setStatus] = useState({});
+    const [showNoti, setShowNoti] = useState(false);
     const { productItems } = Data
     const { shopItems } = Sdata
     const [CartItem, setCartItem] = useState([])
 
-    const addToCart = (product) => {
+    const getCart = () => {
+        axiosClient.get(CART_API.SHOW)
+            .then((response) => {
+                if (response.status === CODE.HTTP_OK) {
+                    setCartItem(response.data.cart)
+                }
+            }).catch(({ response }) => {
+                // setStatus({ type: 'error', message: response?.data ? response.data.message : 'Server error' });
+            });
+    }
+
+    const addToCart = (product, qty = 1) => {
         const productExit = CartItem.find((item) => item.id === product.id)
         if (productExit) {
-            setCartItem(CartItem.map((item) => (item.id === product.id ? { ...productExit, qty: productExit.qty + 1 } : item)))
+            updateCart({ ...productExit, qty: productExit?.pivot?.qty + qty })
         } else {
-            setCartItem([...CartItem, { ...product, qty: 1 }])
+            addProductToCard({ ...product, qty: qty })
         }
     }
-    const decreaseQty = (product) => {
+    const decreaseQty = (product, qty = 1) => {
         const productExit = CartItem.find((item) => item.id === product.id)
-        if (productExit.qty === 1) {
-            setCartItem(CartItem.filter((item) => item.id !== product.id))
+        if (productExit?.pivot?.qty === 1) {
+            removeCartItem(product.id)
         } else {
-            setCartItem(CartItem.map((item) => (item.id === product.id ? { ...productExit, qty: productExit.qty - 1 } : item)))
+            updateCart({ ...product, qty: productExit?.pivot?.qty - qty })
         }
     }
 
-    const removeCartItem = () => {
-        
+    const updateCart = useCallback((item) => {
+        axiosClient.put(CART_API.UPDATE, {
+            ...item
+        })
+            .then((response) => {
+                setShowNoti(true);
+                if (response.status === CODE.HTTP_OK) {
+                    setStatus({ type: 'success', message: response.data.message });
+                    getCart()
+                } else {
+                    setStatus({ type: 'warning', message: response.data.message });
+                }
+
+            }).catch((response) => {
+                setStatus({ type: 'error', message: response.data ? response.data.message : 'Server error' });
+                setShowNoti(true);
+                if (response.status === CODE.UNPROCESSABLE_ENTITY) {
+                    Object.keys(response.data.errors).forEach(element => {
+                        setError(element, { type: 'custom', message: Object.values(response.data.errors[element]) })
+                    });
+                }
+            });
+    }, []);
+
+    const addProductToCard = (item) => {
+        axiosClient.post(CART_API.CREATE, {
+            ...item
+        })
+            .then((response) => {
+                setShowNoti(true);
+                if (response.status === CODE.HTTP_OK) {
+                    setStatus({ type: 'success', message: response.data.message });
+                    getCart();
+                } else {
+                    setStatus({ type: 'warning', message: response.data.message });
+                }
+            }).catch((response) => {
+                setShowNoti(true);
+                setStatus({ type: 'error', message: response?.data ? response.data.message : 'Server error' });
+            });
     }
+
+    const removeCartItem = (id) => {
+        axiosClient.delete(CART_API.DELETE + '/' + id)
+            .then((response) => {
+                if (response.status === CODE.HTTP_OK) {
+                    getCart();
+                }
+            }).catch(({ response }) => {
+                setShowNoti(true);
+                setStatus({ type: 'error', message: response?.data ? response.data.message : 'Server error' });
+            });
+    }
+
     const urlNotExist = useCallback(() => {
         return <Navigate to="/elite" replace />;
     }, []);
+
+
+    useEffect(() => {
+        const _token = window.sessionStorage.getItem(SESSION_ACCESS_TOKEN);
+        if (_token) {
+            getCart();
+        }
+    }, [user])
 
     return (
         <>
@@ -87,7 +163,16 @@ const App = () => {
                         <Routes>
                             <Route path="/" element={<Outlet />} >
                                 <Route index element={<Navigate to="/elite" />} />
-                                <Route path="/elite" element={<DefaultLayout CartItem={CartItem} addToCart={addToCart} decreaseQty={decreaseQty}/>} >
+                                <Route path="/elite" element={
+                                    <DefaultLayout
+                                        showNoti={showNoti}
+                                        setShowNoti={setShowNoti}
+                                        status={status}
+                                        CartItem={CartItem}
+                                        addToCart={addToCart}
+                                        decreaseQty={decreaseQty}
+                                        removeCartItem={removeCartItem} />
+                                } >
                                     <Route index element={
                                         <Suspense fallback={<Loading />}>
                                             <HomePageContainer productItems={productItems} addToCart={addToCart} shopItems={shopItems} />
@@ -102,7 +187,14 @@ const App = () => {
 
                                     <Route path='product' element={
                                         <Suspense fallback={<Loading />}>
-                                            <DetailContainer />
+                                            <DetailContainer
+                                                showNoti={showNoti}
+                                                setShowNoti={setShowNoti}
+                                                setStatus ={setStatus }
+                                                CartItem={CartItem}
+                                                addToCart={addToCart}
+                                                decreaseQty={decreaseQty}
+                                            />
                                         </Suspense>}
                                     />
                                     <Route path="search" element={
@@ -111,6 +203,10 @@ const App = () => {
                                         </Suspense>
                                     } />
                                 </Route>
+                                <Route path="customer/login" element={
+                                    <Suspense fallback={<Loading />}>
+                                        <CustomerLoginContainer />
+                                    </Suspense>} />
                                 <Route path="*" element={urlNotExist} />
 
                                 {/* admin route */}

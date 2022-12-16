@@ -22,7 +22,7 @@ const OptionGroupCategory = ({ setSearchFiled, name, option, reset,
         }>
         {
             <Controller
-                name="group_category"
+                name="group_category_id"
                 control={control}
                 render={({ field }) =>
                     <FormControl variant="standard">
@@ -47,7 +47,7 @@ const OptionGroupCategory = ({ setSearchFiled, name, option, reset,
                                         />}
                                         label={value.name}
                                         style={{ marginLeft: 0 }}
-                                        className={`${getValues('group_category') == value.id ? 'active' : ''}`}
+                                        className={`${getValues('group_category_id') == value.id ? 'active' : ''}`}
                                     />
                                 })
                             }

@@ -232,6 +232,9 @@ button {
         transform: 0.5s;
         z-index: 5;
         right: -20px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
         i {
             font-size: 20px;
             transition: 0.5s;
@@ -254,6 +257,9 @@ button {
         transform: 0.5s;
         z-index: 5;
         left: -20px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
         i {
             font-size: 20px;
             transition: 0.5s;
@@ -313,12 +319,12 @@ img {
 
 .old-price {
     text-decoration: line-through;
-    font-size: 12px !important;
-    color: #c5bebef6 !important;
+    font-size: 12px;
+    color: #c5bebef6;
 }
 
 .new-price {
-    font-size: 16px !important;
+    font-size: 16px;
     color: #e94560;
 }
 
@@ -479,4 +485,12 @@ label.active {
 /* Handle on hover */
 .cart__product__list::-webkit-scrollbar-thumb:hover {
     background: #e94560;
+}
+
+.slick-slider.content {
+    padding: 20px;
+}
+
+.ml-2 {
+    margin-left: 0.5rem !important;
 }

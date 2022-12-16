@@ -11,7 +11,7 @@ class EventService
     public function list($request)
     {
         $events = Event::select('id', 'name')
-            ->with('products:id,name,sale_type,sale_off,expried,price')
+            ->with('products:id,name,sale_type,sale_off,expried,price,image')
             ->get();
         return response([
             'events' => $events,

@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import Slider from 'react-slick';
 import "slick-carousel/slick/slick.css"
 import "slick-carousel/slick/slick-theme.css"
 import { BASE_URL } from '../../../../constants/constants';
 import { auto } from '@popperjs/core';
+import { API_BASE_URL } from '../../../../constants/api';
 
 const SliderProduct = (props) => {
     const {
@@ -42,13 +43,11 @@ const SliderProduct = (props) => {
         <>
             <section className={slideClass}>
                 <Slider {...settings}>
-                    {data.map((value, index) => {
+                    {data && data.map((value, index) => {
                         return (
-                            <>
-                                <div className='d-flex justify-content-center' style={{ height: 300, paddingBottom: 100, margin: auto}} key={index}>
-                                    <img src={BASE_URL + value.cover} alt=''/>
-                                </div>
-                            </>
+                            <div className='slide__product_image' key={index}>
+                                <img src={API_BASE_URL + value} alt='' />
+                            </div>
                         )
                     })}
                 </Slider>

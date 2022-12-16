@@ -1,5 +1,5 @@
 import React, { Fragment, useState } from 'react';
-import { Outlet } from 'react-router-dom';
+import { Outlet, useNavigate } from 'react-router-dom';
 import Header from "../../components/partial/header/Header"
 import Footer from "../../components/partial/footer/Footer"
 
@@ -8,8 +8,10 @@ import "../../../sass/common.scss";
 import { Button, Divider, Drawer, IconButton, Typography } from '@mui/material';
 import { Add, Clear, Remove, ShoppingCart } from '@mui/icons-material';
 import { formatPrice } from '../../utils/helper';
+import ShowSnackbars from '../../components/partial/ShowSnackbars';
+import { SESSION_ACCESS_TOKEN } from '../../utils/sessionHelper';
 
-const DefaultLayout = ({ CartItem, addToCart, decreaseQty }) => {
+const DefaultLayout = ({ CartItem, addToCart, decreaseQty, showNoti, setShowNoti, status, removeCartItem }) => {
     const [state, setState] = useState(false)
     const toggleDrawer = (open) => (event) => {
         if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
@@ -17,6 +19,7 @@ const DefaultLayout = ({ CartItem, addToCart, decreaseQty }) => {
         }
         setState(open);
     };
+    const navigate = useNavigate();
     return (
         <>
             <Header CartItem={CartItem} toggleDrawer={toggleDrawer} />
@@ -42,7 +45,7 @@ const DefaultLayout = ({ CartItem, addToCart, decreaseQty }) => {
                                         <IconButton onClick={() => addToCart(item)}>
                                             <Add />
                                         </IconButton>
-                                        <Typography variant="h7">{item.qty}</Typography>
+                                        <Typography variant="h7">{item?.pivot?.qty}</Typography>
                                         <IconButton onClick={() => decreaseQty(item)}>
                                             <Remove />
                                         </IconButton>
@@ -64,7 +67,7 @@ const DefaultLayout = ({ CartItem, addToCart, decreaseQty }) => {
                                         }
                                     </div>
                                     <div className="cart__product__remove">
-                                        <IconButton>
+                                        <IconButton onClick={() => removeCartItem(item.id)}>
                                             <Clear />
                                         </IconButton>
                                     </div>
@@ -77,14 +80,30 @@ const DefaultLayout = ({ CartItem, addToCart, decreaseQty }) => {
                     }
 
                 </div>
-                <Button variant="contained" className='btn__checkcout'>
-                    Checkout Now
-                </Button>
-                <Button variant="contained" className='btn__view_cart'>
-                    View cart
-                </Button>
+                {window.sessionStorage.getItem(SESSION_ACCESS_TOKEN) ? (
+                    <>
+                        <Button variant="contained" className='btn__checkcout'>
+                            Checkout Now
+                        </Button>
+                        <Button variant="contained" className='btn__view_cart'>
+                            View cart
+                        </Button>
+                    </>
+                )
+                    :
+                    (
+                        <Button variant="contained" className='btn__checkcout'
+                            onClick={() => navigate('/customer/login')}
+                        >
+                            Login now
+                        </Button>
+                    )
+
+                }
+
 
             </Drawer>
+            {showNoti && <ShowSnackbars type={status.type} message={status.message} setShowNoti={setShowNoti} />}
         </>
     );
 };

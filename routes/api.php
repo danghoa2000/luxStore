@@ -9,6 +9,7 @@ use App\Http\Controllers\Admin\LoginController;
 use App\Http\Controllers\admin\ManufacturerController;
 use App\Http\Controllers\admin\ProductController;
 use App\Http\Controllers\admin\ShippingController;
+use App\Http\Controllers\Client\CartController;
 use App\Http\Controllers\Client\HomeController;
 use App\Http\Controllers\DirectionController;
 use App\Http\Controllers\UploadController;
@@ -94,4 +95,17 @@ Route::group([
     Route::get('getFormFilter', [HomeController::class, 'getFormFilter'])->name('formSearch');
     Route::get('auth/admin/product', [ProductController::class, 'index'])->name('product');
     Route::get('auth/admin/top-group-category', [GroupCategoryController::class, 'topGroupCategory'])->name('topGroupCategory');
+
+    Route::get('cart', [CartController::class, 'index'])->name('cart');
+
+    Route::get('auth/admin/product/show', [ProductController::class, 'show'])->name('product.show');
+
+    Route::group([
+        'middleware' => ['auth:customerApi']
+    ], function () {
+        Route::post('cart/create', [CartController::class, 'store'])->name('cart.create');
+        Route::put('cart/update', [CartController::class, 'update'])->name('cart.update');
+        Route::get('cart/show', [CartController::class, 'show'])->name('cart.show');
+        Route::delete('cart/delete/{id}', [CartController::class, 'destroy'])->name('cart.delete');
+    });
 });

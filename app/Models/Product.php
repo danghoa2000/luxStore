@@ -35,7 +35,7 @@ class Product extends Model
 
     protected $table = 'products';
 
-    protected $appends = ['total_rate', 'sale_price', 'sale_persen', 'image'];
+    protected $appends = ['total_rate', 'sale_price', 'sale_persen'];
 
     public function productDetail()
     {
@@ -132,10 +132,10 @@ class Product extends Model
         return 0;
     }
 
-    public function getImageAttribute()
-    {
-        return 'http://127.0.0.1:8000/' . $this->attributes['image'];
-    }
+    // public function getImageAttribute()
+    // {
+    //     return 'http://127.0.0.1:8000/' . $this->attributes['image'];
+    // }
 
     public function scopeFilter($query, $request)
     {
@@ -152,12 +152,12 @@ class Product extends Model
         if (!empty($data['name'])) {
             $query->where('name', 'like', '%' . $data['name'] . '%');
         }
-        if (!empty($data['price_min'])) {
-            $query->where('price', ">=", $data['price_min']);
-        }
-        if (!empty($data['price_max'])) {
-            $query->where('price', "<=", $data['price_max']);
-        }
+        // if (!empty($data['price_min'])) {
+        //     $query->where('price', ">=", $data['price_min']);
+        // }
+        // if (!empty($data['price_max'])) {
+        //     $query->where('price', "<=", $data['price_max']);
+        // }
         if (!empty($data['category_id'])) {
             if (is_array($data['category_id'])) {
                 $query->whereIn('category_id',  $data['category_id']);

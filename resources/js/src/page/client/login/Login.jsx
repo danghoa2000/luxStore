@@ -7,7 +7,7 @@ import { useForm } from 'react-hook-form';
 import { ErrorMessage } from '@hookform/error-message';
 
 const Login = (props) => {
-    const { isLoginFailed, handeSubmit, loading } = props;
+    const { isLoginFailed, handeSubmit } = props;
 
     const form = useForm({
         criteriaMode: 'all',
@@ -61,7 +61,7 @@ const Login = (props) => {
                                         </label>
                                         <span className="ml-auto"><a href="#" className="forgot-pass">{"Forgot Password"}</a></span>
                                     </div>
-                                    <input type="submit" value="Log In" disabled={loading} className="btn text-white btn-block btn-primary"
+                                    <input type="submit" value="Log In" className="btn text-white btn-block btn-primary"
                                     />
                                 </form>
                             </div>

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Customer;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
@@ -47,8 +48,15 @@ class LoginController extends Controller
         $user = User::whereHas('info', function ($query) use ($request) {
             $query->where("email", $request->email);
         })
-        ->where('status', config('constants.user.status.active'))
-        ->first();
+            ->where('status', config('constants.user.status.active'))
+            ->first();
+
+        if ($request->isCustomer) {
+            $user = Customer::whereHas('info', function ($query) use ($request) {
+                $query->where("email", $request->email);
+            })->first();
+        }
+
         if (!$user) {
             return response()->json([
                 'status' => 'fails',
@@ -62,8 +70,15 @@ class LoginController extends Controller
                 'message' => 'Incorrect account or password'
             ], Response::HTTP_UNAUTHORIZED);
         }
+        $info = null;
+        if ($request->isCustomer) {
 
-        Auth::login($user);
+            Auth::guard('customer')->login($user);
+            $info = Auth::guard('customer')->user();
+        } else {
+            Auth::login($user);
+            $info = Auth::user();
+        }
         $tokenResult = $user->createToken('Personal Access Token');
         $token = $tokenResult->token;
 
@@ -80,13 +95,16 @@ class LoginController extends Controller
             'expires_at' => Carbon::parse(
                 $tokenResult->token->expires_at
             )->toDateTimeString(),
-            "info" => Auth::user()
+            "info" => $info,
         ], Response::HTTP_OK);
     }
 
     public function logout()
     {
         $accessToken = Auth::guard('api')->user()->token();
+        if ($request->isCustomer) {
+            $accessToken = Auth::guard('customerApi')->user()->token();
+        }
         $accessToken->revoke();
         return true;
     }

@@ -1,35 +1,32 @@
 import axios from 'axios';
 import React, { useCallback, useContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';
-import { API_BASE_URL, LOGIN_API } from '../../../../constants/api';
+import { LOGIN_API } from '../../../../constants/api';
 import { useAuth } from '../../../../hooks/useAuth';
 import { axiosClient } from '../../../../hooks/useHttp';
-import { ADMIN_INFO, ADMIN_SESSION_ACCESS_TOKEN, getAccessToken, saveAccessToken } from '../../../../utils/sessionHelper';
+import { SESSION_ACCESS_TOKEN, CUSTOMER_INFO } from '../../../../utils/sessionHelper';
 import Login from './login';
 
 const LoginContainer = () => {
-    const { setAuth } = useAuth();
+    const { setUser } = useAuth();
+    const [loading, setLoading] = useState(false);
     const [isLoginFailed, setisLoginFailed] = useState({});
     const navigate = useNavigate();
 
-    useEffect(() => {
-        const token = window.sessionStorage.getItem(ADMIN_SESSION_ACCESS_TOKEN);
-        if (token) {
-            navigate("/admin");
-        }
-    }, [])
-
-    const login = async (data) => {
-        await axiosClient.post(LOGIN_API.LOGIN, {
+    const login = (data) => {
+        setLoading(true);
+        axiosClient.post(LOGIN_API.LOGIN, {
             email: data.email,
             password: data.password,
-        },
-        ).then(res => {
-            setAuth(res.data.info);
-            window.sessionStorage.setItem(ADMIN_SESSION_ACCESS_TOKEN, res.data.access_token);
-            window.sessionStorage.setItem(ADMIN_INFO, JSON.stringify(res.data.info));
-            navigate("/admin");
+            isCustomer: true,
+        },).then(res => {
+            setUser(res.data.info);
+            window.sessionStorage.setItem(SESSION_ACCESS_TOKEN, res.data.access_token);
+            window.sessionStorage.setItem(CUSTOMER_INFO, JSON.stringify(res.data.info));
+            navigate("/elite");
+            setLoading(false);
         }).catch(err => {
+            setLoading(false);
             // setisLoginFailed({
             //     status: err.response.status,
             //     message: err.response.data.message
@@ -41,8 +38,16 @@ const LoginContainer = () => {
         login(data)
     }, []);
 
+    useEffect(() => {
+        const token = window.sessionStorage.getItem(SESSION_ACCESS_TOKEN);
+        if (token) {
+            navigate("/elite");
+        }
+    }, [])
+
     return (
         <Login
+            loading={loading}
             isLoginFailed={isLoginFailed}
             handeSubmit={handeSubmit}
         />

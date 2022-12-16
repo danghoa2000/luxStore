@@ -191,7 +191,7 @@ const Product = (props) => {
                     />
                 </Paper>
             </div>
-            {showNoti && <ShowSnackbars type={status.type} message={status.message} setShowNoti={setShowNoti} />}
+            {true && <ShowSnackbars type={status.type} message={status.message} setShowNoti={setShowNoti} />}
         </>
 
     );

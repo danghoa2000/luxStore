@@ -4,26 +4,112 @@ import "./detail.scss"
 import "../../../../components/client/MainPage/home.css"
 import Sdata from '../../../../components/client/MainPage/Sdata'
 import { BASE_URL } from '../../../../constants/constants';
-import { Avatar, Box, List, ListItem, ListItemAvatar, ListItemText, Rating, Tab, Tabs, Typography } from '@mui/material';
+import { Avatar, Box, Button, Checkbox, FormControl, FormControlLabel, IconButton, List, ListItem, ListItemAvatar, ListItemText, OutlinedInput, Rating, Tab, Tabs, Typography } from '@mui/material';
 import TabPanel from '../../../../components/partial/tabs/TabPanel';
+import { useMemo } from 'react';
+import ShowSnackbars from '../../../../components/partial/ShowSnackbars';
+import { formatPrice } from '../../../../utils/helper';
+import { Add, Check, Remove, Star } from '@mui/icons-material';
 
-const Detail = ({ qty, setQty }) => {
-    const [rate, setRate] = useState(4);
+const Detail = ({
+    qty,
+    setQty,
+    product,
+    handleChange,
+    tab,
+    setOption,
+    option,
+    handleSubmit }) => {
+
+    const SLIDE = useMemo(() => {
+        const slides = [];
+        if (product?.image) {
+            slides.push(product?.image)
+        }
+        if (product?.product_media && Object.keys(product?.product_media).length > 0) {
+            const images = JSON.parse(product?.product_media.url);
+            images.map(item => {
+                slides.push(item)
+                return item;
+            })
+        }
+        return slides;
+    }, [product])
+
+    const QTY = useMemo(() => {
+        return product?.product_detail.reduce((total, item) => total + item.qty, 0)
+    }, [product])
+
+    const SALLED = useMemo(() => {
+        return product?.product_detail.reduce((total, item) => total + item.sold_qty, 0)
+    }, [product])
 
     const customPaging = (i) => {
         return (
             <a key={i}>
-                <img src={BASE_URL + Sdata[i].cover} />
+                <img src={BASE_URL + SLIDE[i]} />
             </a>
         );
     }
 
-    const [value, setValue] = useState(0);
+    const OPTION = useMemo(() => {
+        const items = product?.product_detail;
+        if (items) {
+            const data = [];
+            Object.values(items).map((value) => {
+                Object.values(value.property_value).map((item, index2) => {
+                    if (data[item?.attribute?.name] && Object.keys(data[item?.attribute?.name]).length > 0) {
+                        data[item?.attribute?.name] = { ...data[item?.attribute?.name], option: [...data[item?.attribute?.name].option, { id: item.id, value: item.attribute_value_name }] }
+                    } else {
+                        data[item?.attribute?.name] = { id: item.attribute_id, option: [{ id: item.id, value: item.attribute_value_name }] };
+                    }
 
-    const handleChange = (event, newValue) => {
-        setValue(newValue);
-        console.log(newValue);
-    };
+                    return item;
+                })
+                return value;
+            });
+            return data;
+        }
+        return null;
+    }, [product])
+
+    const FORM = useMemo(() => {
+        const optionTemp = OPTION;
+        if (optionTemp) {
+            return Object.keys(optionTemp).map((value, index) => {
+                return (
+                    <div className='product__option__item' key={index}>
+                        <span className='product__option__item-name' data-id={optionTemp[value].id}>{value}</span>
+                        <div className='product__option__list'>
+                            {
+                                Object.values(optionTemp[value].option).map((opt) => (
+                                    <div className={`product__option-check ${option && Object.values(option).includes(opt.id) ? 'option-checked' : ''}`} data-id={opt.id} key={opt.id}
+                                        onClick={() => {
+                                            const newOptions = { ...option }
+                                            if (newOptions && newOptions[optionTemp[value].id] == opt.id) {
+                                                delete newOptions[optionTemp[value].id];
+                                                setOption(newOptions)
+                                            } else {
+                                                newOptions[optionTemp[value].id] = opt.id;
+                                                setOption(newOptions)
+                                            }
+                                        }}
+                                    >
+                                        {opt.value}
+                                        <span className='product__option-tick'>
+                                            <Check className='icon__check' />
+                                        </span>
+                                    </div>
+                                ))
+                            }
+                        </div>
+                    </div>
+                )
+            })
+        }
+        return null;
+    }, [product, OPTION, option])
+
 
     return (
         <section className='detail py-5'>
@@ -36,56 +122,95 @@ const Detail = ({ qty, setQty }) => {
                             slidesToShow={1}
                             slidesToScroll={1}
                             autoplay={true}
-                            data={Sdata}
+                            data={SLIDE}
                             customPaging={customPaging}
                             dotsClass={"custom-dot m-auto"}
                         />
                     </div>
                     <div className="detail__product__info" style={{ width: "50%" }}>
-                        <h3 className='detail__product__info-name'>Mi Note 11 Pro</h3>
-                        <div className='detail__product__info-brand'>
-                            Brand: <span className='font-bold'>Ziaomi</span>
+                        <h3 className='detail__product__info-name'>{product?.name}</h3>
+                        <div style={{ display: 'flex' }}>
+                            <div className='detail__product__info-rate'>
+                                <span className='text-underline total__rate'>{parseFloat(product?.total_rate || 0).toFixed(1)}</span>
+                                <Rating
+                                    name="simple-controlled"
+                                    value={product?.total_rate || 0}
+                                    readOnly
+                                />
+                            </div>
+                            <div className='detail__product__info-review'>
+                                <span className='text-underline'>{product?.reviews.length}</span>
+                                <span>Reviews</span>
+                            </div>
+                            <div className='detail__product__info-selled'>
+                                <span className=''>{SALLED}</span>
+                                <span>Selled</span>
+                            </div>
                         </div>
-                        <div className='detail__product__info-rate'>
-                            Rated:
-                            <Rating
-                                name="simple-controlled"
-                                value={rate}
-                                readOnly
-                            />
-                            <span className='font-bold'>(50)</span>
+                        <div className='margin-5' style={{ display: 'flex', alignItems: 'baseline', padding: "15px 20px", background: "#fafafa" }}>
+                            {product?.sale_price ?
+                                (
+                                    <>
+                                        <span className="old-price detail__product__info-price font-bold">{formatPrice(product?.price)}</span>
+                                        <span className="new-price detail__product__info-price font-bold" style={{ marginLeft: 5 }}>{formatPrice(product?.sale_price)}</span>
+                                        <span className="saled_price font-bold" style={{ marginLeft: 5 }}>{formatPrice(product?.sale_price)}</span>
+                                    </>
+                                )
+                                :
+                                (<span className="new-price detail__product__info-price font-bold">{formatPrice(product?.price)}</span>)
+                            }
                         </div>
-                        <p className='detail__product__info-price font-bold'>$1135.00</p>
-                        <p className='detail__product__info-status'>Stock Available</p>
+                        <div className='detail__product__info-brand margin-5'>
+                            <span className='detail__product__info-title'>Brand</span><span className='font-bold'>{product?.category.name || 'No brand'}</span>
+                        </div>
+                        <div className='detail__product__info-status margin-5'><span className='detail__product__info-title'>Stock Available</span><span className='font-bold'>{QTY}</span></div>
+                        <div className='product__option'>
+                            {FORM}
+                        </div>
                         <hr style={{ color: "#2b2b2b", width: "100%", height: "2px" }} />
                         <div className='d-flex align-items-center mb-2'>
-                            <label htmlFor="" className='mr-2'>Qty:</label>
-                            <input type="number" className='product__qty'
-                                value={qty}
-                                onInput={(e) => setQty(e.currentTarget.value)}
-                                onChange={(e) => {
-                                    let result = e.target.value.replace(/\D/g, '');
-                                    if (!result) result = 1
-                                    setQty(result);
-                                }}
-                                onPaste={(e) => e.preventDefault()}
-                            />
-                            <button type='button' className='btn-add-product ml-2'>Add To Cart</button>
+                            <div className="cart__product__btn ">
+                                <Button className='btn__remove'
+                                    onClick={() => {
+                                        if (qty == 1) {
+                                            setQty(1)
+                                        } else {
+                                            setQty(pre => pre - 1)
+                                        }
+                                    }}
+                                >
+                                    <Remove />
+                                </Button>
+                                <FormControl>
+                                    <OutlinedInput value={qty} />
+                                </FormControl>
+                                <Button className='btn__add'
+                                    onClick={() => {
+                                        if (qty < QTY) {
+                                            setQty(pre => pre + 1)
+                                        }
+                                    }}>
+                                    <Add />
+                                </Button>
+                            </div>
+                            <Button className='btn-add-product ml-2'
+                                onClick={()=>handleSubmit()}
+                            >Add To Cart</Button>
                         </div>
                     </div>
                 </div>
                 <div className="product__description">
                     <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
                         <Tabs
-                            value={value}
+                            value={tab}
                             onChange={handleChange}
                             aria-label="basic tabs example"
                         >
                             <Tab className='tab__header' label={"Description"} index={0} />
-                            <Tab className='tab__header' label={`Review ${"2"}`} index={1} />
+                            <Tab className='tab__header' label={`Review (${product?.reviews.length})`} index={1} />
                         </Tabs>
                     </Box>
-                    <TabPanel value={value} index={0}>
+                    <TabPanel value={tab} index={0}>
                         <Typography variant="h6" component="div">
                             <h3 style={{ fontWeight: 'bold' }}>Specification:</h3>
                             <List
@@ -93,42 +218,66 @@ const Detail = ({ qty, setQty }) => {
                                 component="nav"
                                 aria-labelledby="nested-list-subheader"
                             >
-                                <ListItemText primary="Sent mail" />
+                                <ListItemText primary={product?.description} />
                             </List>
                         </Typography>
                     </TabPanel>
-                    <TabPanel value={value} index={1}>
+                    <TabPanel value={tab} index={1}>
+                        <div className='rating__overview'>
+                            <Typography variant='h5' className='rating__overview__rate'>{parseFloat(product?.total_rate || 0).toFixed(1)}/5.0</Typography>
+                            <Rating
+                                name="text-feedback"
+                                value={product?.total_rate || 0}
+                                readOnly
+                                precision={0.5}
+                                emptyIcon={<Star style={{ opacity: 0.55 }} fontSize="inherit" />}
+                            />
+                        </div>
                         <List sx={{ width: '100%', bgcolor: 'background.paper' }}>
-                            <ListItem>
-                                <ListItemAvatar>
-                                    <Avatar src='https://bonik-react.vercel.app/assets/images/products/headphone.png'></Avatar>
-                                </ListItemAvatar>
-                                <ListItemText
-                                    primary={<span style={{ fontWeight: 'bold' }}>Jannie Schumm</span>}
-                                    secondary={
-                                        <div className='detail__product__info'>
-                                            <div className='detail__product__info-rate'>
-                                                Rated:
-                                                <Rating
-                                                    name="simple-controlled"
-                                                    className='mx-2'
-                                                    value={rate}
-                                                    readOnly
-                                                />
-                                                <span className='font-bold'>1.7 years ago</span>
+                            {
+                                product?.reviews.length > 0 ? (
+                                    product?.reviews.map((review, index) => {
+                                        return (
+                                            <div key={index}>
+                                                <ListItem>
+                                                    <ListItemAvatar>
+                                                        <Avatar >{review?.pivot?.name}</Avatar>
+                                                    </ListItemAvatar>
+
+                                                    <ListItemText
+                                                        primary={<span style={{ fontWeight: 'bold' }}>{review?.pivot?.name}</span>}
+                                                        secondary={
+                                                            <div className='detail__product__info'>
+                                                                <div className='detail__product__info-rate'>
+                                                                    <Rating
+                                                                        name="simple-controlled"
+                                                                        className='mx-2'
+                                                                        value={review?.pivot?.rate}
+                                                                        readOnly
+                                                                    />
+                                                                    <span className='font-bold'>{review?.created_at}</span>
+                                                                </div>
+                                                            </div>
+                                                        }
+                                                    />
+                                                </ListItem>
+                                                <ListItemText
+                                                    primary={review?.pivot?.content} >
+                                                </ListItemText>
                                             </div>
-                                        </div>
-                                    }
-                                />
-                            </ListItem>
-                            <ListItemText
-                                primary="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Varius massa id ut mattis. Facilisis vitae gravida egestas ac account." >
-                            </ListItemText>
+                                        )
+                                    })
+                                ) : (
+                                    ''
+                                )
+                            }
+
                         </List>
                     </TabPanel>
                 </div>
             </div>
         </section >
+
     );
 };
 

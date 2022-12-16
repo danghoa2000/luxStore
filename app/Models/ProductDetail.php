@@ -26,4 +26,9 @@ class ProductDetail extends Model
     {
         return $this->belongsToMany(AttributeValue::class, "product_attribute_value", "product_detail_id", "attribute_value_id")->withTimestamps();
     }
+
+    public function product()
+    {
+        return $this->belongsTo(Product::class,'product_id');
+    }
 }

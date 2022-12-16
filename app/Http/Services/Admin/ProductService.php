@@ -203,6 +203,8 @@ class ProductService
             ], Response::HTTP_NOT_FOUND);
         } catch (\Throwable $th) {
             DB::rollBack();
+            dd($th);
+
             return response([
                 'message' => 'Update product error!',
                 'code' => Response::HTTP_INTERNAL_SERVER_ERROR

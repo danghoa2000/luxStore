@@ -31,7 +31,7 @@ const ProductContainer = () => {
         = useForm({
             shouldUnregister: false,
             defaultValues: {
-                group_category: '',
+                group_category_id: '',
                 category_id: '',
                 attribute: [],
                 rate: '',
@@ -86,7 +86,7 @@ const ProductContainer = () => {
         if (isCompleteSetting) {
             getProductList();
         }
-    }, [orderBy, page, rowsPerPage, searchField, isCompleteSetting])
+    }, [orderBy, page, rowsPerPage, isCompleteSetting])
 
 
     return (
@@ -99,7 +99,6 @@ const ProductContainer = () => {
             totalRecord={totalRecord}
             productList={productList}
             formFilter={formFilter}
-            searchField={searchField}
             setPage={setPage}
             handleSubmit={handleSubmit}
             control={control}

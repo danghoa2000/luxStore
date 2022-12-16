@@ -1,4 +1,5 @@
 export const SESSION_ACCESS_TOKEN = "accessToken";
+export const CUSTOMER_INFO = "customerInfo";
 export const ADMIN_SESSION_ACCESS_TOKEN = "adminAccessToken";
 
 export const ADMIN_INFO = "adminInfo";

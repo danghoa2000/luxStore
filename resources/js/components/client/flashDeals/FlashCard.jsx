@@ -3,6 +3,8 @@ import Slider from "react-slick"
 import "slick-carousel/slick/slick.css"
 import "slick-carousel/slick/slick-theme.css"
 import { formatPrice } from "../../../utils/helper"
+import { Rating } from "@mui/material"
+import { Star } from "@mui/icons-material"
 
 const SampleNextArrow = (props) => {
   const { onClick } = props
@@ -42,10 +44,6 @@ const FlashCard = ({ productItems, addToCart }) => {
     <>
       <Slider {...settings}>
         {productItems.map((items) => {
-          const rate = [];
-          for (var i = 0; i < items?.total_rate; i++) {
-            rate.push(<i className='fa fa-star' key={i}></i>);
-          }
           return (
             <div className='box' key={items.id}>
               <div className='product mtop'>
@@ -60,7 +58,13 @@ const FlashCard = ({ productItems, addToCart }) => {
                 <div className='product-details'>
                   <h3>{items?.name}</h3>
                   <div className='rate'>
-                    {rate}
+                    <Rating
+                      name="text-feedback"
+                      value={items?.total_rate || 0}
+                      readOnly
+                      precision={0.5}
+                      emptyIcon={<Star style={{ opacity: 0.55 }} fontSize="inherit" />}
+                    />
                   </div>
                   <div className='price'>
                     <div style={{ display: 'flex', alignItems: 'baseline' }}>

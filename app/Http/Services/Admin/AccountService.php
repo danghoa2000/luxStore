@@ -36,7 +36,7 @@ class AccountService
                 ->with('district')
                 ->with('commune');
         })->filter($request)
-        ->where('status', config('constants.user.status.active'));;
+        ->where('status', config('constants.user.status.active'));
         $total = count($accounts->get());
         $accounts->limit($request->pageSize)
             ->offset(($request->currentPage) * $request->pageSize);

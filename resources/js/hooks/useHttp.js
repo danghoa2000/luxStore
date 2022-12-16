@@ -3,6 +3,7 @@ import { createBrowserHistory } from "history";
 import {
     ADMIN_SESSION_ACCESS_TOKEN,
     getAccessToken,
+    SESSION_ACCESS_TOKEN,
 } from "../utils/sessionHelper";
 
 export const axiosClient = axios.create();

@@ -44,6 +44,7 @@ const HomePage = ({
             <Shop shopItems={ortherProduct} addToCart={addToCart} />
             <Annocument />
             <Wrapper />
+            
         </>
     );
 };

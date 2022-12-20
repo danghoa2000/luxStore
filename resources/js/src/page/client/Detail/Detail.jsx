@@ -212,7 +212,7 @@ const Detail = ({
                     </Box>
                     <TabPanel value={tab} index={0}>
                         <Typography variant="h6" component="div">
-                            <h3 style={{ fontWeight: 'bold' }}>Specification:</h3>
+                            <span style={{ fontWeight: 'bold' }}>Specification:</span>
                             <List
                                 sx={{ width: '100%', bgcolor: 'background.paper' }}
                                 component="nav"

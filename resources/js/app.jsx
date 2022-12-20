@@ -63,7 +63,7 @@ const App = () => {
     const getCart = () => {
         axiosClient.get(CART_API.SHOW)
             .then((response) => {
-                if (response.status === CODE.HTTP_OK) {
+                if (response.data.code === CODE.HTTP_OK) {
                     setCartItem(response.data.cart)
                 }
             }).catch(({ response }) => {
@@ -94,7 +94,7 @@ const App = () => {
         })
             .then((response) => {
                 setShowNoti(true);
-                if (response.status === CODE.HTTP_OK) {
+                if (response.data.code === CODE.HTTP_OK) {
                     setStatus({ type: 'success', message: response.data.message });
                     getCart()
                 } else {
@@ -118,7 +118,7 @@ const App = () => {
         })
             .then((response) => {
                 setShowNoti(true);
-                if (response.status === CODE.HTTP_OK) {
+                if (response.data.code === CODE.HTTP_OK) {
                     setStatus({ type: 'success', message: response.data.message });
                     getCart();
                 } else {
@@ -133,7 +133,7 @@ const App = () => {
     const removeCartItem = (id) => {
         axiosClient.delete(CART_API.DELETE + '/' + id)
             .then((response) => {
-                if (response.status === CODE.HTTP_OK) {
+                if (response.data.code === CODE.HTTP_OK) {
                     getCart();
                 }
             }).catch(({ response }) => {
@@ -181,7 +181,7 @@ const App = () => {
 
                                     <Route path='cart' element={
                                         <Suspense fallback={<Loading />}>
-                                            <CartContainer CartItem={CartItem} addToCart={addToCart} decreaseQty={decreaseQty} />
+                                            <CartContainer CartItem={CartItem} addToCart={addToCart} decreaseQty={decreaseQty} removeCartItem={removeCartItem} />
                                         </Suspense>}
                                     />
 

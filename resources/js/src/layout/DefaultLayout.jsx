@@ -85,7 +85,9 @@ const DefaultLayout = ({ CartItem, addToCart, decreaseQty, showNoti, setShowNoti
                         <Button variant="contained" className='btn__checkcout'>
                             Checkout Now
                         </Button>
-                        <Button variant="contained" className='btn__view_cart'>
+                        <Button variant="contained" className='btn__view_cart'
+                            onClick={() => navigate('/elite/cart')}
+                        >
                             View cart
                         </Button>
                     </>

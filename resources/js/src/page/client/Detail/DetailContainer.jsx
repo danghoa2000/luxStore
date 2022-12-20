@@ -51,7 +51,6 @@ const DetailContainer = ({ CartItem, addToCart, decreaseQty, showNoti, setShowNo
 
     const handleSubmit = () => {
         const result = checkExitProduct();
-        console.log(result);
         if (result) {
             addToCart(result, result.qty);
         } else {

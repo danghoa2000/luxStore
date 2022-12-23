@@ -14,7 +14,7 @@ class ProductService
         $products = Product::with(
             'productMedia:product_id,url',
             'productPrice:product_id,price',
-            'productDetail:id,qty,sold_qty,product_id',
+            'productDetail:id,qty,sold_qty,product_id,price',
             'productDetail.propertyValue.attribute:id,name',
             'productDetail.propertyValue:id,attribute_id,attribute_value_name',
             'productSuggest',
@@ -68,14 +68,17 @@ class ProductService
                 'sale_type' => $request->sale_type,
                 'sale_off' => $request->price_saled,
                 'expried' => $request->expried,
-                'price' => $request->price,
+                // 'price' => $request->price,
             ]);
             if ($request->property) {
                 foreach ($request->property as $item) {
                     $qty = $item["qty"];
+                    $price = $item["price"];
                     unset($item["qty"]); // remove qty
+                    unset($item["price"]); // remove price
                     $productDetail = ProductDetail::create([
                         "qty" => $qty,
+                        "price" => $price,
                         "sold_qty" => 0,
                         "product_id" =>  $product->id,
                     ]);
@@ -109,7 +112,7 @@ class ProductService
         $product = Product::with(
             'productMedia:product_id,url',
             'productPrice:product_id,price',
-            'productDetail:id,qty,sold_qty,product_id',
+            'productDetail:id,qty,sold_qty,product_id,price',
             'productDetail.propertyValue.attribute:id,name',
             'productDetail.propertyValue:id,attribute_id,attribute_value_name',
             'productSuggest',
@@ -165,7 +168,7 @@ class ProductService
                     'sale_type' => $request->sale_type,
                     'sale_off' => $request->price_saled,
                     'expried' => $request->expried,
-                    'price' => $request->price,
+                    // 'price' => $request->price,
                 ]);
 
                 if ($request->property) {
@@ -174,11 +177,13 @@ class ProductService
                     }
                     $product->productDetail()->delete();
                     foreach ($request->property as $item) {
-                        // get qty
                         $qty = $item["qty"];
+                        $price = $item["price"];
                         unset($item["qty"]); // remove qty
+                        unset($item["price"]); // remove price
                         $productDetail = ProductDetail::create([
                             "qty" => $qty,
+                            "price" => $price,
                             "sold_qty" => 0,
                             "product_id" =>  $product->id,
                         ]);
@@ -203,8 +208,6 @@ class ProductService
             ], Response::HTTP_NOT_FOUND);
         } catch (\Throwable $th) {
             DB::rollBack();
-            dd($th);
-
             return response([
                 'message' => 'Update product error!',
                 'code' => Response::HTTP_INTERNAL_SERVER_ERROR

@@ -69,20 +69,20 @@ const CreateAttributeValueModal = ({
             .then((response) => {
                 setShowNoti(true);
                 setLoading(false);
-                if (response.status === CODE.HTTP_OK) {
+                if (response.data.code === CODE.HTTP_OK) {
                     setStatus({ type: 'success', message: response.data.message });
                     reset();
                     setGroupCategoryId(-1);
                     setAttribute(-1);
                 }
 
-                if (response.status === CODE.HTTP_NOT_FOUND) {
+                if (response.data.code === CODE.HTTP_NOT_FOUND) {
                     setStatus({ type: 'error', message: response.data.message });
                 }
             }).catch(( response ) => {
                 setShowNoti(true);
                 setLoading(false);
-                if (response.status === CODE.UNPROCESSABLE_ENTITY) {
+                if (response.data.code === CODE.UNPROCESSABLE_ENTITY) {
                     Object.keys(response.data.errors).forEach(element => {
                         setError(element, { type: 'custom', message: Object.values(response.data.errors[element]) })
                     });

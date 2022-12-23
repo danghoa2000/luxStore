@@ -35,7 +35,7 @@ class Product extends Model
 
     protected $table = 'products';
 
-    protected $appends = ['total_rate', 'sale_price', 'sale_persen'];
+    protected $appends = ['total_rate', 'sale_price', 'sale_persen', 'max_price', 'min_price'];
 
     public function productDetail()
     {
@@ -102,17 +102,17 @@ class Product extends Model
     public function getSalePriceAttribute()
     {
         if (
-            $this->attributes['expried'] && date_format(Carbon::parse($this->attributes['expried']), config('constants.date_format')) < date_format(Carbon::now(), config('constants.date_format'))
+            $this->attributes['expried'] && date_format(Carbon::parse($this->attributes['expried']), config('constants.date_format')) > date_format(Carbon::now(), config('constants.date_format'))
         ) {
-            return 0;
-        } else {
             if ($this->attributes['sale_type'] && $this->attributes['sale_type'] != -1) {
                 if ($this->attributes['sale_type'] == config('constants.sale_type.price')) {
                     return $this->attributes['sale_off'];
                 } else {
-                    return $this->attributes['price'] ? $this->attributes['price'] - floor(($this->attributes['price'] * $this->attributes['sale_off']) / 100) : 0;
+                    return $this->getMinPriceAttribute() ? $this->getMinPriceAttribute() - floor(($this->getMinPriceAttribute() * $this->attributes['sale_off']) / 100) : 0;
                 }
             }
+            return 0;
+        } else {
             return 0;
         }
     }
@@ -130,6 +130,17 @@ class Product extends Model
             }
         }
         return 0;
+    }
+
+
+    public function getMinPriceAttribute()
+    {
+        return $this->productDetail()->min('price');
+    }
+
+    public function getMaxPriceAttribute()
+    {
+        return $this->productDetail()->max('price');
     }
 
     // public function getImageAttribute()

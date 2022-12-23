@@ -34,7 +34,7 @@ axiosClient.interceptors.request.use(function (config) {
 //         return response;
 //     },
 //     function (error) {
-//         if (error.response.status === 401) {
+//         if (error.response.data.code === 401) {
 //             //Add Logic to
 //             //1. Redirect to login page or
 //             //2. Request refresh token

@@ -56,7 +56,7 @@ const GroupCategoryContainer = () => {
                 ...paramater
             }
         }).then((response) => {
-            if (response.status === CODE.HTTP_OK) {
+            if (response.data.code === CODE.HTTP_OK) {
                 setGroupCategoryList(response.data.groupCategories);
                 setTotalRecode(response.data.total);
             }
@@ -73,7 +73,7 @@ const GroupCategoryContainer = () => {
     const deleteGroupCategory = useCallback((id) => {
         axiosClient.delete(GROUP_CATEGORY_API.DELETE + '/' + id)
             .then((response) => {
-                if (response.status === CODE.HTTP_OK) {
+                if (response.data.code === CODE.HTTP_OK) {
                     setStatus({ type: 'success', message: response.data.message });
                     setShowNoti(true)
                     getGroupCategoryList()
@@ -83,7 +83,7 @@ const GroupCategoryContainer = () => {
                     setStatus({ type: 'error', message: response.data.message });
                 };
             }).catch(({ response }) => {
-                if (response.status === CODE.UNPROCESSABLE_ENTITY) {
+                if (response.data.code === CODE.UNPROCESSABLE_ENTITY) {
                     Object.keys(response.data.errors).forEach(element => {
                         setError(element, { type: 'custom', message: Object.values(response.data.errors[element]) })
                     });

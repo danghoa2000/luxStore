@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { CATEGORIES_API, GROUP_CATEGORY_API, PRODUCT_API } from '../../../../constants/api';
+import { CATEGORIES_API, GROUP_CATEGORY_API, MANUFACTURER_API, PRODUCT_API } from '../../../../constants/api';
 import { axiosClient } from '../../../../hooks/useHttp';
 import Product from './Product';
 import TableHeader from './TableHeader';
@@ -59,7 +59,7 @@ const ProductContainer = () => {
                 ...paramater
             }
         }).then((response) => {
-            if (response.status === CODE.HTTP_OK) {
+            if (response.data.code === CODE.HTTP_OK) {
                 setProductList(response.data.products);
                 setTotalRecode(response.data.total);
             }
@@ -72,7 +72,7 @@ const ProductContainer = () => {
     const getGroupCategoryList = useCallback(() => {
 
         axiosClient.get(GROUP_CATEGORY_API.LIST).then((response) => {
-            if (response.status === CODE.HTTP_OK) {
+            if (response.data.code === CODE.HTTP_OK) {
                 setGroupCategoryList(response.data.groupCategories);
             }
         }).catch((response) => {
@@ -81,22 +81,34 @@ const ProductContainer = () => {
         });
     }, []);
 
+    const getManufacturerList = useCallback(() => {
+        axiosClient.get(MANUFACTURER_API.LIST).then((response) => {
+            if (response.data.code === CODE.HTTP_OK) {
+                setManufacturerList(response.data.manufacturers);
+            }
+        }).catch((response) => {
+            setStatus({ type: 'error', message: response.data ? response.data.message : 'Server error' });
+            setShowNoti(true)
+        });
+    }, []);
+    
     const getCategoryList = useCallback(() => {
         axiosClient.get(CATEGORIES_API.LIST).then((response) => {
-            if (response.status === CODE.HTTP_OK) {
+            if (response.data.code === CODE.HTTP_OK) {
                 setCategoryList(response.data.categories);
             }
         }).catch((response) => {
             setStatus({ type: 'error', message: response.data ? response.data.message : 'Server error' });
             setShowNoti(true)
         });
-    }, [order, orderBy, page, rowsPerPage, searchField]);
+    }, []);
 
     useEffect(() => {
+        getManufacturerList();
         getGroupCategoryList();
         getCategoryList();
     }, [])
-    
+
     useEffect(() => {
         getProductList();
     }, [order, orderBy, page, rowsPerPage, searchField])
@@ -104,7 +116,7 @@ const ProductContainer = () => {
     const deleteProduct = useCallback((id) => {
         axiosClient.delete(PRODUCT_API.DELETE + '/' + id)
             .then((response) => {
-                if (response.status === CODE.HTTP_OK) {
+                if (response.data.code === CODE.HTTP_OK) {
                     setStatus({ type: 'success', message: response.data.message });
                     setShowNoti(true)
                     getProductList()
@@ -114,7 +126,7 @@ const ProductContainer = () => {
                     setStatus({ type: 'error', message: response.data.message });
                 };
             }).catch(({ response }) => {
-                if (response.status === CODE.UNPROCESSABLE_ENTITY) {
+                if (response.data.code === CODE.UNPROCESSABLE_ENTITY) {
                     Object.keys(response.data.errors).forEach(element => {
                         setError(element, { type: 'custom', message: Object.values(response.data.errors[element]) })
                     });

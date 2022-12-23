@@ -146,7 +146,7 @@ const ProductUpdateContainer = () => {
             .then((response) => {
                 setShowNoti(true);
                 setLoading(false);
-                if (response.status === CODE.HTTP_OK) {
+                if (response.data.code === CODE.HTTP_OK) {
                     setStatus({ type: 'success', message: response.data.message });
                     setTimeout(() => {
                         navigate(-1);
@@ -155,7 +155,7 @@ const ProductUpdateContainer = () => {
             }).catch(({ response }) => {
                 setShowNoti(true);
                 setLoading(false);
-                if (response.status === CODE.UNPROCESSABLE_ENTITY) {
+                if (response.data.code === CODE.UNPROCESSABLE_ENTITY) {
                     Object.keys(response.data.errors).forEach(element => {
                         setError(element, { type: 'custom', message: Object.values(response.data.errors[element]) })
                     });
@@ -168,7 +168,7 @@ const ProductUpdateContainer = () => {
         axiosClient.get(GROUP_CATEGORY_API.LIST)
             .then((response) => {
                 setCompleteSettingGroupCategory(true);
-                if (response.status === CODE.HTTP_OK) {
+                if (response.data.code === CODE.HTTP_OK) {
                     setGroupCategoryList(response.data.groupCategories);
                 }
             }).catch((response) => {
@@ -180,7 +180,7 @@ const ProductUpdateContainer = () => {
     const getCategoryList = useCallback(() => {
         axiosClient.get(CATEGORIES_API.LIST).then((response) => {
             setCompleteSettingCategory(true);
-            if (response.status === CODE.HTTP_OK) {
+            if (response.data.code === CODE.HTTP_OK) {
                 setCategoryList(response.data.categories);
             }
         }).catch((response) => {
@@ -192,7 +192,7 @@ const ProductUpdateContainer = () => {
     const getManufacturerList = useCallback(() => {
         axiosClient.get(MANUFACTURER_API.LIST).then((response) => {
             setCompleteSettingManufacturer(true);
-            if (response.status === CODE.HTTP_OK) {
+            if (response.data.code === CODE.HTTP_OK) {
                 setManufacturerList(response.data.manufacturers);
             }
         }).catch((response) => {

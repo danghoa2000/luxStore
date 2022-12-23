@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string("name")->nullable();
             $table->text("description")->nullable();
             $table->integer("country_id")->nullable();
-            $table->integer("price")->nullable();
+            $table->longText('price')->nullable();
             $table->integer("category_id")->nullable();
             $table->integer("group_category_id")->nullable();
             $table->integer("manufacturer_id")->nullable();

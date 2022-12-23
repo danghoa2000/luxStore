@@ -13,7 +13,7 @@ const EventContainer = () => {
     const [loading, setLoading] = useState(false);
     const getEventList = useCallback(() => {
         axiosClient.get(EVENT_API.LIST).then((response) => {
-            if (response.status === CODE.HTTP_OK) {
+            if (response.data.code === CODE.HTTP_OK) {
                 setEventList(response?.data?.events);
             }
         }).catch((response) => {
@@ -24,7 +24,7 @@ const EventContainer = () => {
 
     const getProductList = useCallback(() => {
         axiosClient.get(PRODUCT_API.LIST).then((response) => {
-            if (response.status === CODE.HTTP_OK) {
+            if (response.data.code === CODE.HTTP_OK) {
                 setProductList(response?.data?.products.map(({ id, name }) => ({ id, name })));
             }
         }).catch((response) => {
@@ -41,13 +41,13 @@ const EventContainer = () => {
             .then((response) => {
                 setShowNoti(true);
                 setLoading(false);
-                if (response.status === CODE.HTTP_OK) {
+                if (response.data.code === CODE.HTTP_OK) {
                     setStatus({ type: 'success', message: response.data.message });
                 }
             }).catch(({ response }) => {
                 setShowNoti(true);
                 setLoading(false);
-                if (response.status === CODE.UNPROCESSABLE_ENTITY) {
+                if (response.data.code === CODE.UNPROCESSABLE_ENTITY) {
                     Object.keys(response.data.errors).forEach(element => {
                         setError(element, { type: 'custom', message: Object.values(response.data.errors[element]) })
                     });

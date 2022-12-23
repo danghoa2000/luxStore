@@ -30,10 +30,10 @@ const LoginContainer = () => {
             window.sessionStorage.setItem(ADMIN_INFO, JSON.stringify(res.data.info));
             navigate("/admin");
         }).catch(err => {
-            // setisLoginFailed({
-            //     status: err.response.status,
-            //     message: err.response.data.message
-            // })
+            setisLoginFailed({
+                status: err.response.data.code,
+                message: err.response.data.message
+            })
         });
     }
 

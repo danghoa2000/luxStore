@@ -5,6 +5,7 @@ import "slick-carousel/slick/slick-theme.css"
 import { formatPrice } from "../../../utils/helper"
 import { Rating } from "@mui/material"
 import { Star } from "@mui/icons-material"
+import { useNavigate } from "react-router-dom"
 
 const SampleNextArrow = (props) => {
   const { onClick } = props
@@ -28,6 +29,7 @@ const SamplePrevArrow = (props) => {
 }
 const FlashCard = ({ productItems, addToCart }) => {
   const [count, setCount] = useState(0)
+  const navigate = useNavigate();
   const increment = () => {
     setCount(count + 1)
   }
@@ -47,7 +49,13 @@ const FlashCard = ({ productItems, addToCart }) => {
           return (
             <div className='box' key={items.id}>
               <div className='product mtop'>
-                <div className='img'>
+                <div className='img'
+                  onClick={() => navigate('/elite/product', {
+                    state: {
+                      id: items.id
+                    }
+                  })}
+                >
                   {items?.sale_persen ? <span className='discount'>{items?.sale_persen}% Off</span> : ""}
                   <img src={items?.image} alt='' />
                   <div className='product-like'>
@@ -71,12 +79,12 @@ const FlashCard = ({ productItems, addToCart }) => {
                       {items?.sale_price ?
                         (
                           <>
-                            <span className="old-price">{formatPrice(items?.price)}</span>
+                            <span className="old-price">{formatPrice(items?.min_price)}</span>
                             <span className="new-price" style={{ marginLeft: 5 }}>{formatPrice(items?.sale_price)}</span>
                           </>
                         )
                         :
-                        (<span className="new-price">{formatPrice(items?.price)}</span>)
+                        (<span className="new-price">{formatPrice(items?.min_price)}</span>)
                       }
                     </div>
                     {/* step : 3  

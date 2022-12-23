@@ -19,7 +19,7 @@ const HomePageContainer = ({ productItems, addToCart, CartItem, shopItems }) => 
     const getApi = useCallback(() => {
         axiosClient.get(HOME_API)
             .then((response) => {
-                if (response.status === CODE.HTTP_OK) {
+                if (response.data.code === CODE.HTTP_OK) {
                     setFlashDelas(response.data.flashDelas);
                     setNewArrivals(response.data.newArrivals);
                     setBigDiscounts(response.data.bigDiscounts);
@@ -35,7 +35,7 @@ const HomePageContainer = ({ productItems, addToCart, CartItem, shopItems }) => 
     const getTopCategory = useCallback(() => {
         axiosClient.get(GROUP_CATEGORY_API.TOP_GROUP_CATEGORY)
             .then((response) => {
-                if (response.status === CODE.HTTP_OK) {
+                if (response.data.code === CODE.HTTP_OK) {
                     setTopGroupCategory(response.data.groupCategories);
                 }
             }).catch((response) => {

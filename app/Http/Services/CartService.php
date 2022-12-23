@@ -2,6 +2,7 @@
 
 namespace App\Http\Services;
 
+use App\Models\Customer;
 use App\Models\ProductDetail;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
@@ -46,7 +47,13 @@ class CartService
 
     public function detail($request)
     {
-        $cart = Auth::guard('customerApi')->user()->cart ? Auth::guard('customerApi')->user()->cart->products : [];
+        $user = Customer::with(
+            'cart',
+            'cart.products',
+            'cart.products.propertyValue:attribute_value_name',
+            'cart.products.product:id,name,image,expried,sale_type,price,sale_off'
+        )->find(Auth::guard('customerApi')->user()->id);
+        $cart = $user->cart->products;
         return response([
             'cart' => $cart,
             'message' => 'success!',

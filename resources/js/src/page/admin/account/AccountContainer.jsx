@@ -56,7 +56,7 @@ const AccountContainer = () => {
                 ...paramater
             }
         }).then((response) => {
-            if (response.status === CODE.HTTP_OK) {
+            if (response.data.code === CODE.HTTP_OK) {
                 setAccountList(response.data.accounts);
                 setTotalRecode(response.data.total);
             }
@@ -73,7 +73,7 @@ const AccountContainer = () => {
     const deleteAccount = useCallback((id) => {
         axiosClient.delete(ACCOUNT_API.DELETE + '/' + id)
             .then((response) => {
-                if (response.status === CODE.HTTP_OK) {
+                if (response.data.code === CODE.HTTP_OK) {
                     setStatus({ type: 'success', message: response.data.message });
                     setShowNoti(true)
 
@@ -84,7 +84,7 @@ const AccountContainer = () => {
                     setStatus({ type: 'error', message: response.data.message });
                 };
             }).catch(({ response }) => {
-                if (response.status === CODE.UNPROCESSABLE_ENTITY) {
+                if (response.data.code === CODE.UNPROCESSABLE_ENTITY) {
                     Object.keys(response.data.errors).forEach(element => {
                         setError(element, { type: 'custom', message: Object.values(response.data.errors[element]) })
                     });

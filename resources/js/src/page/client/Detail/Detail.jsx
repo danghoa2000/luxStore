@@ -17,99 +17,14 @@ const Detail = ({
     product,
     handleChange,
     tab,
-    setOption,
-    option,
-    handleSubmit }) => {
-
-    const SLIDE = useMemo(() => {
-        const slides = [];
-        if (product?.image) {
-            slides.push(product?.image)
-        }
-        if (product?.product_media && Object.keys(product?.product_media).length > 0) {
-            const images = JSON.parse(product?.product_media.url);
-            images.map(item => {
-                slides.push(item)
-                return item;
-            })
-        }
-        return slides;
-    }, [product])
-
-    const QTY = useMemo(() => {
-        return product?.product_detail.reduce((total, item) => total + item.qty, 0)
-    }, [product])
-
-    const SALLED = useMemo(() => {
-        return product?.product_detail.reduce((total, item) => total + item.sold_qty, 0)
-    }, [product])
-
-    const customPaging = (i) => {
-        return (
-            <a key={i}>
-                <img src={BASE_URL + SLIDE[i]} />
-            </a>
-        );
-    }
-
-    const OPTION = useMemo(() => {
-        const items = product?.product_detail;
-        if (items) {
-            const data = [];
-            Object.values(items).map((value) => {
-                Object.values(value.property_value).map((item, index2) => {
-                    if (data[item?.attribute?.name] && Object.keys(data[item?.attribute?.name]).length > 0) {
-                        data[item?.attribute?.name] = { ...data[item?.attribute?.name], option: [...data[item?.attribute?.name].option, { id: item.id, value: item.attribute_value_name }] }
-                    } else {
-                        data[item?.attribute?.name] = { id: item.attribute_id, option: [{ id: item.id, value: item.attribute_value_name }] };
-                    }
-
-                    return item;
-                })
-                return value;
-            });
-            return data;
-        }
-        return null;
-    }, [product])
-
-    const FORM = useMemo(() => {
-        const optionTemp = OPTION;
-        if (optionTemp) {
-            return Object.keys(optionTemp).map((value, index) => {
-                return (
-                    <div className='product__option__item' key={index}>
-                        <span className='product__option__item-name' data-id={optionTemp[value].id}>{value}</span>
-                        <div className='product__option__list'>
-                            {
-                                Object.values(optionTemp[value].option).map((opt) => (
-                                    <div className={`product__option-check ${option && Object.values(option).includes(opt.id) ? 'option-checked' : ''}`} data-id={opt.id} key={opt.id}
-                                        onClick={() => {
-                                            const newOptions = { ...option }
-                                            if (newOptions && newOptions[optionTemp[value].id] == opt.id) {
-                                                delete newOptions[optionTemp[value].id];
-                                                setOption(newOptions)
-                                            } else {
-                                                newOptions[optionTemp[value].id] = opt.id;
-                                                setOption(newOptions)
-                                            }
-                                        }}
-                                    >
-                                        {opt.value}
-                                        <span className='product__option-tick'>
-                                            <Check className='icon__check' />
-                                        </span>
-                                    </div>
-                                ))
-                            }
-                        </div>
-                    </div>
-                )
-            })
-        }
-        return null;
-    }, [product, OPTION, option])
-
+    handleSubmit,
+    FORM,
+    stock,
+    SLIDE,
+    customPaging,
+    SALLED,
+    currentOption
+}) => {
 
     return (
         <section className='detail py-5'>
@@ -148,22 +63,65 @@ const Detail = ({
                             </div>
                         </div>
                         <div className='margin-5' style={{ display: 'flex', alignItems: 'baseline', padding: "15px 20px", background: "#fafafa" }}>
-                            {product?.sale_price ?
-                                (
-                                    <>
-                                        <span className="old-price detail__product__info-price font-bold">{formatPrice(product?.price)}</span>
-                                        <span className="new-price detail__product__info-price font-bold" style={{ marginLeft: 5 }}>{formatPrice(product?.sale_price)}</span>
-                                        <span className="saled_price font-bold" style={{ marginLeft: 5 }}>{formatPrice(product?.sale_price)}</span>
-                                    </>
-                                )
-                                :
-                                (<span className="new-price detail__product__info-price font-bold">{formatPrice(product?.price)}</span>)
+                            {
+                                Object.keys(currentOption).length == 0 ?
+                                    (
+                                        product?.sale_price ?
+                                            (
+                                                product?.max_price === product?.min_price ? (
+                                                    <>
+                                                        <span className="old-price detail__product__info-price font-bold">{formatPrice(product?.max_price)}</span>
+                                                        <span className="new-price detail__product__info-price font-bold" style={{ marginLeft: 5 }}>{formatPrice(product?.sale_price)}</span>
+                                                        <span className="saled_price detail__product__info-price font-bold" style={{ marginLeft: 5 }}>{`${product?.sale_persen}% off`}</span>
+                                                    </>
+                                                )
+                                                    :
+                                                    (
+                                                        <>
+                                                            <span className="old-price detail__product__info-price font-bold">{formatPrice(product?.min_price)} - {formatPrice(product?.max_price)}</span>
+                                                            <span className="new-price detail__product__info-price font-bold" style={{ marginLeft: 5 }}>{formatPrice(product?.min_price - product?.min_price * product?.sale_persen / 100)} <span style={{ margin: "0 5px" }}>-</span>{formatPrice(product?.max_price - product?.max_price * product?.sale_persen / 100)}</span>
+                                                            <span className="saled_price detail__product__info-price font-bold" style={{ marginLeft: 5 }}>{`${product?.sale_persen}% off`}</span>
+                                                        </>
+                                                    )
+
+                                            )
+                                            :
+                                            (
+                                                product?.max_price === product?.min_price ?
+                                                    (
+                                                        <span className="new-price detail__product__info-price font-bold">{formatPrice(product?.max_price)}</span>
+                                                    )
+                                                    :
+                                                    (
+                                                        <>
+                                                            <span className="new-price detail__product__info-price font-bold">{formatPrice(product?.min_price)}</span>
+                                                            <span style={{ margin: "0 10px" }}>-</span>
+                                                            <span className="new-price detail__product__info-price font-bold">{formatPrice(product?.max_price)}</span>
+                                                        </>
+                                                    )
+                                            )
+                                    )
+                                    :
+                                    (
+                                        currentOption?.sale_price ?
+                                            (
+                                                <>
+                                                    <span className="old-price detail__product__info-price font-bold">{formatPrice(currentOption?.price)}</span>
+                                                    <span className="new-price detail__product__info-price font-bold" style={{ marginLeft: 5 }}>{formatPrice(currentOption?.sale_price)}</span>
+                                                    <span className="saled_price detail__product__info-price font-bold" style={{ marginLeft: 5 }}>{`${currentOption?.sale_persen}% off`}</span>
+                                                </>
+                                            )
+                                            :
+                                            (
+                                                <span className="new-price detail__product__info-price font-bold">{formatPrice(currentOption?.price)}</span>
+                                            )
+                                    )
                             }
                         </div>
                         <div className='detail__product__info-brand margin-5'>
                             <span className='detail__product__info-title'>Brand</span><span className='font-bold'>{product?.category.name || 'No brand'}</span>
                         </div>
-                        <div className='detail__product__info-status margin-5'><span className='detail__product__info-title'>Stock Available</span><span className='font-bold'>{QTY}</span></div>
+                        <div className='detail__product__info-status margin-5'><span className='detail__product__info-title'>Stock Available</span><span className='font-bold'>{stock}</span></div>
                         <div className='product__option'>
                             {FORM}
                         </div>
@@ -194,7 +152,7 @@ const Detail = ({
                                 </Button>
                             </div>
                             <Button className='btn-add-product ml-2'
-                                onClick={()=>handleSubmit()}
+                                onClick={() => handleSubmit()}
                             >Add To Cart</Button>
                         </div>
                     </div>
@@ -214,7 +172,7 @@ const Detail = ({
                         <Typography variant="h6" component="div">
                             <span style={{ fontWeight: 'bold' }}>Specification:</span>
                             <List
-                                sx={{ width: '100%', bgcolor: 'background.paper' }}
+                                sx={{ width: '100%' }}
                                 component="nav"
                                 aria-labelledby="nested-list-subheader"
                             >
@@ -233,7 +191,7 @@ const Detail = ({
                                 emptyIcon={<Star style={{ opacity: 0.55 }} fontSize="inherit" />}
                             />
                         </div>
-                        <List sx={{ width: '100%', bgcolor: 'background.paper' }}>
+                        <List sx={{ width: '100%' }}>
                             {
                                 product?.reviews.length > 0 ? (
                                     product?.reviews.map((review, index) => {

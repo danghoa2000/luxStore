@@ -5,8 +5,10 @@ import "slick-carousel/slick/slick-theme.css"
 import Ddata from "./Ddata"
 import "../newarrivals/style.css"
 import { formatPrice } from "../../../utils/helper"
+import { useNavigate } from "react-router-dom"
 
 const Dcard = ({ productItems }) => {
+  const navigate = useNavigate();
   const settings = {
     dots: false,
     infinite: true,
@@ -20,7 +22,13 @@ const Dcard = ({ productItems }) => {
         return (
           <div className='box' key={index}>
             <div className="product">
-              <div className='img has__hover'>
+              <div className='img has__hover'
+                onClick={() => navigate('/elite/product', {
+                  state: {
+                    id: value.id
+                  }
+                })}
+              >
                 {value?.sale_persen ? <span className='discount'>{value?.sale_persen}% Off</span> : ""}
                 <img src={value?.image} alt='' />
               </div>
@@ -29,12 +37,12 @@ const Dcard = ({ productItems }) => {
                 {value?.sale_price ?
                   (
                     <>
-                      <span className="old-price">{formatPrice(value?.price)}</span>
+                      <span className="old-price">{formatPrice(value?.min_price)}</span>
                       <span className="new-price" style={{ marginLeft: 5 }}>{formatPrice(value?.sale_price)}</span>
                     </>
                   )
                   :
-                  (<span className="new-price">{formatPrice(value?.price)}</span>)
+                  (<span className="new-price">{formatPrice(value?.min_price)}</span>)
                 }
               </div>
             </div>

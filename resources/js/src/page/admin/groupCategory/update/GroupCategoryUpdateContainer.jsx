@@ -80,7 +80,7 @@ const GroupCategoryUpdateContainer = () => {
             ...value
         })
             .then((response) => {
-                if (response.status === CODE.HTTP_OK) {
+                if (response.data.code === CODE.HTTP_OK) {
                     setStatus({ type: 'success', message: response.data.message });
                 }
                 if (response.data.code === CODE.HTTP_NOT_FOUND) {
@@ -89,7 +89,7 @@ const GroupCategoryUpdateContainer = () => {
                 setShowNoti(true)
                 setLoading(false);
             }).catch(({ response }) => {
-                if (response.status === CODE.UNPROCESSABLE_ENTITY) {
+                if (response.data.code === CODE.UNPROCESSABLE_ENTITY) {
                     Object.keys(response.data.errors).forEach(element => {
                         setError(element, { type: 'custom', message: Object.values(response.data.errors[element]) })
                     });

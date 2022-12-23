@@ -26,6 +26,7 @@ import NotFoundResult from '../../../../components/partial/NotFoundResult';
 import { formatPrice } from '../../../../utils/helper';
 import FormFIlter from './FormFIlter';
 import './product.scss';
+import { BASE_URL } from '../../../../constants/constants';
 
 const Product = (props) => {
     const {
@@ -112,7 +113,7 @@ const Product = (props) => {
                                             <div className='product m-3'>
                                                 <div className='img'>
                                                     {value?.sale_persen ? <span className='discount'>{value?.sale_persen}% Off</span> : ""}
-                                                    <img src={value?.image} alt='' />
+                                                    <img src={BASE_URL + value?.image} alt='' />
                                                     <div className='product-like'>
                                                         <label>{10}</label> <br />
                                                         <i className='fa-regular fa-heart'></i>
@@ -132,12 +133,12 @@ const Product = (props) => {
                                                             {value?.sale_price ?
                                                                 (
                                                                     <>
-                                                                        <span className="old-price">{formatPrice(value?.price)}</span>
+                                                                        <span className="old-price">{formatPrice(value?.min_price)}</span>
                                                                         <span className="new-price" style={{ marginLeft: 5 }}>{formatPrice(value?.sale_price)}</span>
                                                                     </>
                                                                 )
                                                                 :
-                                                                (<span className="new-price">{formatPrice(value?.price)}</span>)
+                                                                (<span className="new-price">{formatPrice(value?.min_price)}</span>)
                                                             }
                                                         </div>
                                                         <button onClick={() => ({})}>

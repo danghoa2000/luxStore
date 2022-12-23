@@ -52,10 +52,10 @@ const ProductContainer = () => {
 
         axiosClient.get(SEARCH_API, {
             params: {
-                searchField: { ...value },
+                ...paramater
             },
         }).then((response) => {
-            if (response.status === CODE.HTTP_OK) {
+            if (response.data.code === CODE.HTTP_OK) {
                 setProductList(response.data.products);
                 setTotalRecode(response.data.total);
             }
@@ -68,7 +68,7 @@ const ProductContainer = () => {
     const getFormFilter = useCallback(() => {
         setComplateSetting(false);
         axiosClient.get(FORM_SEARCH_API).then((response) => {
-            if (response.status === CODE.HTTP_OK) {
+            if (response.data.code === CODE.HTTP_OK) {
                 setFormFilter(response.data.formFilter);
                 setComplateSetting(true)
             }

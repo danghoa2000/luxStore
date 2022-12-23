@@ -10,6 +10,7 @@ import { Add, Clear, Remove, ShoppingCart } from '@mui/icons-material';
 import { formatPrice } from '../../utils/helper';
 import ShowSnackbars from '../../components/partial/ShowSnackbars';
 import { SESSION_ACCESS_TOKEN } from '../../utils/sessionHelper';
+import { BASE_URL } from '../../constants/constants';
 
 const DefaultLayout = ({ CartItem, addToCart, decreaseQty, showNoti, setShowNoti, status, removeCartItem }) => {
     const [state, setState] = useState(false)
@@ -51,7 +52,7 @@ const DefaultLayout = ({ CartItem, addToCart, decreaseQty, showNoti, setShowNoti
                                         </IconButton>
                                     </div>
                                     <div className="cart__product__img">
-                                        <img src={item.image} alt="" />
+                                        <img src={BASE_URL + item.product.image} alt="" />
                                     </div>
                                     <div className="cart__product__detail">
                                         <Typography variant="h7">{item.name}</Typography>

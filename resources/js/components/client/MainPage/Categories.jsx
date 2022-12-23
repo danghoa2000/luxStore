@@ -1,6 +1,28 @@
-import React from "react"
+import React, { useCallback, useEffect, useState } from "react"
+import { GROUP_CATEGORY_API } from "../../../constants/api";
+import { axiosClient } from "../../../hooks/useHttp";
+import { CODE } from "../../../constants/constants";
+import { useNavigate } from "react-router-dom";
 
 const Categories = () => {
+  const [category, setCategory] = useState([]);
+  const navigate = useNavigate();
+  const getCategory = useCallback(() => {
+    axiosClient.get(GROUP_CATEGORY_API.LIST)
+      .then((response) => {
+        if (response.data.code === CODE.HTTP_OK) {
+          setCategory(response.data.groupCategories);
+        }
+      }).catch((response) => {
+        // setStatus({ type: 'error', message: response.data ? response.data.message : 'Server error' });
+        // setShowNoti(true)
+      })
+  }, []);
+
+  useEffect(() => {
+    getCategory();
+  }, [])
+
   const data = [
     {
       cateImg: "./images/category/cat1.png",
@@ -50,16 +72,33 @@ const Categories = () => {
 
   return (
     <>
-      <div className='category'>
-        {data.map((value, index) => {
-          return (
-            <div className='box d-flex' key={index}>
-              <img src={value.cateImg} alt='' />
-              <span>{value.cateName}</span>
-            </div>
-          )
-        })}
-      </div>
+      {
+        <div className='category'>
+          {Object.keys(category).length > 0 &&
+            Object.values(category).map((value, index) => {
+              let i = 0;
+              if (index !== 0) {
+                let mod = data.length % index;
+                if (mod !== 0) {
+                  const surplus = data.length - (data.length / index) * data.length;
+                  i = surplus;
+                } else {
+                  i = index;
+                }
+              }
+              return (
+                <div className='box d-flex' style={{ alignItems: 'center' }} key={index}
+                  onClick={() => navigate('/elite/search', {state: {
+                    group_category_id: value.id
+                  }})}
+                >
+                  <img src={data[i].cateImg} alt='' />
+                  <span>{value.name}</span>
+                </div>
+              )
+            })}
+        </div>
+      }
     </>
   )
 }

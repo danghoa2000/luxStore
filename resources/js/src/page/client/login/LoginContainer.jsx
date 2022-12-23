@@ -28,7 +28,7 @@ const LoginContainer = () => {
         }).catch(err => {
             setLoading(false);
             // setisLoginFailed({
-            //     status: err.response.status,
+            //     status: err.response.data.code,
             //     message: err.response.data.message
             // })
         });

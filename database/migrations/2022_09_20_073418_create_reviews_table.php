@@ -17,7 +17,7 @@ return new class extends Migration
             $table->id();
             $table->integer("user_id")->nullable(); // for review product
             $table->integer("constrained_id")->nullable();
-            $table->string("content")->nullable();
+            $table->longText("content")->nullable();
             $table->integer("rate")->nullable();
             $table->integer("parent_id")->nullable();
             $table->tinyInteger('type')->default(0);

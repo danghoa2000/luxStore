@@ -9,6 +9,7 @@ import CreateAttributeValueModal from '../../../../../components/partial/Modal/C
 import ProductPropertyItem from '../../../../../components/partial/product/ProductPropertyItem';
 import { GROUP_CATEGORY_API, PRODUCT_API } from '../../../../../constants/api';
 import { axiosClient } from '../../../../../hooks/useHttp';
+import { formatPrice } from '../../../../../utils/helper';
 
 const topFilms = [{
     id: '1',
@@ -47,6 +48,7 @@ const ProductProperty = (props, ref) => {
     const [attributeValueList, setAttributeValueList] = useState([]);
     const [attributeSelectedList, setAttributeSelectedList] = useState([]);
     const [qty, setQty] = useState('');
+    const [price, setPrice] = useState('');
     const [idEdit, setIdEdit] = useState(null);
     const [open, setOpen] = useState(false);
     const [type, setType] = useState(1);
@@ -98,17 +100,18 @@ const ProductProperty = (props, ref) => {
             return;
         }
         if (idEdit === null) {
-            setPropertiesList(pre => [...pre, { ...properties, qty: qty }])
+            setPropertiesList(pre => [...pre, { ...properties, qty: qty, price: price }])
         } else {
             let newPropertiesList = [...propertiesList];
             newPropertiesList[idEdit] = { ...properties };
             newPropertiesList[idEdit]["qty"] = qty;
+            newPropertiesList[idEdit]["price"] = price;
             setPropertiesList(newPropertiesList);
         }
         setProperties([]);
         setIdEdit(null);
         setAttributeSelectedList([]);
-    }, [properties, propertiesList, idEdit, qty]);
+    }, [properties, propertiesList, idEdit, qty, price]);
 
     const validateProperty = useCallback(() => {
         let error = false;
@@ -166,7 +169,8 @@ const ProductProperty = (props, ref) => {
                 }))
                 return {
                     ...newItem,
-                    qty: item.qty
+                    qty: item.qty,
+                    price: item.price
                 }
             })
             setPropertiesList(newData);
@@ -224,15 +228,27 @@ const ProductProperty = (props, ref) => {
                     </Grid>
                     {
                         properties && Object.keys(properties).length > 0 && (
-                            <Grid item xs={5} style={{ margin: "10px 0" }}>
-                                <TextField
-                                    label="Qty"
-                                    variant="standard"
-                                    type="number"
-                                    value={qty}
-                                    onChange={(e) => setQty(e.target.value)}
-                                />
-                            </Grid>
+                            <>
+                                <Grid item xs={5} style={{ margin: "10px 0" }}>
+                                    <TextField
+                                        label="Qty"
+                                        variant="standard"
+                                        type="number"
+                                        value={qty}
+                                        onChange={(e) => setQty(e.target.value)}
+                                    />
+                                </Grid>
+                                <Grid item xs={5} style={{ margin: "10px 0" }}>
+                                    <TextField
+                                        label="Price"
+                                        variant="standard"
+                                        type="number"
+                                        value={price}
+                                        onChange={(e) => setPrice(e.target.value)}
+                                    />
+                                </Grid>
+                            </>
+
                         )
                     }
                     <Grid>
@@ -251,7 +267,7 @@ const ProductProperty = (props, ref) => {
                         </Typography>
                         {propertiesList && propertiesList.length > 0 && (
                             propertiesList.map((item, index) => {
-                                const { qty, ...newItem } = item;
+                                const { qty, price, ...newItem } = item;
                                 return <React.Fragment key={index}>
                                     {
                                         <p>
@@ -263,7 +279,7 @@ const ProductProperty = (props, ref) => {
                                                 })
                                             }
                                             {
-                                                "Qty: " + qty
+                                                "Price: " + formatPrice(price) + ", Qty: " + qty
                                             }
                                             <span
                                                 className='edit__property'
@@ -271,6 +287,7 @@ const ProductProperty = (props, ref) => {
                                                     setProperties(Object.keys(newItem).map(key => newItem[key]))
                                                     setIdEdit(index);
                                                     setQty(qty)
+                                                    setPrice(price)
                                                 }}>Edit</span>
                                         </p>
                                     }

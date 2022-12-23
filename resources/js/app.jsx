@@ -15,6 +15,7 @@ import { axiosClient } from "./hooks/useHttp";
 import { CART_API } from "./constants/api";
 import { object } from "yup";
 import { SESSION_ACCESS_TOKEN } from "./utils/sessionHelper";
+import { createBrowserHistory } from "history";
 
 // admin
 const AdminLoginContainer = lazy(() => import("./src/page/admin/login/LoginContainer"));
@@ -58,7 +59,8 @@ const App = () => {
     const [showNoti, setShowNoti] = useState(false);
     const { productItems } = Data
     const { shopItems } = Sdata
-    const [CartItem, setCartItem] = useState([])
+    const [CartItem, setCartItem] = useState([]);
+    const history = createBrowserHistory();
 
     const getCart = () => {
         axiosClient.get(CART_API.SHOW)
@@ -67,7 +69,7 @@ const App = () => {
                     setCartItem(response.data.cart)
                 }
             }).catch(({ response }) => {
-                // setStatus({ type: 'error', message: response?.data ? response.data.message : 'Server error' });
+                setStatus({ type: 'error', message: response?.data ? response.data.message : 'Server error' });
             });
     }
 
@@ -104,7 +106,7 @@ const App = () => {
             }).catch((response) => {
                 setStatus({ type: 'error', message: response.data ? response.data.message : 'Server error' });
                 setShowNoti(true);
-                if (response.status === CODE.UNPROCESSABLE_ENTITY) {
+                if (response.data.code === CODE.UNPROCESSABLE_ENTITY) {
                     Object.keys(response.data.errors).forEach(element => {
                         setError(element, { type: 'custom', message: Object.values(response.data.errors[element]) })
                     });
@@ -149,7 +151,9 @@ const App = () => {
 
     useEffect(() => {
         const _token = window.sessionStorage.getItem(SESSION_ACCESS_TOKEN);
-        if (_token) {
+        const paths = history.location.pathname;
+        const arrayPaths = paths.split("/");
+        if (_token && arrayPaths[1] !== "admin") {
             getCart();
         }
     }, [user])
@@ -190,7 +194,7 @@ const App = () => {
                                             <DetailContainer
                                                 showNoti={showNoti}
                                                 setShowNoti={setShowNoti}
-                                                setStatus ={setStatus }
+                                                setStatus={setStatus}
                                                 CartItem={CartItem}
                                                 addToCart={addToCart}
                                                 decreaseQty={decreaseQty}

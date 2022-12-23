@@ -16,32 +16,30 @@ class HomeService
     {
         $flashDelas = Product::whereHas('events', function ($query) {
             $query->where('event_type', Event::FLASH_DELAS);
-        })
-            ->with('productPrice:price')
+        })->with('productDetail:qty,sold_qty,product_id,price')
             ->select('id', 'name', 'image', 'expried', 'sale_type', 'price', 'sale_off')
             ->get();
 
         $newArrivals = Product::whereHas('events', function ($query) {
             $query->where('event_type', Event::NEW_ARRIVALS);
         })
-            ->with('productPrice:price')
+            ->with('productDetail:qty,sold_qty,product_id,price')
             ->select('id', 'name', 'image', 'expried', 'sale_type', 'price', 'sale_off')
             ->get();
 
         $bigDiscounts = Product::whereHas('events', function ($query) {
             $query->where('event_type', Event::BIG_DISCOUNTS);
         })
-            ->with('productPrice:price')
+            ->with('productDetail:qty,sold_qty,product_id,price')
             ->select('id', 'name', 'image', 'expried', 'sale_type', 'price', 'sale_off')
             ->get();
 
-        $ortherProduct = Product::with('productPrice:price')
+        $ortherProduct = Product::with('productDetail:qty,sold_qty,product_id,price')
             ->select('id', 'name', 'image', 'expried', 'sale_type', 'price', 'sale_off')
             ->take(8)
             ->get();
 
-        $topRateProduct = Product::with('productPrice:price')
-            ->select('id', 'name', 'image', 'expried', 'sale_type', 'price', 'sale_off')
+        $topRateProduct = Product::select('id', 'name', 'image', 'expried', 'sale_type', 'price', 'sale_off')
             ->get();
 
         $topRateProduct = $topRateProduct->sortByDesc(function ($item) {
@@ -61,11 +59,10 @@ class HomeService
 
     public function search($request)
     {
-        $products = Product::select('id', 'name', 'image', 'expried', 'sale_type', 'price', 'sale_off')
+        $products = Product::with('productDetail:qty,sold_qty,product_id,price')
+            ->select('id', 'name', 'image', 'expried', 'sale_type', 'price', 'sale_off')
             ->filter($request)
             ->where('status', config('constants.user.status.active'));
-        // ->limit($request->pageSize)
-        //     ->offset(($request->currentPage - 1) * $request->pageSize)
         $products = $products->get();
         $data = json_decode($request->searchField, true);
         $products = $products->filter(function ($item) use ($data) {
@@ -93,7 +90,7 @@ class HomeService
         });
 
         $total = count($products);
-        $products->slice(($request->currentPage - 1) * $request->pageSize, $request->pageSize);
+        $products = array_slice($products->toArray(), ($request->currentPage - 1) * $request->pageSize, $request->pageSize, true);
         return response([
             'products' => $products,
             'total' => $total,
@@ -125,7 +122,7 @@ class HomeService
                     'name' => $item->name,
                     'option' => $item->attributeValue
                         ->filter(function ($value) {
-                            return $value->products->count();
+                            return $value->products()->count();
                         })
                         ->map(function ($data) {
                             $newData = [];

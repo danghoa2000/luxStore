@@ -9,6 +9,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { useTranslation } from 'react-i18next';
 import { CODE, DATE_TIME, SALE_TYPE, STATUS } from '../../../../../constants/constants';
 import { format, parseISO } from 'date-fns';
+import '../check_editor.css'
 
 const ProductCreateContainer = () => {
     const navigate = useNavigate();
@@ -121,7 +122,7 @@ const ProductCreateContainer = () => {
             .then((response) => {
                 setShowNoti(true);
                 setLoading(false);
-                if (response.status === CODE.HTTP_OK) {
+                if (response.data.code === CODE.HTTP_OK) {
                     setStatus({ type: 'success', message: response.data.message });
                     setTimeout(() => {
                         navigate(-1);
@@ -131,7 +132,7 @@ const ProductCreateContainer = () => {
             }).catch(({ response }) => {
                 setShowNoti(true);
                 setLoading(false);
-                if (response.status === CODE.UNPROCESSABLE_ENTITY) {
+                if (response.data.code === CODE.UNPROCESSABLE_ENTITY) {
                     Object.keys(response.data.errors).forEach(element => {
                         setError(element, { type: 'custom', message: Object.values(response.data.errors[element]) })
                     });
@@ -143,7 +144,7 @@ const ProductCreateContainer = () => {
     const getGroupCategory = useCallback(() => {
         axiosClient.get(GROUP_CATEGORY_API.LIST)
             .then((response) => {
-                if (response.status === CODE.HTTP_OK) {
+                if (response.data.code === CODE.HTTP_OK) {
                     setGroupCategoryList(response.data.groupCategories);
                 }
             }).catch((response) => {
@@ -154,7 +155,7 @@ const ProductCreateContainer = () => {
 
     const getCategoryList = useCallback(() => {
         axiosClient.get(CATEGORIES_API.LIST).then((response) => {
-            if (response.status === CODE.HTTP_OK) {
+            if (response.data.code === CODE.HTTP_OK) {
                 setCategoryList(response.data.categories);
             }
         }).catch((response) => {
@@ -165,7 +166,7 @@ const ProductCreateContainer = () => {
 
     const getManufacturerList = useCallback(() => {
         axiosClient.get(MANUFACTURER_API.LIST).then((response) => {
-            if (response.status === CODE.HTTP_OK) {
+            if (response.data.code === CODE.HTTP_OK) {
                 setManufacturerList(response.data.manufacturers);
             }
         }).catch((response) => {

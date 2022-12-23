@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::table('products', function (Blueprint $table) {
             $table->integer('sale_type')->nullable();
-            $table->string('sale_off')->nullable();
+            $table->longText('sale_off')->nullable();
             $table->date('expried')->nullable();
         });
     }

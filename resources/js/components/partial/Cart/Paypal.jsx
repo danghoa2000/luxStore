@@ -13,7 +13,7 @@ export default function Paypal() {
                             {
                                 description: "Cool looking table",
                                 amount: {
-                                    currency_code: "CAD",
+                                    currency_code: "USD",
                                     value: 650.0,
                                 },
                             },

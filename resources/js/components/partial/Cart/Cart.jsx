@@ -1,15 +1,11 @@
 import React from "react";
 import "./style.css";
-import { formatPrice } from "../../../utils/helper";
-import { BASE_URL } from "../../../constants/constants";
 import {
-    Button,
     Stack,
     Step,
     StepConnector,
     StepLabel,
     Stepper,
-    Typography,
     stepConnectorClasses,
     styled,
 } from "@mui/material";
@@ -18,40 +14,14 @@ import {
     AddShoppingCart,
     Check,
     EventNote,
-    GroupAdd,
     Money,
     RateReview,
-    Settings,
-    VideoLabel,
 } from "@mui/icons-material";
-import { Box } from "@mui/system";
 import CartStep from "./CartStep";
 import DetailStep from "./DetailStep";
 import PaymentStep from "./PaymentStep";
-
-const QontoConnector = styled(StepConnector)(({ theme }) => ({
-    [`&.${stepConnectorClasses.alternativeLabel}`]: {
-        top: 10,
-        left: "calc(-50% + 16px)",
-        right: "calc(50% + 16px)",
-    },
-    [`&.${stepConnectorClasses.active}`]: {
-        [`& .${stepConnectorClasses.line}`]: {
-            borderColor: "#784af4",
-        },
-    },
-    [`&.${stepConnectorClasses.completed}`]: {
-        [`& .${stepConnectorClasses.line}`]: {
-            borderColor: "#784af4",
-        },
-    },
-    [`& .${stepConnectorClasses.line}`]: {
-        borderColor:
-            theme.palette.mode === "dark" ? theme.palette.grey[800] : "#eaeaf0",
-        borderTopWidth: 3,
-        borderRadius: 1,
-    },
-}));
+import { useState } from "react";
+import { useEffect } from "react";
 
 const QontoStepIconRoot = styled("div")(({ theme, ownerState }) => ({
     color: theme.palette.mode === "dark" ? theme.palette.grey[700] : "#eaeaf0",
@@ -89,16 +59,8 @@ function QontoStepIcon(props) {
 }
 
 QontoStepIcon.propTypes = {
-    /**
-     * Whether this step is active.
-     * @default false
-     */
     active: PropTypes.bool,
     className: PropTypes.string,
-    /**
-     * Mark the step as completed. Is passed to child components.
-     * @default false
-     */
     completed: PropTypes.bool,
 };
 
@@ -170,27 +132,15 @@ function ColorlibStepIcon(props) {
 }
 
 ColorlibStepIcon.propTypes = {
-    /**
-     * Whether this step is active.
-     * @default false
-     */
     active: PropTypes.bool,
     className: PropTypes.string,
-    /**
-     * Mark the step as completed. Is passed to child components.
-     * @default false
-     */
     completed: PropTypes.bool,
-    /**
-     * The label displayed in the step icon.
-     */
     icon: PropTypes.node,
 };
 
 const steps = ["Cart", "Details", "Payment", "Review"];
 
 const Cart = ({ CartItem, addToCart, decreaseQty }) => {
-    // Stpe: 7   calucate total of items
     const totalPrice = CartItem.reduce((price, item) => {
         let newPrice = item.price;
         if (item.sale_price) {
@@ -199,11 +149,19 @@ const Cart = ({ CartItem, addToCart, decreaseQty }) => {
         return price + item.pivot.qty * newPrice;
     }, 0);
 
-    const [activeStep, setActiveStep] = React.useState(0);
-    const [completed, setCompleted] = React.useState({});
-    const handleStep = (step) => () => {
-        setActiveStep(step);
-    };
+    const [data, setData] = useState({
+        cart: CartItem,
+        address: "",
+        discount: 0,
+        shipping: 1.5,
+        note: "",
+        voucher: {},
+        paymentMethod: "1",
+        totalPrice: totalPrice,
+    });
+
+    const [activeStep, setActiveStep] = useState(0);
+    const [completed, setCompleted] = useState({});
 
     const totalSteps = () => {
         return steps.length;
@@ -224,9 +182,7 @@ const Cart = ({ CartItem, addToCart, decreaseQty }) => {
     const handleNext = () => {
         const newActiveStep =
             isLastStep() && !allStepsCompleted()
-                ? // It's the last step, but not all steps have been completed,
-                  // find the first step that has been completed
-                  steps.findIndex((step, i) => !(i in completed))
+                ? steps.findIndex((step, i) => !(i in completed))
                 : activeStep + 1;
         setActiveStep(newActiveStep);
     };
@@ -235,19 +191,16 @@ const Cart = ({ CartItem, addToCart, decreaseQty }) => {
         setActiveStep((prevActiveStep) => prevActiveStep - 1);
     };
 
-    const handleComplete = () => {
-        const newCompleted = completed;
-        newCompleted[activeStep] = true;
-        setCompleted(newCompleted);
-        handleNext();
-    };
+    const handelSubmit = (data) => {
+        console.log(data);
+    }
 
-    const handleReset = () => {
-        setActiveStep(0);
-        setCompleted({});
-    };
+    useEffect(() => {
+        if (Object.keys(CartItem).length > 0) {
+            setData({ ...data, cart: CartItem, totalPrice: totalPrice });
+        }
+    }, [CartItem]);
 
-    // prodcut qty total
     return (
         <section className="cart-items">
             <div className="container">
@@ -268,24 +221,6 @@ const Cart = ({ CartItem, addToCart, decreaseQty }) => {
                 </Stack>
             </div>
             <div>
-                {allStepsCompleted() && (
-                    <React.Fragment>
-                        <Typography sx={{ mt: 2, mb: 1 }}>
-                            All steps completed - you&apos;re finished
-                        </Typography>
-                        <Box
-                            sx={{
-                                display: "flex",
-                                flexDirection: "row",
-                                pt: 2,
-                            }}
-                        >
-                            <Box sx={{ flex: "1 1 auto" }} />
-                            <Button onClick={handleReset}>Reset</Button>
-                        </Box>
-                    </React.Fragment>
-                )}
-
                 {activeStep == 0 && (
                     <CartStep
                         CartItem={CartItem}
@@ -295,6 +230,8 @@ const Cart = ({ CartItem, addToCart, decreaseQty }) => {
                         totalPrice={totalPrice}
                         activeStep={activeStep}
                         handleBack={handleBack}
+                        data={data}
+                        setData={setData}
                     />
                 )}
 
@@ -307,11 +244,22 @@ const Cart = ({ CartItem, addToCart, decreaseQty }) => {
                         totalPrice={totalPrice}
                         activeStep={activeStep}
                         handleBack={handleBack}
+                        data={data}
+                        setData={setData}
                     />
                 )}
 
                 {activeStep == 2 && (
-                    <PaymentStep />
+                    <PaymentStep
+                        CartItem={CartItem}
+                        handleNext={handleNext}
+                        totalPrice={totalPrice}
+                        activeStep={activeStep}
+                        handleBack={handleBack}
+                        data={data}
+                        setData={setData}
+                        handelSubmit={handelSubmit}
+                    />
                 )}
             </div>
         </section>

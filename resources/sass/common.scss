@@ -494,3 +494,13 @@ label.active {
 .ml-2 {
     margin-left: 0.5rem !important;
 }
+
+.light__mode {
+    .css-vqmohf-MuiButtonBase-root-MuiRadio-root {
+        color: rgba(0, 0, 0, 0.6) !important;
+    }
+
+    .css-vqmohf-MuiButtonBase-root-MuiRadio-root.Mui-checked {
+        color: #1976d2 !important;
+    }
+}

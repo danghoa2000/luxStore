@@ -11,6 +11,8 @@ const CartStep = ({
     totalPrice,
     activeStep,
     handleBack,
+    data,
+    setData,
 }) => {
     return (
         <React.Fragment>

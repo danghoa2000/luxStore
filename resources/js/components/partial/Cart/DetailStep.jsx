@@ -2,6 +2,7 @@ import React from "react";
 import { formatPrice } from "../../../utils/helper";
 import { Box, Button, TextField, Typography } from "@mui/material";
 import { BASE_URL } from "../../../constants/constants";
+import { setDate } from "date-fns";
 
 const DetailStep = ({
     CartItem,
@@ -11,7 +12,10 @@ const DetailStep = ({
     totalPrice,
     activeStep,
     handleBack,
+    data,
+    setData,
 }) => {
+    const applyVoucher = () => {};
     return (
         <React.Fragment>
             <div className="container d-flex">
@@ -94,17 +98,20 @@ const DetailStep = ({
                             );
                         })}
                     </div>
-                    <Button variant="contained" className="btn__view_cart"
-                    onClick={handleBack}
+                    <Button
+                        variant="contained"
+                        className="btn__view_cart"
+                        onClick={handleBack}
                     >
                         Back to Cart
                     </Button>
-                    <Button variant="contained" className="btn__checkcout"
-                    onClick={handleNext}>
+                    <Button
+                        variant="contained"
+                        className="btn__checkcout"
+                        onClick={handleNext}
+                    >
                         Proceed to Payment
                     </Button>
-
-
                 </div>
 
                 <div className="cart-total product">
@@ -189,25 +196,39 @@ const DetailStep = ({
                         </span>
                     </label>
                     <TextField
-                        id="outlined-multiline-static"
+                        name="note"
                         multiline
                         rows={4}
-                        defaultValue=""
+                        value={data.note}
+                        onChange={(e) =>
+                            setData({ ...data, note: e.target.value })
+                        }
                         margin="dense"
                     />
 
                     <TextField
-                        id="outlined-basic"
+                        name="voucher"
                         variant="outlined"
                         placeholder="Voucher"
                         className="voucher"
                         margin="dense"
+                        value={data.voucher.name}
+                        onChange={(e) =>
+                            setData({
+                                ...data,
+                                voucher: {
+                                    ...data.voucher,
+                                    name: e.target.value,
+                                },
+                            })
+                        }
                     />
 
                     <Button
                         variant="contained"
                         className="btn__view_cart"
                         style={{ margin: 0 }}
+                        onClick={applyVoucher}
                     >
                         Apply Voucher
                     </Button>

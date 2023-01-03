@@ -144,7 +144,7 @@ const Detail = ({
                                 </FormControl>
                                 <Button className='btn__add'
                                     onClick={() => {
-                                        if (qty < QTY) {
+                                        if (qty < stock) {
                                             setQty(pre => pre + 1)
                                         }
                                     }}>

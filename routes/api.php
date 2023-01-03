@@ -10,7 +10,9 @@ use App\Http\Controllers\admin\ManufacturerController;
 use App\Http\Controllers\admin\ProductController;
 use App\Http\Controllers\admin\ShippingController;
 use App\Http\Controllers\Client\CartController;
+use App\Http\Controllers\Client\CustomerController;
 use App\Http\Controllers\Client\HomeController;
+use App\Http\Controllers\Client\OrderController;
 use App\Http\Controllers\DirectionController;
 use App\Http\Controllers\UploadController;
 use Illuminate\Support\Facades\Route;
@@ -107,5 +109,17 @@ Route::group([
         Route::put('cart/update', [CartController::class, 'update'])->name('cart.update');
         Route::get('cart/show', [CartController::class, 'show'])->name('cart.show');
         Route::delete('cart/delete/{id}', [CartController::class, 'destroy'])->name('cart.delete');
+
+        Route::get('customer-address', [CustomerController::class, 'getAddress'])->name('customer-address.show');
+        Route::post('customer-address/create', [CustomerController::class, 'storeAddress'])->name('customer-address.create');
+        Route::put('customer-address/update', [CustomerController::class, 'updateAddress'])->name('customer-address.update');
+        // Route::get('customer-address/show', [CustomerController::class, 'show'])->name('customer-address.show');
+        // Route::delete('customer-address/delete/{id}', [CustomerController::class, 'destroy'])->name('customer-address.delete');
+
+        Route::get('order', [OrderController::class, 'index'])->name('order');
+        Route::post('order/create', [OrderController::class, 'store'])->name('order.create');
+        Route::put('order/update', [OrderController::class, 'update'])->name('order.update');
+        Route::get('order/show', [OrderController::class, 'show'])->name('order.show');
+        Route::delete('order/delete/{id}', [OrderController::class, 'destroy'])->name('order.delete');
     });
 });

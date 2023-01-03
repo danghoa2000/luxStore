@@ -35,7 +35,7 @@ const PaymentStep = ({
                                         paymentMethod: e.target.value,
                                     })
                                 }
-                                className="light__mode"
+                                className="ligth__mode"
                             >
                                 <FormControlLabel
                                     value="1"
@@ -62,7 +62,12 @@ const PaymentStep = ({
                                                 : "none",
                                     }}
                                 >
-                                    <Paypal />
+                                    <Paypal
+                                        totalPrice={totalPrice}
+                                        handelSubmit={handelSubmit}
+                                        data={data}
+                                        setData={setData}
+                                    />
                                 </div>
                             </RadioGroup>
                         </FormControl>
@@ -78,7 +83,6 @@ const PaymentStep = ({
                         variant="contained"
                         className="btn__checkcout"
                         disabled={data.paymentMethod == "2"}
-                        
                         onClick={() => handelSubmit(data)}
                     >
                         Confirm
@@ -143,15 +147,15 @@ const PaymentStep = ({
                                 variant="h7"
                                 style={{ fontWeight: "bold" }}
                             >
-                                {Object.keys(data.voucher) > 0 &&
-                                    data.voucher.value}
+                                {data?.voucher && Object.keys(data?.voucher) > 0 &&
+                                    data.voucher?.value}
                             </Typography>
                         </div>
                     </div>
                     <h3 style={{ textAlign: "right" }}>
                         {formatPrice(
                             Number(totalPrice) -
-                                Number(data.voucher.value || 0) +
+                                Number(data?.voucher?.value || 0) +
                                 Number(data.shipping)
                         )}
                     </h3>

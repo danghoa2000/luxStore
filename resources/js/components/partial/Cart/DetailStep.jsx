@@ -1,8 +1,10 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { formatPrice } from "../../../utils/helper";
 import { Box, Button, TextField, Typography } from "@mui/material";
-import { BASE_URL } from "../../../constants/constants";
-import { setDate } from "date-fns";
+import { axiosClient } from "../../../hooks/useHttp";
+import { CUSTOMER_ADDRESS_API } from "../../../constants/api";
+import { useAuth } from "../../../hooks/useAuth";
+import { CODE } from "../../../constants/constants";
 
 const DetailStep = ({
     CartItem,
@@ -14,6 +16,9 @@ const DetailStep = ({
     handleBack,
     data,
     setData,
+    address,
+    currentAddress,
+    setOpen,
 }) => {
     const applyVoucher = () => {};
     return (
@@ -25,30 +30,39 @@ const DetailStep = ({
                             Shipping Address
                         </Typography>
                         <div className="address">
-                            <div>
-                                <div className="address__contact">
-                                    <Typography
-                                        variant="h8"
-                                        style={{ fontWeight: "bold" }}
-                                    >
-                                        Name
+                            {Object.keys(currentAddress).length > 0 && (
+                                <div>
+                                    <div className="address__contact">
+                                        <Typography
+                                            variant="h8"
+                                            style={{ fontWeight: "bold" }}
+                                        >
+                                            {currentAddress?.name}
+                                        </Typography>
+                                        <span
+                                            style={{
+                                                borderLeft:
+                                                    "1px solid rgba(0,0,0,.26)",
+                                                margin: "0 8px",
+                                            }}
+                                        ></span>
+                                        <Typography variant="h8">
+                                            {currentAddress?.phone}
+                                        </Typography>
+                                    </div>
+                                    <Typography variant="h8">
+                                        {currentAddress?.address}
                                     </Typography>
-                                    <span
-                                        style={{
-                                            borderLeft:
-                                                "1px solid rgba(0,0,0,.26)",
-                                            margin: "0 8px",
-                                        }}
-                                    ></span>
-                                    <Typography variant="h8">phone</Typography>
                                 </div>
-                                <Typography variant="h8">
-                                    68A phạm văn đồng Phường Cổ Nhuế 1, Quận Bắc
-                                    Từ Liêm, Hà Nội
-                                </Typography>
-                            </div>
+                            )}
+
                             <div className="address__tool">
-                                <span className="change">Change</span>
+                                <span
+                                    className="change"
+                                    onClick={() => setOpen(true)}
+                                >
+                                    Change
+                                </span>
                             </div>
                         </div>
                     </div>

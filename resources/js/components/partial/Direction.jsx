@@ -22,7 +22,7 @@ const Direction = (props) => {
     const [districtSelected, setDistrictSelected] = useState({});
     const [communeSelected, setCommuneSelected] = useState({});
     const [error, setError] = useState(false);
-    const [message, setMassage] = useState('');
+    const [message, //setMassage] = useState('');
     const [clickedOutside, setClickedOutside] = useState(false);
     const myRef = useRef();
 
@@ -35,7 +35,7 @@ const Direction = (props) => {
             .then(res => setProvince(res.data.provinces))
             .catch(err => {
                 setError(true)
-                setMassage(err.data.message)
+                //setMassage(err.data.message)
             })
     })
 
@@ -44,7 +44,7 @@ const Direction = (props) => {
             .then(res => setDistrict(res.data.districts))
             .catch(err => {
                 setError(true)
-                setMassage(err.data.message)
+                //setMassage(err.data.message)
             })
     })
 
@@ -53,7 +53,7 @@ const Direction = (props) => {
             .then(res => setCommune(res.data.communes))
             .catch(err => {
                 setError(true)
-                setMassage(err.data.message)
+                //setMassage(err.data.message)
             })
     })
 

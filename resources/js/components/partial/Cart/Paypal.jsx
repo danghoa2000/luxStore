@@ -1,6 +1,6 @@
 import React, { useRef, useEffect } from "react";
 
-export default function Paypal() {
+export default function Paypal({ totalPrice, setData, data, handelSubmit }) {
     const paypal = useRef();
 
     useEffect(() => {
@@ -14,15 +14,17 @@ export default function Paypal() {
                                 description: "Cool looking table",
                                 amount: {
                                     currency_code: "USD",
-                                    value: 650.0,
+                                    value: totalPrice,
                                 },
                             },
                         ],
                     });
                 },
-                onApprove: async (data, actions) => {
+                onApprove: async (res, actions) => {
                     const order = await actions.order.capture();
-                    console.log(order);
+                    if(order.status === "COMPLETED") {
+                        handelSubmit({...data, orderStatus: 1})
+                    }
                 },
                 onError: (err) => {
                     console.log(err);

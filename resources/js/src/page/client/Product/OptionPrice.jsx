@@ -23,7 +23,7 @@ const OptionPrice = ({ setSearchFiled, searchField, reset,
                             }}
                             type="number"
                             onChange={(event) => setValue(event.target.name, event.target.value)}
-                            className="light-mode"
+                            className="ligth__mode"
                         />
                     </FormControl>
                 }
@@ -44,7 +44,7 @@ const OptionPrice = ({ setSearchFiled, searchField, reset,
                             }}
                             type="number"
                             onChange={(event) => setValue(event.target.name, event.target.value)}
-                            className="light-mode"
+                            className="ligth__mode"
                         />
                     </FormControl>
                 }

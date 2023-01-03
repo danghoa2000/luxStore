@@ -72,7 +72,7 @@ const ShippingCreate = (props) => {
             .then(res => setProvince(res.data.provinces))
             .catch(err => {
                 setError(true)
-                setMassage(err.data.message)
+                //setMassage(err.data.message)
             })
     })
 
@@ -81,7 +81,7 @@ const ShippingCreate = (props) => {
             .then(res => setDistrict(res.data.districts))
             .catch(err => {
                 setError(true)
-                setMassage(err.data.message)
+                //setMassage(err.data.message)
             })
     })
 
@@ -90,7 +90,7 @@ const ShippingCreate = (props) => {
             .then(res => setCommune(res.data.communes))
             .catch(err => {
                 setError(true)
-                setMassage(err.data.message)
+                //setMassage(err.data.message)
             })
     })
 

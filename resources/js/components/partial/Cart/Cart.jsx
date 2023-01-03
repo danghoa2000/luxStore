@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useCallback } from "react";
 import "./style.css";
 import {
     Stack,
@@ -22,6 +22,13 @@ import DetailStep from "./DetailStep";
 import PaymentStep from "./PaymentStep";
 import { useState } from "react";
 import { useEffect } from "react";
+import { API_BASE_URL, CUSTOMER_ADDRESS_API } from "../../../constants/api";
+import { CODE } from "../../../constants/constants";
+import { axiosClient } from "../../../hooks/useHttp";
+import ModalAddress from "./ModalAddress";
+import BasicModal from "../BasicModal";
+import ModalUpdateAddress from "./ModalUpdateAddress";
+import ModalCreateAddress from "./ModalCreateAddress";
 
 const QontoStepIconRoot = styled("div")(({ theme, ownerState }) => ({
     color: theme.palette.mode === "dark" ? theme.palette.grey[700] : "#eaeaf0",
@@ -141,6 +148,23 @@ ColorlibStepIcon.propTypes = {
 const steps = ["Cart", "Details", "Payment", "Review"];
 
 const Cart = ({ CartItem, addToCart, decreaseQty }) => {
+    const [open, setOpen] = useState(false);
+    const [type, setType] = useState(1);
+    const [loading, setLoading] = useState(false);
+    const [status, setStatus] = useState({});
+    const [showNoti, setShowNoti] = useState(false);
+
+    const [activeStep, setActiveStep] = useState(0);
+    const [completed, setCompleted] = useState({});
+    const [address, setAddress] = useState([]);
+    const [currentAddress, setCurrentAddress] = useState({});
+    const [province, setProvince] = useState([]);
+    const [district, setDistrict] = useState([]);
+    const [commune, setCommune] = useState([]);
+    const [provinceSelected, setProvinceSelected] = useState(-1);
+    const [districtSelected, setDistrictSelected] = useState(-1);
+    const [communeSelected, setCommuneSelected] = useState(-1);
+
     const totalPrice = CartItem.reduce((price, item) => {
         let newPrice = item.price;
         if (item.sale_price) {
@@ -158,10 +182,8 @@ const Cart = ({ CartItem, addToCart, decreaseQty }) => {
         voucher: {},
         paymentMethod: "1",
         totalPrice: totalPrice,
+        orderStatus: 1,
     });
-
-    const [activeStep, setActiveStep] = useState(0);
-    const [completed, setCompleted] = useState({});
 
     const totalSteps = () => {
         return steps.length;
@@ -192,14 +214,96 @@ const Cart = ({ CartItem, addToCart, decreaseQty }) => {
     };
 
     const handelSubmit = (data) => {
-        console.log(data);
-    }
+        axiosClient
+            .post(CUSTOMER_ADDRESS_API.LIST)
+            .then((response) => {
+                if (response.data.code === CODE.HTTP_OK) {
+                    setAddress(response.data.address);
+                    const currentAddress = response.data.address.find(
+                        (item) => item.selected
+                    );
+                    if (currentAddress) {
+                        setData({ ...data, address: currentAddress.id });
+                        setCurrentAddress(currentAddress);
+                    }
+                }
+            })
+            .catch((err) => {
+                console.log("error!");
+            });
+    };
+
+    const getAddress = () => {
+        axiosClient
+            .get(CUSTOMER_ADDRESS_API)
+            .then((response) => {
+                if (response.data.code === CODE.HTTP_OK) {
+                    setAddress(response.data.address);
+                    const currentAddress = response.data.address.find(
+                        (item) => item.selected
+                    );
+                    if (currentAddress) {
+                        setData({ ...data, address: currentAddress.id });
+                        setCurrentAddress(currentAddress);
+                    }
+                }
+            })
+            .catch((err) => {
+                console.log("error!");
+            });
+    };
+
+    useEffect(() => {
+        getAddress();
+    }, []);
 
     useEffect(() => {
         if (Object.keys(CartItem).length > 0) {
             setData({ ...data, cart: CartItem, totalPrice: totalPrice });
         }
     }, [CartItem]);
+
+    const getProvince = useCallback(() => {
+        axiosClient
+            .get(API_BASE_URL + "api/get-province")
+            .then((res) => setProvince(res.data.provinces))
+            .catch((err) => {
+                setError(true);
+                //setMassage(err.data.message);
+            });
+    }, []);
+
+    const getDistrict = useCallback(() => {
+        axiosClient
+            .get(API_BASE_URL + "api/get-district/" + provinceSelected)
+            .then((res) => setDistrict(res.data.districts))
+            .catch((err) => {
+                setError(true);
+                //setMassage(err.data.message);
+            });
+    }, [provinceSelected]);
+
+    const getCommune = useCallback(() => {
+        axiosClient
+            .get(API_BASE_URL + "api/get-commune/" + districtSelected)
+            .then((res) => setCommune(res.data.communes))
+            .catch((err) => {
+                setError(true);
+                //setMassage(err.data.message);
+            });
+    }, [districtSelected]);
+
+    useEffect(() => {
+        getProvince();
+    }, []);
+
+    useEffect(() => {
+        if (provinceSelected && provinceSelected != -1) getDistrict();
+    }, [provinceSelected]);
+
+    useEffect(() => {
+        if (districtSelected && districtSelected != -1) getCommune();
+    }, [provinceSelected, districtSelected]);
 
     return (
         <section className="cart-items">
@@ -246,6 +350,9 @@ const Cart = ({ CartItem, addToCart, decreaseQty }) => {
                         handleBack={handleBack}
                         data={data}
                         setData={setData}
+                        address={address}
+                        currentAddress={currentAddress}
+                        setOpen={setOpen}
                     />
                 )}
 
@@ -262,6 +369,39 @@ const Cart = ({ CartItem, addToCart, decreaseQty }) => {
                     />
                 )}
             </div>
+            {open && (
+                <BasicModal
+                    open={open}
+                    handleClose={() => {
+                        setOpen(false);
+                        setType(1);
+                    }}
+                    className="ligth__mode"
+                >
+                    {type == 1 && <ModalAddress setType={setType} />}
+                    {type == 2 && (
+                        <ModalCreateAddress
+                            loading={loading}
+                            setLoading={setLoading}
+                            showNoti={showNoti}
+                            status={status}
+                            setStatus={setStatus}
+                            setShowNoti={setShowNoti}
+                            province={province}
+                            district={district}
+                            commune={commune}
+                            setProvinceSelected={setProvinceSelected}
+                            setDistrictSelected={setDistrictSelected}
+                            setCommuneSelected={setCommuneSelected}
+                            provinceSelected={provinceSelected}
+                            districtSelected={districtSelected}
+                            communeSelected={communeSelected}
+                            setType={setType}
+                        />
+                    )}
+                    {type == 3 && <ModalUpdateAddress />}
+                </BasicModal>
+            )}
         </section>
     );
 };

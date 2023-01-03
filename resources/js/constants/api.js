@@ -79,3 +79,18 @@ export const CART_API = {
     SHOW: API_BASE_URL + "api/cart/show",
     DELETE: API_BASE_URL + "api/cart/delete",
 };
+
+export const CUSTOMER_ADDRESS_API = {
+    LIST: API_BASE_URL + "api/customer-address",
+    CREATE: API_BASE_URL + "api/customer-address/create",
+    UPDATE: API_BASE_URL + "api/customer-address/update",
+    DELETE: API_BASE_URL + "api/customer-address/delete",
+} 
+
+export const ORDER_API = {
+    LIST: API_BASE_URL + "api/order",
+    CREATE: API_BASE_URL + "api/order/create",
+    UPDATE: API_BASE_URL + "api/order/update",
+    SHOW: API_BASE_URL + "api/order/show",
+    DELETE: API_BASE_URL + "api/order/delete",
+};

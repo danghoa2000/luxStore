@@ -45,7 +45,7 @@ const OptionAttribute = ({
                                                     label={value.name}
                                                     control={(
                                                         <Checkbox
-                                                            className='light__mode'
+                                                            className='ligth__mode'
                                                             onChange={() => {
                                                                 if (!field.value.includes(value.id)) {
                                                                     field.onChange([...field.value, value.id])

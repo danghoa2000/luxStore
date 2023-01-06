@@ -10,4 +10,17 @@ class OrderDetail extends Model
     use HasFactory;
     
     protected $table = "order_detail";
+    protected $guarded = [];
+    protected $fillable = [
+        'order_id',
+        'product_id',
+        'product_name',
+        'product_price',
+        'qty',
+    ];
+
+    public function order()
+    {
+        return $this->belongsTo(Order::class, 'order_id', 'id');
+    }
 }

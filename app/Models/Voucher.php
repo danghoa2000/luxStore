@@ -5,15 +5,10 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Order extends Model
+class Voucher extends Model
 {
     use HasFactory;
 
-    protected $table = 'order';
+    protected $table = 'voucher';
     protected $guarded = [];
-
-    public function orderDetail()
-    {
-        return $this->hasMany(OrderDetail::class, 'id', 'order_id');
-    }
 }

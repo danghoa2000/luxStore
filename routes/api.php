@@ -114,7 +114,8 @@ Route::group([
         Route::post('customer-address/create', [CustomerController::class, 'storeAddress'])->name('customer-address.create');
         Route::put('customer-address/update', [CustomerController::class, 'updateAddress'])->name('customer-address.update');
         // Route::get('customer-address/show', [CustomerController::class, 'show'])->name('customer-address.show');
-        // Route::delete('customer-address/delete/{id}', [CustomerController::class, 'destroy'])->name('customer-address.delete');
+        Route::delete('customer-address/delete/{id}', [CustomerController::class, 'destroy'])->name('customer-address.delete');
+        Route::post('customer-address/set-default', [CustomerController::class, 'updateAddressSelected'])->name('customer-address.set-default');
 
         Route::get('order', [OrderController::class, 'index'])->name('order');
         Route::post('order/create', [OrderController::class, 'store'])->name('order.create');

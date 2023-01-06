@@ -35,7 +35,8 @@ const ModalCreateAddress = ({
     provinceSelected,
     districtSelected,
     communeSelected,
-    setType
+    setType,
+    getAddress
 }) => {
     const {
         handleSubmit,
@@ -74,12 +75,14 @@ const ModalCreateAddress = ({
                         message: response.data.message,
                     });
                     reset();
-                    getShippingList();
+                    getAddress();
                 }
             })
             .catch(({ response }) => {
                 setShowNoti(true);
                 setLoading(false);
+                console.log(response);
+
                 if (response.data.code === CODE.UNPROCESSABLE_ENTITY) {
                     Object.keys(response.data.errors).forEach((element) => {
                         setError(element, {

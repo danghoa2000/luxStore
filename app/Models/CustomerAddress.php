@@ -10,6 +10,23 @@ use Laravel\Passport\HasApiTokens;
 
 class CustomerAddress extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable, SoftDeletes;
+    use HasApiTokens, HasFactory, Notifiable;
+
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array<int, string>
+     */
+    protected $fillable = [
+        'code',
+        'full_name',
+        'telephone',
+        'province_id',
+        'district_id',
+        'commune_id',
+        'address',
+        'status',
+    ];
+
     protected $table = "customer_address";
 }

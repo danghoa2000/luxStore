@@ -19,8 +19,9 @@ return new class extends Migration
             $table->integer("shipping_id")->nullable();
             $table->integer("status")->nullable();
             $table->string("order_code")->nullable();
-            $table->integer("price")->nullable();
-            $table->integer("price_discount")->nullable();
+            $table->float("price")->nullable();
+            $table->float("price_discount")->nullable();
+            $table->text("address")->nullable();
             $table->timestamps();
         });
     }

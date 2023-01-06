@@ -31,13 +31,13 @@ const DetailStep = ({
                         </Typography>
                         <div className="address">
                             {Object.keys(currentAddress).length > 0 && (
-                                <div>
+                                <div style={{ flexGrow: 1, flexShrink: 1 }}>
                                     <div className="address__contact">
                                         <Typography
                                             variant="h8"
                                             style={{ fontWeight: "bold" }}
                                         >
-                                            {currentAddress?.name}
+                                            {currentAddress?.full_name}
                                         </Typography>
                                         <span
                                             style={{
@@ -47,7 +47,7 @@ const DetailStep = ({
                                             }}
                                         ></span>
                                         <Typography variant="h8">
-                                            {currentAddress?.phone}
+                                            {currentAddress?.telephone}
                                         </Typography>
                                     </div>
                                     <Typography variant="h8">
@@ -226,7 +226,7 @@ const DetailStep = ({
                         placeholder="Voucher"
                         className="voucher"
                         margin="dense"
-                        value={data.voucher.name}
+                        value={data.voucher.name || ''}
                         onChange={(e) =>
                             setData({
                                 ...data,

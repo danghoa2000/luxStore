@@ -8,6 +8,7 @@ use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class CustomerController extends Controller
 {
@@ -30,9 +31,9 @@ class CustomerController extends Controller
     public function storeAddress(Request $request)
     {
         $user = Auth::guard('customerApi')->user();
-        $user->address()->create([
+        CustomerAddress::create([
             'code' => $user->id,
-            'full_name' => $request->full_name,
+            'full_name' => $request->fullName,
             'telephone' => $request->telephone,
             'province_id' => $request->province_id,
             'district_id' => $request->district_id,
@@ -75,15 +76,49 @@ class CustomerController extends Controller
     {
         $address = CustomerAddress::find($request->id);
         if ($address) {
-            $address->update([
-                'status' => self::ADDRESS_SELECTED,
-            ]);
-            return response()->json([
-                'code' => Response::HTTP_OK,
-                'message' => 'success',
-            ], Response::HTTP_OK);
+            try {
+                DB::beginTransaction();
+                CustomerAddress::where('code', Auth::guard('customerApi')->user()->id)
+                    ->update(['status' => self::ADDRESS_UNSELECTED]);
+                $address->update([
+                    'status' => self::ADDRESS_SELECTED,
+                ]);
+                DB::commit();
+                return response()->json([
+                    'code' => Response::HTTP_OK,
+                    'message' => 'success',
+                ], Response::HTTP_OK);
+            } catch (\Throwable $th) {
+                DB::rollBack();
+                return response([
+                    'message' => 'error!',
+                    'code' => Response::HTTP_INTERNAL_SERVER_ERROR
+                ], Response::HTTP_INTERNAL_SERVER_ERROR);
+            }
         }
+        return response([
+            'message' => 'Update error!',
+            'code' => Response::HTTP_NOT_FOUND
+        ], Response::HTTP_OK);
+    }
 
+    public function destroy(Request $request)
+    {
+        $address = CustomerAddress::find($request->id);
+        if ($address) {
+            try {
+                $address->delete();
+                return response()->json([
+                    'code' => Response::HTTP_OK,
+                    'message' => 'success',
+                ], Response::HTTP_OK);
+            } catch (\Throwable $th) {
+                return response([
+                    'message' => 'error!',
+                    'code' => Response::HTTP_INTERNAL_SERVER_ERROR
+                ], Response::HTTP_INTERNAL_SERVER_ERROR);
+            }
+        }
         return response([
             'message' => 'Update error!',
             'code' => Response::HTTP_NOT_FOUND

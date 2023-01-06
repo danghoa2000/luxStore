@@ -22,13 +22,18 @@ import DetailStep from "./DetailStep";
 import PaymentStep from "./PaymentStep";
 import { useState } from "react";
 import { useEffect } from "react";
-import { API_BASE_URL, CUSTOMER_ADDRESS_API } from "../../../constants/api";
+import {
+    API_BASE_URL,
+    CUSTOMER_ADDRESS_API,
+    ORDER_API,
+} from "../../../constants/api";
 import { CODE } from "../../../constants/constants";
 import { axiosClient } from "../../../hooks/useHttp";
 import ModalAddress from "./ModalAddress";
 import BasicModal from "../BasicModal";
 import ModalUpdateAddress from "./ModalUpdateAddress";
 import ModalCreateAddress from "./ModalCreateAddress";
+import ShowSnackbars from "../ShowSnackbars";
 
 const QontoStepIconRoot = styled("div")(({ theme, ownerState }) => ({
     color: theme.palette.mode === "dark" ? theme.palette.grey[700] : "#eaeaf0",
@@ -215,7 +220,7 @@ const Cart = ({ CartItem, addToCart, decreaseQty }) => {
 
     const handelSubmit = (data) => {
         axiosClient
-            .post(CUSTOMER_ADDRESS_API.LIST)
+            .post(ORDER_API.CREATE, { ...data })
             .then((response) => {
                 if (response.data.code === CODE.HTTP_OK) {
                     setAddress(response.data.address);
@@ -235,16 +240,19 @@ const Cart = ({ CartItem, addToCart, decreaseQty }) => {
 
     const getAddress = () => {
         axiosClient
-            .get(CUSTOMER_ADDRESS_API)
+            .get(CUSTOMER_ADDRESS_API.LIST)
             .then((response) => {
                 if (response.data.code === CODE.HTTP_OK) {
                     setAddress(response.data.address);
                     const currentAddress = response.data.address.find(
-                        (item) => item.selected
+                        (item) => item.status == 1
                     );
                     if (currentAddress) {
-                        setData({ ...data, address: currentAddress.id });
+                        setData({ ...data, address: JSON.parse(currentAddress) });
                         setCurrentAddress(currentAddress);
+                    } else {
+                        setData({ ...data, address: "" });
+                        setCurrentAddress({});
                     }
                 }
             })
@@ -378,7 +386,16 @@ const Cart = ({ CartItem, addToCart, decreaseQty }) => {
                     }}
                     className="ligth__mode"
                 >
-                    {type == 1 && <ModalAddress setType={setType} />}
+                    {type == 1 && (
+                        <ModalAddress
+                            setType={setType}
+                            address={address}
+                            currentAddress={currentAddress}
+                            getAddress={getAddress}
+                            setStatus={setStatus}
+                            setShowNoti={setShowNoti}
+                        />
+                    )}
                     {type == 2 && (
                         <ModalCreateAddress
                             loading={loading}
@@ -397,10 +414,39 @@ const Cart = ({ CartItem, addToCart, decreaseQty }) => {
                             districtSelected={districtSelected}
                             communeSelected={communeSelected}
                             setType={setType}
+                            getAddress={getAddress}
                         />
                     )}
-                    {type == 3 && <ModalUpdateAddress />}
+                    {type == 3 && (
+                        <ModalUpdateAddress
+                            loading={loading}
+                            setLoading={setLoading}
+                            showNoti={showNoti}
+                            status={status}
+                            setStatus={setStatus}
+                            setShowNoti={setShowNoti}
+                            province={province}
+                            district={district}
+                            commune={commune}
+                            setProvinceSelected={setProvinceSelected}
+                            setDistrictSelected={setDistrictSelected}
+                            setCommuneSelected={setCommuneSelected}
+                            provinceSelected={provinceSelected}
+                            districtSelected={districtSelected}
+                            communeSelected={communeSelected}
+                            setType={setType}
+                            getAddress={getAddress}
+                        />
+                    )}
                 </BasicModal>
+            )}
+
+            {showNoti && (
+                <ShowSnackbars
+                    type={status.type}
+                    message={status.message}
+                    setShowNoti={setShowNoti}
+                />
             )}
         </section>
     );

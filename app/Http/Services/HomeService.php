@@ -8,8 +8,6 @@ use App\Models\GroupCategory;
 use App\Models\Product;
 use Illuminate\Http\Response;
 
-use function PHPSTORM_META\map;
-
 class HomeService
 {
     public function index()
@@ -46,12 +44,25 @@ class HomeService
             return $item->total_rate;
         })->take(3);
 
+
+        $brand = Category::select(
+            'id',
+            'category_code',
+            'name',
+            'group_category_id',
+            'description',
+            'created_by',
+            'status',
+        )
+            ->where('status', config('constants.user.status.active'))
+            ->get();
         return response([
             'flashDelas' => $flashDelas,
             'newArrivals' => $newArrivals,
             'bigDiscounts' => $bigDiscounts,
             'ortherProduct' => $ortherProduct,
             'topRateProduct' => $topRateProduct,
+            'brand' => $brand,
             'message' => 'success!',
             'code' => Response::HTTP_OK
         ], Response::HTTP_OK);

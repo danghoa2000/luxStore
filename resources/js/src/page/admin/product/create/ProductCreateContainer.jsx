@@ -10,6 +10,7 @@ import { useTranslation } from 'react-i18next';
 import { CODE, DATE_TIME, SALE_TYPE, STATUS } from '../../../../../constants/constants';
 import { format, parseISO } from 'date-fns';
 import '../check_editor.css'
+import _ from 'lodash';
 
 const ProductCreateContainer = () => {
     const navigate = useNavigate();
@@ -35,8 +36,6 @@ const ProductCreateContainer = () => {
             required(t('validate.required', { name: 'Product code' })),
         name: Yup.string().
             required(t('validate.required', { name: 'Product name' })),
-        price: Yup.string().
-            required(t('validate.required', { name: 'Price' })),
         group_category_id: Yup.string()
             .required(t('validate.required', { name: 'Group category' }))
             .test("isSelect", t('validate.required', { name: 'Group category' }), value => value != "-1"),
@@ -80,7 +79,9 @@ const ProductCreateContainer = () => {
                 }
             },
             then: () => Yup.string().required(t('validate.required', { name: 'Expried sale' }))
-            .test("", "Invalid value", value => value > new Date())
+            .test("", "Invalid value", value => {
+                return value > format(new Date(), 'yyyy-MM-dd');
+            })
         }),
     }, [['sale_type', 'expried'], ['expried', 'price_saled'], ['sale_type', 'price_saled']]);
 

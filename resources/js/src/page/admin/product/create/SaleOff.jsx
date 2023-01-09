@@ -21,7 +21,7 @@ const SaleOff = ({
                     <FormControl variant="standard"
                         style={{ margin: "0 0 10px 0" }}
                     >
-                        <InputLabel htmlFor="">{t('product.list.table.price')}<span className='required'></span></InputLabel>
+                        <InputLabel htmlFor="">{t('product.list.table.price')}</InputLabel>
                         <Input
                             {...field}
                             startAdornment={
@@ -53,7 +53,7 @@ const SaleOff = ({
                             <MenuItem key={-1} value={-1}>
                                 {"Select sale type"}
                             </MenuItem>
-                            <MenuItem key={1} value={1}>
+                            <MenuItem disabled key={1} value={1}>
                                 {"vnđ"}
                             </MenuItem>
                             <MenuItem key={0} value={2}>

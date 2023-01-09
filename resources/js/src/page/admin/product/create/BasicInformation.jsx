@@ -91,31 +91,6 @@ const BasicInformation = (props) => {
                     {errors.name && <p className='text-danger'>{errors.name.message}</p>}
                 </Grid>
                 <Grid item xs={6}>
-                    <Controller
-                        name="price"
-                        control={control}
-                        render={({ field }) =>
-                            <FormControl variant="standard">
-                                <InputLabel htmlFor="">{t('product.list.table.price')}<span className='required'></span></InputLabel>
-                                <Input
-                                    {...field}
-                                    startAdornment={
-                                        <InputAdornment position="start">
-                                            <Paid />
-                                        </InputAdornment>
-                                    }
-                                    placeholder={t('placehoder', { name: t('product.list.table.price') })}
-                                    onBlur={(event) => {
-                                        setValue(event.target.name, event.target.value ? event.target.value.trim() : '')
-                                    }}
-                                    type="number"
-                                />
-                            </FormControl>}
-                    />
-                    {errors.price && <p className='text-danger'>{errors.price.message}</p>}
-                </Grid>
-                <Grid item xs={6}></Grid>
-                <Grid item xs={6}>
                     <FormControlGroup
                         label="Sale Off"
                         content={

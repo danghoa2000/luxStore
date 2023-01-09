@@ -152,12 +152,19 @@ ColorlibStepIcon.propTypes = {
 
 const steps = ["Cart", "Details", "Payment", "Review"];
 
-const Cart = ({ CartItem, addToCart, decreaseQty }) => {
+const Cart = ({
+    CartItem,
+    addToCart,
+    decreaseQty,
+    getCart,
+    showNoti,
+    setShowNoti,
+    status,
+    setStatus,
+}) => {
     const [open, setOpen] = useState(false);
     const [type, setType] = useState(1);
     const [loading, setLoading] = useState(false);
-    const [status, setStatus] = useState({});
-    const [showNoti, setShowNoti] = useState(false);
 
     const [activeStep, setActiveStep] = useState(0);
     const [completed, setCompleted] = useState({});
@@ -222,19 +229,29 @@ const Cart = ({ CartItem, addToCart, decreaseQty }) => {
         axiosClient
             .post(ORDER_API.CREATE, { ...data })
             .then((response) => {
+                setShowNoti(true);
                 if (response.data.code === CODE.HTTP_OK) {
-                    setAddress(response.data.address);
-                    const currentAddress = response.data.address.find(
-                        (item) => item.selected
-                    );
-                    if (currentAddress) {
-                        setData({ ...data, address: currentAddress.id });
-                        setCurrentAddress(currentAddress);
-                    }
+                    setActiveStep(0);
+                    setStatus({
+                        type: "success",
+                        message: response.data.message,
+                    });
+                    getCart();
+                } else {
+                    setStatus({
+                        type: "warning",
+                        message: response.data.message,
+                    });
                 }
             })
             .catch((err) => {
-                console.log("error!");
+                setShowNoti(true);
+                setStatus({
+                    type: "error",
+                    message: err?.data
+                        ? err.data.message
+                        : "Server error",
+                });
             });
     };
 
@@ -248,7 +265,10 @@ const Cart = ({ CartItem, addToCart, decreaseQty }) => {
                         (item) => item.status == 1
                     );
                     if (currentAddress) {
-                        setData({ ...data, address: JSON.parse(currentAddress) });
+                        setData({
+                            ...data,
+                            address: JSON.stringify(currentAddress),
+                        });
                         setCurrentAddress(currentAddress);
                     } else {
                         setData({ ...data, address: "" });
@@ -439,14 +459,6 @@ const Cart = ({ CartItem, addToCart, decreaseQty }) => {
                         />
                     )}
                 </BasicModal>
-            )}
-
-            {showNoti && (
-                <ShowSnackbars
-                    type={status.type}
-                    message={status.message}
-                    setShowNoti={setShowNoti}
-                />
             )}
         </section>
     );

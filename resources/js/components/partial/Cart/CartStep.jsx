@@ -98,6 +98,7 @@ const CartStep = ({
                         className="btn__checkcout"
                         style={{ margin: 0 }}
                         onClick={handleNext}
+                        disabled={Object.keys(CartItem).length === 0}
                     >
                         Checkout Now
                     </Button>

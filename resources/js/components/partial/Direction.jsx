@@ -22,7 +22,7 @@ const Direction = (props) => {
     const [districtSelected, setDistrictSelected] = useState({});
     const [communeSelected, setCommuneSelected] = useState({});
     const [error, setError] = useState(false);
-    const [message, //setMassage] = useState('');
+    const [message, setMassage] = useState('');
     const [clickedOutside, setClickedOutside] = useState(false);
     const myRef = useRef();
 

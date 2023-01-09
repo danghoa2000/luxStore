@@ -5,6 +5,7 @@ namespace App\Http\Requests;
 use App\Models\Info;
 use App\Models\User;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Http\Request;
 
 class AccountRequest extends FormRequest
 {
@@ -25,11 +26,20 @@ class AccountRequest extends FormRequest
      */
     public function rules()
     {
-        $user = User::find($this->id);
-        return [
-            'user_code' => 'unique:users,user_code,' . $this->id,
-            'email' => 'unique:info,email,' . $user->info->id,
-            'telephone' => ['nullable', 'unique:info,telephone,' .  $user->info->id, 'unique:manufacturer,telephone'],
+
+        $rules = [
+            'user_code' => 'unique:users,user_code',
+            'email' => 'unique:info,email',
+            'telephone' => ['nullable', 'unique:info,telephone', 'unique:manufacturer,telephone'],
         ];
+        if ($this->isMethod('put')) {
+            $user = User::find($this->id);
+            $rules = [
+                'user_code' => 'unique:users,user_code,' . $this->id,
+                'email' => 'unique:info,email,' . $user->info->id,
+                'telephone' => ['nullable', 'unique:info,telephone,' .  $user->info->id, 'unique:manufacturer,telephone,' . $user->info->id],
+            ];
+        }
+        return $rules;
     }
 }

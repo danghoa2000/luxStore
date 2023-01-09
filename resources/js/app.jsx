@@ -305,6 +305,11 @@ const App = () => {
                                                     removeCartItem={
                                                         removeCartItem
                                                     }
+                                                    getCart={getCart}
+                                                    showNoti={showNoti}
+                                                    setShowNoti={setShowNoti}
+                                                    status={status}
+                                                    setStatus={setStatus}
                                                 />
                                             </Suspense>
                                         }

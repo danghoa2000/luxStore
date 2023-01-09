@@ -11,20 +11,6 @@ import { GROUP_CATEGORY_API, PRODUCT_API } from '../../../../../constants/api';
 import { axiosClient } from '../../../../../hooks/useHttp';
 import { formatPrice } from '../../../../../utils/helper';
 
-const topFilms = [{
-    id: '1',
-    name: 'Option 1'
-},
-{
-    id: '2',
-    name: 'Option 2'
-},
-{
-    id: '3',
-    name: 'Option 3'
-}
-];
-
 const ProductProperty = (props, ref) => {
     const {
         control,
@@ -100,6 +86,7 @@ const ProductProperty = (props, ref) => {
             return;
         }
         if (idEdit === null) {
+
             setPropertiesList(pre => [...pre, { ...properties, qty: qty, price: price }])
         } else {
             let newPropertiesList = [...propertiesList];
@@ -108,6 +95,7 @@ const ProductProperty = (props, ref) => {
             newPropertiesList[idEdit]["price"] = price;
             setPropertiesList(newPropertiesList);
         }
+        setPrice('');
         setProperties([]);
         setIdEdit(null);
         setAttributeSelectedList([]);
@@ -142,7 +130,6 @@ const ProductProperty = (props, ref) => {
             <React.Fragment key={key}>
                 <ProductPropertyItem
                     setCurrentRef={setCurrentRef}
-                    topFilms={topFilms}
                     index={key}
                     item={item}
                     removeProperty={removeProperty}
@@ -156,7 +143,7 @@ const ProductProperty = (props, ref) => {
                 />
             </React.Fragment >
         )
-    }, [properties, propertiesList, attributeList, attributeValueList]);
+    }, [properties, propertiesList, attributeList, attributeValueList, attributeSelectedList]);
 
     useEffect(() => {
         if (product) {
@@ -179,7 +166,6 @@ const ProductProperty = (props, ref) => {
 
     useEffect(() => {
         if (Object.keys(properties).length === 0) {
-            setpropertyCount(0);
             setIdEdit(null);
             setQty(0)
         }

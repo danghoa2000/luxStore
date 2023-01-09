@@ -13,6 +13,7 @@ const HomePageContainer = ({ productItems, addToCart, CartItem, shopItems }) => 
     const [ortherProduct, setOrtherProduct] = useState([]);
     const [topGroupCategory, setTopGroupCategory] = useState([]);
     const [topRateProduct, setTopRateProduct] = useState([]);
+    const [brand, setBrand] = useState([]);
     const [status, setStatus] = useState({});
     const [showNoti, setShowNoti] = useState(false);
 
@@ -25,6 +26,7 @@ const HomePageContainer = ({ productItems, addToCart, CartItem, shopItems }) => 
                     setBigDiscounts(response.data.bigDiscounts);
                     setOrtherProduct(response.data.ortherProduct);
                     setTopRateProduct(response.data.topRateProduct)
+                    setBrand(response.data.brand)
                 }
             }).catch((response) => {
                 setStatus({ type: 'error', message: response.data ? response.data.message : 'Server error' });
@@ -60,6 +62,7 @@ const HomePageContainer = ({ productItems, addToCart, CartItem, shopItems }) => 
             ortherProduct={ortherProduct}
             topRateProduct={topRateProduct}
             topGroupCategory={topGroupCategory}
+            brand={brand}
             status={status}
             showNoti={showNoti}
             />

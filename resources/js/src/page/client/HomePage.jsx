@@ -22,6 +22,7 @@ const HomePage = ({
     ortherProduct,
     topRateProduct,
     topGroupCategory,
+    brand,
     status,
     showNoti,
 }) => {
@@ -41,10 +42,9 @@ const HomePage = ({
             </section>
             <NewArrivals productItems={newArrivals} />
             <Discount productItems={bigDiscounts} />
-            <Shop shopItems={ortherProduct} addToCart={addToCart} />
+            <Shop shopItems={ortherProduct} addToCart={addToCart} brand={brand} />
             <Annocument />
             <Wrapper />
-            
         </>
     );
 };

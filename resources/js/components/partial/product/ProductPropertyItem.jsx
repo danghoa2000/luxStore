@@ -9,7 +9,6 @@ import { ATTRIBUTE_API, PRODUCT_API } from '../../../constants/api';
 import { useRef } from 'react';
 
 const ProductPropertyItem = ({
-    topFilms,
     index,
     item,
     removeProperty,
@@ -61,7 +60,6 @@ const ProductPropertyItem = ({
         <div style={{ padding: 5, display: 'inline-flex' }}>
             <div className='d-flex' style={{ border: '1px solid', padding: '5px', borderRadius: 5 }}>
                 <ProductAttributeName
-                    topFilms={topFilms}
                     attributeName={attributeName}
                     setAttributeName={setAttributeName}
                     attributeList={attributeList}
@@ -69,7 +67,6 @@ const ProductPropertyItem = ({
                     attributeSelectedList={attributeSelectedList}
                 />
                 <ProductAttributeValue
-                    topFilms={topFilms}
                     attributeValue={attributeValue}
                     setAttributeValue={setAttributeValue}
                     attributeValueOption={attributeValueOption}

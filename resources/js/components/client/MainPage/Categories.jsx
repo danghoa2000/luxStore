@@ -78,9 +78,9 @@ const Categories = () => {
             Object.values(category).map((value, index) => {
               let i = 0;
               if (index !== 0) {
-                let mod = data.length % index;
-                if (mod !== 0) {
-                  const surplus = data.length - (data.length / index) * data.length;
+                let intNumber = index / data.length;
+                if (intNumber !== 0) {
+                  const surplus =  index % data.length;
                   i = surplus;
                 } else {
                   i = index;

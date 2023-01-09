@@ -8,7 +8,6 @@ function sleep(delay = 0) {
 }
 
 const ProductAttributeValue = ({
-    topFilms,
     attributeValue,
     setAttributeValue,
     attributeValueOption,

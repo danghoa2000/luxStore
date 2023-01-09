@@ -1,6 +1,6 @@
 import React from "react"
 
-const Catg = () => {
+const Catg = ({brand}) => {
   const data = [
     {
       cateImg: "./images/category/cat-1.png",
@@ -34,11 +34,21 @@ const Catg = () => {
           <h1 style={{ flex: "1" }}>Brands </h1>
           <h1 style={{ flex: "1" }}>Shops </h1>
         </div>
-        {data.map((value, index) => {
+        {Object.keys(brand).length > 0 && brand.map((value, index) => {
+          let i = 0;
+          if (index !== 0) {
+            let intNumber = index / data.length;
+            if (intNumber !== 0) {
+              const surplus =  index % data.length;
+              i = surplus;
+            } else {
+              i = index;
+            }
+          }
           return (
-            <div className='box ' key={index}>
-              <img src={value.cateImg} alt='' />
-              <span>{value.cateName}</span>
+            <div className='box' key={index}>
+               <img src={data[i].cateImg} alt='' />
+              <span>{value.name}</span>
             </div>
           )
         })}

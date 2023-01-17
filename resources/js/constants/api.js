@@ -68,6 +68,14 @@ export const EVENT_API = {
     UPDATE: API_BASE_URL + "api/auth/admin/event/update",
 };
 
+export const ADMIN_ORDER_API = {
+    LIST: API_BASE_URL + "api/auth/admin/order",
+    CREATE: API_BASE_URL + "api/auth/admin/order/create",
+    UPDATE: API_BASE_URL + "api/auth/admin/order/update",
+    SHOW: API_BASE_URL + "api/auth/admin/order/show",
+    DELETE: API_BASE_URL + "api/auth/admin/order/delete",
+};
+
 export const HOME_API = API_BASE_URL + "api/home";
 export const SEARCH_API = API_BASE_URL + "api/search";
 export const FORM_SEARCH_API = API_BASE_URL + "api/getFormFilter";
@@ -86,7 +94,15 @@ export const CUSTOMER_ADDRESS_API = {
     UPDATE: API_BASE_URL + "api/customer-address/update",
     DELETE: API_BASE_URL + "api/customer-address/delete/",
     SET_DEFAULT: API_BASE_URL + "api/customer-address/set-default",
-} 
+};
+
+export const CUSTOMER_API = {
+    LIST: API_BASE_URL + "api/customer-address",
+    CREATE: API_BASE_URL + "api/customer-address/create",
+    UPDATE: API_BASE_URL + "api/customer-address/update",
+    DELETE: API_BASE_URL + "api/customer-address/delete/",
+    SET_DEFAULT: API_BASE_URL + "api/customer-address/set-default",
+};
 
 export const ORDER_API = {
     LIST: API_BASE_URL + "api/order",
@@ -95,3 +111,5 @@ export const ORDER_API = {
     SHOW: API_BASE_URL + "api/order/show",
     DELETE: API_BASE_URL + "api/order/delete",
 };
+
+export const STATISTIC_API = API_BASE_URL + "api/auth/admin/statistic";

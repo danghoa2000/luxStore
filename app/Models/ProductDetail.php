@@ -36,6 +36,11 @@ class ProductDetail extends Model
         return $this->belongsTo(Product::class, 'product_id');
     }
 
+    public function orderDetail()
+    {
+        return $this->belongsToMany(Order::class, 'order_detail', 'product_id', 'order_id');
+    }
+
     public function getSalePriceAttribute()
     {
         if (

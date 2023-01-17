@@ -211,7 +211,7 @@ const AdminLayout = () => {
                 <div className="d-flex">
                     <Box className="left__menu">
                         <MenuList>
-                            <MenuItem>
+                            <MenuItem onClick={() => redirect('dashboard')}>
                                 <ListItemIcon>
                                     <Dashboard fontSize="small" />
                                 </ListItemIcon>
@@ -251,13 +251,19 @@ const AdminLayout = () => {
                                 <ListItemIcon>
                                     <BookOnline fontSize="small" />
                                 </ListItemIcon>
-                                <ListItemText>Product</ListItemText>
+                                <ListItemText>Products</ListItemText>
                             </MenuItem>
                             <MenuItem onClick={() => redirect('event')}>
                                 <ListItemIcon>
                                     <BookOnline fontSize="small" />
                                 </ListItemIcon>
-                                <ListItemText>Event</ListItemText>
+                                <ListItemText>Events</ListItemText>
+                            </MenuItem>
+                            <MenuItem onClick={() => redirect('orders')}>
+                                <ListItemIcon>
+                                    <BookOnline fontSize="small" />
+                                </ListItemIcon>
+                                <ListItemText>Orders</ListItemText>
                             </MenuItem>
 
                         </MenuList>

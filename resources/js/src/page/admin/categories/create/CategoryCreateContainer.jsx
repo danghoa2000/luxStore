@@ -38,7 +38,7 @@ const CategoryCreateContainer = () => {
                 category_code: '',
                 name: '',
                 status: STATUS.ACTIVE,
-                group_category_id: '',
+                group_category_id: -1,
                 description: '',
             },
             resolver: yupResolver(validationSchema),

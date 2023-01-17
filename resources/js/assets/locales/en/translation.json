@@ -19,7 +19,11 @@
                 "commune": "Commune",
                 "address": "Address"
             }
-        }
+        },
+        "full_name": "Full name",
+        "email": "Email",
+        "password": "Password",
+        "comfirm_password": "Comfirm password"
     },
     "manufacturer": {
         "list": {
@@ -80,6 +84,29 @@
             }
         }
     },
+    "order": {
+        "list": {
+            "table": {
+                "order_code": "Order code",
+                "customer_name": "Customer name",
+                "status": "Status",
+                "name": "Name",
+                "price": "Price",
+                "price_discount": "Price discount",
+                "address": "Address",
+                "order_date": "Order date",
+                "description": "Description",
+                "avatar": "Avatar",
+                "qty": "Qty"
+            }
+        },
+        "status": {
+            "0": "Pending",
+            "1": "Delivery",
+            "2": "Success",
+            "3": "Cancel"
+        }
+    },
     "role": {
         "1": "Manage",
         "0": "Employee"
@@ -87,5 +114,9 @@
     "status": {
         "1": "Active",
         "0": "Block"
+    },
+    "payment_method": {
+        "0": "Pay on delivery",
+        "1": "Pay with Paypal"
     }
 }

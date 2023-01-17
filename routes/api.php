@@ -5,6 +5,7 @@ use App\Http\Controllers\admin\AttributeController;
 use App\Http\Controllers\Admin\CategoriesController;
 use App\Http\Controllers\admin\EventController;
 use App\Http\Controllers\Admin\GroupCategoryController;
+use App\Http\Controllers\Admin\HomeController as AdminHomeController;
 use App\Http\Controllers\Admin\LoginController;
 use App\Http\Controllers\admin\ManufacturerController;
 use App\Http\Controllers\admin\ProductController;
@@ -81,6 +82,13 @@ Route::group([
 
         Route::get('event', [EventController::class, 'index'])->name('event');
         Route::put('event/update', [EventController::class, 'update'])->name('event.update');
+        Route::post('statistic', [AdminHomeController::class, 'index'])->name('statistic');
+
+        Route::get('order', [OrderController::class, 'index'])->name('admin.order');
+        Route::post('order/create', [OrderController::class, 'store'])->name('admin.order.create');
+        Route::put('order/update', [OrderController::class, 'update'])->name('admin.order.update');
+        Route::get('order/show', [OrderController::class, 'show'])->name('order.show');
+        Route::delete('order/delete/{id}', [OrderController::class, 'destroy'])->name('admin.order.delete');
     });
 });
 

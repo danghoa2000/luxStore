@@ -18,7 +18,7 @@ const CategoryContainer = () => {
     const [status, setStatus] = useState({});
     const [showNoti, setShowNoti] = useState(false);
     const [searchField, setSearchFiled] = useState({});
-    const [totalRecord, setTotalRecode] = useState(0);
+    const [totalRecord, setTotalRecord] = useState(0);
     const [groupCategoryList, setGroupCategoryList] = useState([]);
 
     const navigate = useNavigate();
@@ -59,7 +59,7 @@ const CategoryContainer = () => {
         }).then((response) => {
             if (response.data.code === CODE.HTTP_OK) {
                 setCategoryList(response.data.categories);
-                setTotalRecode(response.data.total);
+                setTotalRecord(response.data.total);
             }
         }).catch((response) => {
             setStatus({ type: 'error', message: response.data ? response.data.message : 'Server error' });

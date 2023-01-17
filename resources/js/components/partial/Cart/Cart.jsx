@@ -189,7 +189,7 @@ const Cart = ({
         cart: CartItem,
         address: "",
         discount: 0,
-        shipping: 1.5,
+        shipping: 0,
         note: "",
         voucher: {},
         paymentMethod: "1",

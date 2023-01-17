@@ -18,7 +18,7 @@ const AccountContainer = () => {
     const [status, setStatus] = useState({});
     const [showNoti, setShowNoti] = useState(false);
     const [searchField, setSearchFiled] = useState({});
-    const [totalRecord, setTotalRecode] = useState(0);
+    const [totalRecord, setTotalRecord] = useState(0);
 
     const navigate = useNavigate();
     const headCells = { ...TableHeader }
@@ -58,7 +58,7 @@ const AccountContainer = () => {
         }).then((response) => {
             if (response.data.code === CODE.HTTP_OK) {
                 setAccountList(response.data.accounts);
-                setTotalRecode(response.data.total);
+                setTotalRecord(response.data.total);
             }
         }).catch((response) => {
             setStatus({ type: 'error', message: response.data ? response.data.message : 'Server error' });

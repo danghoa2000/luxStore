@@ -9,9 +9,23 @@ export const ROLE = {
     CUSTOMER: 2,
 };
 
+export const DISPLAY_BY = {
+    DAY: "day",
+    WEEK: "week",
+    MONTH: "month",
+    YEAR: "year",
+};
+
 export const STATUS = {
     BLOCK: 0,
     ACTIVE: 1,
+};
+
+export const STATUS_ORDER = {
+    PENDING: 0,
+    DELEVERY: 1,
+    SUCCESS: 2,
+    CANCEL: 3,
 };
 
 export const MENU_MAPPING = {
@@ -48,4 +62,4 @@ export const DATE_TIME = "Y-M-dd";
 export const SALE_TYPE = {
     PRICE: 1,
     PERSEN: 2,
-}
+};

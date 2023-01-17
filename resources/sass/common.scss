@@ -25,7 +25,7 @@ body {
     padding: 50px 0;
 }
 .container {
-    max-width: 90%;
+    max-width: 1200px;
     margin: auto;
 }
 .d_flex {
@@ -527,5 +527,27 @@ label.active {
     .css-1c2i806-MuiFormLabel-root-MuiInputLabel-root,
     .css-ittuaa-MuiInputAdornment-root {
         color: rgba(0, 0, 0, 0.6) !important;
+    }
+}
+
+.light__mode {
+    .css-s7asi4,
+    .css-s7asi4:focus {
+        background-color: rgb(255, 255, 255);
+        box-shadow: rgb(3 0 71 / 9%) 0px 8px 45px;
+        border-color: rgb(255, 255, 255);
+        border-radius: 8px;
+    }
+
+    .css-ittuaa-MuiInputAdornment-root,
+    .css-1c2i806-MuiFormLabel-root-MuiInputLabel-root,
+    .css-1ptx2yq-MuiInputBase-root-MuiInput-root {
+        color: rgba(0, 0, 0, 0.6) !important;
+    }
+}
+
+.w-500 {
+    .css-s7asi4 {
+        width: 500px;
     }
 }

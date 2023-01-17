@@ -12,6 +12,7 @@ use Illuminate\Http\Response;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class OrderController extends Controller
 {
@@ -22,7 +23,17 @@ class OrderController extends Controller
      */
     public function index(Request $request)
     {
-        return;
+        $orders = Order::query()->filter($request);
+        $total = count($orders->get());
+        if ($request->pageSize) {
+            $orders->limit($request->pageSize)
+                ->offset(($request->currentPage) * ($request->pageSize));
+        }
+        return response([
+            'orders' => $orders->get(),
+            'total' => $total,
+            'code' => Response::HTTP_OK
+        ], Response::HTTP_OK);
     }
 
     /**
@@ -43,22 +54,21 @@ class OrderController extends Controller
                 'status' => $request->orderStatus,
                 'price' => $request->totalPrice + $request->shipping,
                 'price_discount' => 0,
+                'note' => $request->note,
                 'address' => $request->address
             ]);
 
             $productList = [];
-            $productsOrder = array_map(function ($data) use ($order) {
-                $newData = [];
-                $newData['order_id'] = $order->id;
-                $newData['product_id'] = $data['id'];
-                $newData['product_name'] = $data['product']['name'];
-                $newData['product_price'] = $data['price'];
-                $newData['qty'] = $data['pivot']['qty'];
-
-                $productList[] = $data['product']['id'];
-
-                return $newData;
-            }, $request->cart);
+            $productsOrder = [];
+            foreach ($request->cart as $value) {
+                $key = $value['id'];
+                $productsOrder[$key]['product_id'] = $key;
+                $productsOrder[$key]['order_id'] = $order->id;
+                $productsOrder[$key]['product_name'] = $value['product']['name'];
+                $productsOrder[$key]['product_price'] = $value['price'];
+                $productsOrder[$key]['qty'] = $value['pivot']['qty'];
+                $productList[] = $value['product']['id'];
+            }
 
             $productList = array_unique($productList);
             if (isset($request->voucher->id)) {
@@ -71,23 +81,20 @@ class OrderController extends Controller
                     ]);
                 }
             }
-            $order->orderDetail()->createMany($productsOrder);
+            $order->orderDetail()->attach($productsOrder);
 
             // update qty product
-            $product = ProductDetail::whereIn('id', Arr::pluck($productsOrder, 'product_id'))->get();
-            $product->map(function ($data) use ($productsOrder) {
-                $item = collect($productsOrder)->first(function($data1) use ($data) {
-                    return $data1['product_id'] == $data['id'];
-                });
-
-                $data['qty'] = $data['qty'] - $item['qty'];
-                $data['sold_qty'] = $item['qty'];
-                $data->save();
-                return $data;
-            });
+            $product = ProductDetail::whereIn('id', array_keys($productsOrder))->get();
+            $options = [];
+            foreach ($product as $data) {
+                $options[$data->id]['id'] =  $data->id;
+                $options[$data->id]['qty'] =  $data['qty'] - $productsOrder[$data->id]['qty'];
+                $options[$data->id]['sold_qty'] =  $data['sold_qty'] + $productsOrder[$data->id]['qty'];
+            }
+            ProductDetail::upsert($options, ['id'], ['qty', 'sold_qty']);
 
             // delete cart
-            $user->cart->products()->delete();
+            $user->cart->products()->detach(array_keys($productsOrder));
 
             DB::commit();
             return response([
@@ -96,7 +103,6 @@ class OrderController extends Controller
             ], Response::HTTP_OK);
         } catch (\Throwable $th) {
             DB::rollBack();
-            dd($th);
             return response([
                 'message' => 'error!',
                 'code' => Response::HTTP_INTERNAL_SERVER_ERROR
@@ -112,7 +118,19 @@ class OrderController extends Controller
      */
     public function show(Request $request)
     {
-        return;
+        $order = Order::with('orderDetail.propertyValue')->find($request->id);
+        if ($order) {
+            return response([
+                'order' => $order,
+                'message' => 'success!',
+                'code' => Response::HTTP_OK
+            ], Response::HTTP_OK);
+        }
+
+        return response([
+            'message' => 'This order dont exist!',
+            'code' => Response::HTTP_NOT_FOUND
+        ], Response::HTTP_NOT_FOUND);
     }
 
     /**
@@ -124,7 +142,48 @@ class OrderController extends Controller
      */
     public function update(Request $request)
     {
-        return;
+        try {
+            DB::beginTransaction();
+            $order = Order::with('orderDetail.propertyValue')->find($request->id);
+            if ($order) {
+                $order->update(['status' => $request->order_status]);
+                if ($request->order_status == 3) {
+                    $productsOrder = [];
+                    foreach ($order->orderDetail as $value) {
+                        $key = $value['id'];
+                        $productsOrder[$key]['id'] = $key;
+                        $productsOrder[$key]['qty'] = $value['pivot']['qty'];
+                    }
+
+                    $product = ProductDetail::whereIn('id', array_keys($productsOrder))->get();
+                    $options = [];
+                    foreach ($product as $data) {
+                        $options[$data->id]['id'] =  $data->id;
+                        $options[$data->id]['qty'] =  $data['qty'] + $productsOrder[$data->id]['qty'];
+                        $options[$data->id]['sold_qty'] =  $data['sold_qty'] - $productsOrder[$data->id]['qty'];
+                    }
+
+                    ProductDetail::upsert($options, ['id'], ['qty', 'sold_qty']);
+                    DB::commit();
+                }
+                return response([
+                    'order' => $order,
+                    'message' => 'success!',
+                    'code' => Response::HTTP_OK
+                ], Response::HTTP_OK);
+            }
+
+            return response([
+                'message' => 'This order dont exist!',
+                'code' => Response::HTTP_NOT_FOUND
+            ], Response::HTTP_NOT_FOUND);
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            return response([
+                'message' => 'server error!',
+                'code' => Response::HTTP_INTERNAL_SERVER_ERROR
+            ], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
     }
 
     /**

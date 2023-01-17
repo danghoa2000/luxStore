@@ -116,7 +116,7 @@ const CategoryCreate = (props) => {
                                         {
                                             groupCategoryList.length > 0 && (
                                                 groupCategoryList.map(item => (
-                                                    <MenuItem key={""} value={item.id}>
+                                                    <MenuItem key={item.id} value={item.id}>
                                                        {item.name}
                                                     </MenuItem>
                                                 ))

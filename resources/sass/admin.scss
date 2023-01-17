@@ -408,3 +408,65 @@ table {
         color: #fff;
     }
 }
+
+.card::before {
+    position: absolute;
+    left: 10px;
+    top: -15px;
+    font-size: 23px;
+    padding: 15px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+    border-radius: 5px;
+}
+
+.card.card-calendar input {
+    outline: none;
+    background-color: transparent;
+    color: #fff;
+}
+
+.color-title {
+    color: #ffc107;
+}
+
+.order__header {
+    display: flex;
+    padding: 12px;
+    margin: -25px;
+    border-radius: 0.25rem;
+    .order__id,
+    .order__placed,
+    .order__finish {
+        flex: 1;
+    }
+}
+
+.card__admin {
+    .order__header {
+        background-color: #f3f5f94f;
+    }
+}
+
+.order__product__item {
+    display: flex;
+    align-items: center;
+
+    .order__product__item-name {
+        margin-right: 15px;
+    }
+
+    .order__product__item-name,
+    .order__product__item-properties {
+        flex: 1;
+    }
+}
+.card__admin {
+    .box__price {
+        display: flex;
+        justify-content: space-between;
+    }
+}
+
+.MuiTypography-root.MuiTypography-h7 {
+    display: block;
+} 

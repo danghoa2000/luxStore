@@ -87,6 +87,12 @@ const AdminShippingContainer = lazy(() =>
 const AdminEventContainer = lazy(() =>
     import("./src/page/admin/event/EventContainer")
 );
+const AdminOrderContainer = lazy(() =>
+    import("./src/page/admin/order/OrderContainer")
+);
+const AdminOrderDetailContainer = lazy(() =>
+    import("./src/page/admin/order/detail/OrderDetailContainer")
+);
 // ====
 
 const HomePageContainer = lazy(() =>
@@ -112,6 +118,8 @@ const App = () => {
     const { productItems } = Data;
     const { shopItems } = Sdata;
     const [CartItem, setCartItem] = useState([]);
+    const [open, setOpen] = useState(false);
+    const [type, setType] = useState(1);
     const history = createBrowserHistory();
 
     const getCart = () => {
@@ -278,6 +286,10 @@ const App = () => {
                                             addToCart={addToCart}
                                             decreaseQty={decreaseQty}
                                             removeCartItem={removeCartItem}
+                                            type={type}
+                                            setType={setType}
+                                            open={open}
+                                            setOpen={setOpen}
                                         />
                                     }
                                 >
@@ -353,6 +365,7 @@ const App = () => {
                                 <Route path="admin/*" element={<AdminLayout />}>
                                     <Route
                                         index
+                                        path="dashboard"
                                         element={
                                             <Suspense fallback={<Loading />}>
                                                 <AdminHomeContainer />
@@ -708,6 +721,42 @@ const App = () => {
                                                         ]}
                                                     >
                                                         <AdminEventContainer />
+                                                    </PrivateAdminRoute>
+                                                </Suspense>
+                                            }
+                                        />
+                                    </Route>
+                                    <Route path="orders" element={<Outlet />}>
+                                        <Route
+                                            index
+                                            element={
+                                                <Suspense
+                                                    fallback={<Loading />}
+                                                >
+                                                    <PrivateAdminRoute
+                                                        roles={[
+                                                            ROLE.MANAGER,
+                                                            ROLE.EMPLOYEE,
+                                                        ]}
+                                                    >
+                                                        <AdminOrderContainer />
+                                                    </PrivateAdminRoute>
+                                                </Suspense>
+                                            }
+                                        />
+                                        <Route
+                                            path="detail"
+                                            element={
+                                                <Suspense
+                                                    fallback={<Loading />}
+                                                >
+                                                    <PrivateAdminRoute
+                                                        roles={[
+                                                            ROLE.MANAGER,
+                                                            ROLE.EMPLOYEE,
+                                                        ]}
+                                                    >
+                                                        <AdminOrderDetailContainer />
                                                     </PrivateAdminRoute>
                                                 </Suspense>
                                             }

@@ -12,8 +12,9 @@ import ShowSnackbars from "../../components/partial/ShowSnackbars";
 import { SESSION_ACCESS_TOKEN } from "../../utils/sessionHelper";
 import { BASE_URL } from "../../constants/constants";
 import BasicModal from "../../components/partial/BasicModal";
-import { MessengerChat } from "react-messenger-chat-plugin";
-import { useRef } from "react";
+import RegisterAccountModal from "../../components/partial/Modal/RegisterAccountModal";
+// import { MessengerChat } from "react-messenger-chat-plugin";
+// import { useRef } from "react";
 
 const DefaultLayout = ({
     CartItem,
@@ -23,6 +24,10 @@ const DefaultLayout = ({
     setShowNoti,
     status,
     removeCartItem,
+    type,
+    setType,
+    open,
+    setOpen,
 }) => {
     const [state, setState] = useState(false);
     const toggleDrawer = (state) => (event) => {
@@ -35,29 +40,29 @@ const DefaultLayout = ({
         setState(state);
     };
     const navigate = useNavigate();
-    const MessengerRef = useRef();
-    useEffect(() => {
-        MessengerRef.current.setAttribute("page_id", "your_page_id");
-        MessengerRef.current.setAttribute("attribution", "biz_inbox");
+    // const MessengerRef = useRef();
+    // useEffect(() => {
+    //     MessengerRef.current.setAttribute("page_id", "your_page_id");
+    //     MessengerRef.current.setAttribute("attribution", "biz_inbox");
 
-        window.fbAsyncInit = function () {
-            FB.init({
-                xfbml: true,
-                version: "v15.0",
-            });
-        };
+    //     window.fbAsyncInit = function () {
+    //         FB.init({
+    //             xfbml: true,
+    //             version: "v15.0",
+    //         });
+    //     };
 
-        (function (d, s, id) {
-            var js,
-                fjs = d.getElementsByTagName(s)[0];
-            if (d.getElementById(id)) return;
-            js = d.createElement(s);
-            js.id = id;
-            js.src =
-                "https://connect.facebook.net/en_US/sdk/xfbml.customerchat.js";
-            fjs.parentNode.insertBefore(js, fjs);
-        })(document, "script", "facebook-jssdk");
-    }, []);
+    //     (function (d, s, id) {
+    //         var js,
+    //             fjs = d.getElementsByTagName(s)[0];
+    //         if (d.getElementById(id)) return;
+    //         js = d.createElement(s);
+    //         js.id = id;
+    //         js.src =
+    //             "https://connect.facebook.net/en_US/sdk/xfbml.customerchat.js";
+    //         fjs.parentNode.insertBefore(js, fjs);
+    //     })(document, "script", "facebook-jssdk");
+    // }, []);
     return (
         <>
             <Header CartItem={CartItem} toggleDrawer={toggleDrawer} />
@@ -201,6 +206,11 @@ const DefaultLayout = ({
                     </Button>
                 )}
             </Drawer>
+            {/* {open && ( */}
+                <BasicModal className="light__mode w-500" open={true} handleClose={() => setOpen(false)}>
+                    {type == 1 && <RegisterAccountModal />}
+                </BasicModal>
+            {/* )} */}
             {showNoti && (
                 <ShowSnackbars
                     type={status.type}
@@ -208,7 +218,7 @@ const DefaultLayout = ({
                     setShowNoti={setShowNoti}
                 />
             )}
-            <div
+            {/* <div
                 id="fb-root"
                 style={{ display: "block" }}
             ></div>
@@ -216,7 +226,7 @@ const DefaultLayout = ({
                 ref={MessengerRef}
                 id="fb-customer-chat"
                 className="fb-customerchat"
-            ></div>
+            ></div> */}
         </>
     );
 };

@@ -1,11 +1,14 @@
-import axios from 'axios';
-import React, { useCallback, useContext, useEffect, useState } from 'react';
-import { useNavigate } from 'react-router';
-import { LOGIN_API } from '../../../../constants/api';
-import { useAuth } from '../../../../hooks/useAuth';
-import { axiosClient } from '../../../../hooks/useHttp';
-import { SESSION_ACCESS_TOKEN, CUSTOMER_INFO } from '../../../../utils/sessionHelper';
-import Login from './login';
+import axios from "axios";
+import React, { useCallback, useContext, useEffect, useState } from "react";
+import { useNavigate } from "react-router";
+import { LOGIN_API } from "../../../../constants/api";
+import { useAuth } from "../../../../hooks/useAuth";
+import { axiosClient } from "../../../../hooks/useHttp";
+import {
+    SESSION_ACCESS_TOKEN,
+    CUSTOMER_INFO,
+} from "../../../../utils/sessionHelper";
+import Login from "./login";
 
 const LoginContainer = () => {
     const { setUser } = useAuth();
@@ -15,27 +18,36 @@ const LoginContainer = () => {
 
     const login = (data) => {
         setLoading(true);
-        axiosClient.post(LOGIN_API.LOGIN, {
-            email: data.email,
-            password: data.password,
-            isCustomer: true,
-        },).then(res => {
-            setUser(res.data.info);
-            window.sessionStorage.setItem(SESSION_ACCESS_TOKEN, res.data.access_token);
-            window.sessionStorage.setItem(CUSTOMER_INFO, JSON.stringify(res.data.info));
-            navigate("/elite");
-            setLoading(false);
-        }).catch(err => {
-            setLoading(false);
-            // setisLoginFailed({
-            //     status: err.response.data.code,
-            //     message: err.response.data.message
-            // })
-        });
-    }
+        axiosClient
+            .post(LOGIN_API.LOGIN, {
+                email: data.email,
+                password: data.password,
+                isCustomer: true,
+            })
+            .then((res) => {
+                setUser(res.data.info);
+                window.sessionStorage.setItem(
+                    SESSION_ACCESS_TOKEN,
+                    res.data.access_token
+                );
+                window.sessionStorage.setItem(
+                    CUSTOMER_INFO,
+                    JSON.stringify(res.data.info)
+                );
+                navigate("/elite");
+                setLoading(false);
+            })
+            .catch((err) => {
+                setLoading(false);
+                // setisLoginFailed({
+                //     status: err.response.data.code,
+                //     message: err.response.data.message
+                // })
+            });
+    };
 
     const handeSubmit = useCallback((data) => {
-        login(data)
+        login(data);
     }, []);
 
     useEffect(() => {
@@ -43,7 +55,7 @@ const LoginContainer = () => {
         if (token) {
             navigate("/elite");
         }
-    }, [])
+    }, []);
 
     return (
         <Login

@@ -16,25 +16,27 @@ import { axiosClient } from "../../../hooks/useHttp";
 import { useTranslation } from "react-i18next";
 import * as Yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { ACCOUNT_API } from "../../../constants/api";
+import { ACCOUNT_API, LOGIN_API } from "../../../constants/api";
 import { useState } from "react";
 import { CODE } from "../../../constants/constants";
+import { useNavigate } from "react-router-dom";
+import {
+    CUSTOMER_INFO,
+    SESSION_ACCESS_TOKEN,
+} from "../../../utils/sessionHelper";
+import { useAuth } from "../../../hooks/useAuth";
 
-const RegisterAccountModal = ({ setShowNoti, setStatus, setOpen, setType }) => {
+const SignInAccountModal = ({ setShowNoti, setStatus, setOpen, setType }) => {
     const [t] = useTranslation();
+    const { setUser } = useAuth();
     const [loading, setLoading] = useState(false);
+    const [isLoginFailed, setisLoginFailed] = useState({});
+    const navigate = useNavigate();
     const validationSchema = Yup.object().shape({
         email: Yup.string()
             .required(t("validate.required", { name: "Email" }))
             .email(t("validate.email", { name: "Email" })),
-        full_name: Yup.string().required(
-            t("validate.required", { name: "Full name" })
-        ),
         password: Yup.string().required("Password is required"),
-        comfirm_password: Yup.string().oneOf(
-            [Yup.ref("password"), null],
-            "Password comfirm must match"
-        ),
     });
 
     const {
@@ -50,9 +52,7 @@ const RegisterAccountModal = ({ setShowNoti, setStatus, setOpen, setType }) => {
         shouldUnregister: false,
         defaultValues: {
             email: "",
-            full_name: "",
             password: "",
-            comfirm_password: "",
             isCustomer: true,
         },
         resolver: yupResolver(validationSchema),
@@ -61,39 +61,46 @@ const RegisterAccountModal = ({ setShowNoti, setStatus, setOpen, setType }) => {
     const handleCreate = useCallback((value) => {
         setLoading(true);
         axiosClient
-            .post(ACCOUNT_API.CREATE, {
+            .post(LOGIN_API.LOGIN, {
                 ...value,
             })
-            .then((response) => {
-                setShowNoti(true);
+            .then((res) => {
+                setUser(res.data.info);
+                window.sessionStorage.setItem(
+                    SESSION_ACCESS_TOKEN,
+                    res.data.access_token
+                );
+                window.sessionStorage.setItem(
+                    CUSTOMER_INFO,
+                    JSON.stringify(res.data.info)
+                );
                 setLoading(false);
-                if (response.data.code === CODE.HTTP_OK) {
-                    setStatus({
-                        type: "success",
-                        message: response.data.message,
-                    });
-                    setType(2);
-                }
+                setOpen(false);
             })
-            .catch(({ response }) => {
-                setShowNoti(true);
+            .catch((err) => {
                 setLoading(false);
-                if (response.data.code === CODE.UNPROCESSABLE_ENTITY) {
-                    Object.keys(response.data.errors).forEach((element) => {
+                setShowNoti(true);
+                setisLoginFailed({
+                    status: err.response.data.code,
+                    message: err.response.data.message,
+                });
+                setStatus({
+                    type: "error",
+                    message: err.response.data
+                        ? err.response.data.message
+                        : "Server error",
+                });
+                if (err.response.data.code === CODE.UNPROCESSABLE_ENTITY) {
+                    Object.keys(err.response.data.errors).forEach((element) => {
                         setError(element, {
                             type: "custom",
                             message: Object.values(
-                                response.data.errors[element]
+                                err.response.data.errors[element]
                             ),
                         });
                     });
                 }
-                setStatus({
-                    type: "error",
-                    message: response.data
-                        ? response.data.message
-                        : "Server error",
-                });
+                setValue("password", "");
             });
     });
 
@@ -111,8 +118,13 @@ const RegisterAccountModal = ({ setShowNoti, setStatus, setOpen, setType }) => {
                 className="cart_admin_title"
                 style={{ textAlign: "center", display: "block" }}
             >
-                Register account
+                SignIn account
             </Typography>
+            {isLoginFailed && (
+                <span className="text-base text-danger">
+                    {isLoginFailed.message}
+                </span>
+            )}
             <Grid
                 container
                 sx={{ margin: 0, padding: 1, width: "100%" }}
@@ -157,44 +169,6 @@ const RegisterAccountModal = ({ setShowNoti, setStatus, setOpen, setType }) => {
 
                 <Grid item xs={12}>
                     <Controller
-                        name="full_name"
-                        control={control}
-                        render={({ field }) => (
-                            <FormControl variant="standard">
-                                <InputLabel htmlFor="">
-                                    {t("account.full_name")}
-                                    <span className="required"></span>
-                                </InputLabel>
-                                <Input
-                                    {...field}
-                                    startAdornment={
-                                        <InputAdornment position="start">
-                                            <Note />
-                                        </InputAdornment>
-                                    }
-                                    placeholder={t("placehoder", {
-                                        name: t("account.full_name"),
-                                    })}
-                                    onBlur={(event) => {
-                                        setValue(
-                                            event.target.name,
-                                            event.target.value
-                                                ? event.target.value.trim()
-                                                : ""
-                                        );
-                                    }}
-                                />
-                            </FormControl>
-                        )}
-                    />
-                    {errors.full_name && (
-                        <p className="text-danger">
-                            {errors.full_name.message}
-                        </p>
-                    )}
-                </Grid>
-                <Grid item xs={12}>
-                    <Controller
                         name="password"
                         control={control}
                         render={({ field }) => (
@@ -230,45 +204,7 @@ const RegisterAccountModal = ({ setShowNoti, setStatus, setOpen, setType }) => {
                         <p className="text-danger">{errors.password.message}</p>
                     )}
                 </Grid>
-                <Grid item xs={12}>
-                    <Controller
-                        name="comfirm_password"
-                        control={control}
-                        render={({ field }) => (
-                            <FormControl variant="standard">
-                                <InputLabel htmlFor="">
-                                    {t("account.comfirm_password")}
-                                    <span className="required"></span>
-                                </InputLabel>
-                                <Input
-                                    {...field}
-                                    startAdornment={
-                                        <InputAdornment position="start">
-                                            <Lock />
-                                        </InputAdornment>
-                                    }
-                                    placeholder={t("placehoder", {
-                                        name: t("account.comfirm_password"),
-                                    })}
-                                    onBlur={(event) => {
-                                        setValue(
-                                            event.target.name,
-                                            event.target.value
-                                                ? event.target.value.trim()
-                                                : ""
-                                        );
-                                    }}
-                                    type="password"
-                                />
-                            </FormControl>
-                        )}
-                    />
-                    {errors.comfirm_password && (
-                        <p className="text-danger">
-                            {errors.comfirm_password.message}
-                        </p>
-                    )}
-                </Grid>
+
                 <Button
                     type="submit"
                     variant="contained"
@@ -287,7 +223,7 @@ const RegisterAccountModal = ({ setShowNoti, setStatus, setOpen, setType }) => {
                             }}
                         />
                     )}
-                    Register
+                    Login
                 </Button>
                 <div
                     style={{
@@ -302,14 +238,14 @@ const RegisterAccountModal = ({ setShowNoti, setStatus, setOpen, setType }) => {
                         className="cart_admin_title"
                         style={{ textAlign: "center", display: "block" }}
                     >
-                        Have account?
+                        Don’t have account?
                     </Typography>
 
                     <span
-                        onClick={() => setType(2)}
+                        onClick={() => setType(1)}
                         style={{ textDecoration: "underline", margin: 5, color: 'blue' }}
                     >
-                        Back to signin
+                        Register
                     </span>
                 </div>
             </Grid>
@@ -317,4 +253,4 @@ const RegisterAccountModal = ({ setShowNoti, setStatus, setOpen, setType }) => {
     );
 };
 
-export default RegisterAccountModal;
+export default SignInAccountModal;

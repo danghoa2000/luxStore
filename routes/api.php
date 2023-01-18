@@ -33,7 +33,7 @@ Route::group([
     'prefix' => 'auth'
 ], function () {
     Route::post('login', [LoginController::class, 'login'])->name('login');
-    Route::get('logout', [LoginController::class, 'logout'])->name('logout');
+    Route::post('logout', [LoginController::class, 'logout'])->name('logout');
 
     Route::group([
         'middleware' => ['auth:api', 'cors'], 'prefix' => 'admin'
@@ -45,8 +45,6 @@ Route::group([
         Route::delete('categories/delete/{id}', [CategoriesController::class, 'destroy'])->name('category.delete');
 
         Route::get('account', [AccountController::class, 'index'])->name('account');
-        Route::post('account/create', [AccountController::class, 'store'])->name('account.create');
-        Route::put('account/update', [AccountController::class, 'update'])->name('account.update');
         Route::get('account/show', [AccountController::class, 'show'])->name('account.show');
         Route::delete('account/delete/{id}', [AccountController::class, 'destroy'])->name('account.delete');
 
@@ -92,6 +90,9 @@ Route::group([
     });
 });
 
+Route::post('auth/admin/account/create', [AccountController::class, 'store'])->name('account.create');
+Route::put('auth/admin/account/update', [AccountController::class, 'update'])->name('account.update');
+
 Route::group([
     'middleware' => ['cors']
 ], function () {
@@ -124,6 +125,8 @@ Route::group([
         // Route::get('customer-address/show', [CustomerController::class, 'show'])->name('customer-address.show');
         Route::delete('customer-address/delete/{id}', [CustomerController::class, 'destroy'])->name('customer-address.delete');
         Route::post('customer-address/set-default', [CustomerController::class, 'updateAddressSelected'])->name('customer-address.set-default');
+        Route::post('customer/show', [CustomerController::class, 'show'])->name('customer.show');
+        Route::get('customer/getOrder', [CustomerController::class, 'getOrder'])->name('customer.order');
 
         Route::get('order', [OrderController::class, 'index'])->name('order');
         Route::post('order/create', [OrderController::class, 'store'])->name('order.create');

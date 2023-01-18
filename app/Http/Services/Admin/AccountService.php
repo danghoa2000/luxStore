@@ -2,6 +2,7 @@
 
 namespace App\Http\Services\Admin;
 
+use App\Models\Customer;
 use App\Models\Info;
 use App\Models\User;
 use Illuminate\Http\Response;
@@ -36,7 +37,7 @@ class AccountService
                 ->with('district')
                 ->with('commune');
         })->filter($request)
-        ->where('status', config('constants.user.status.active'));
+            ->where('status', config('constants.user.status.active'));
         $total = count($accounts->get());
         $accounts->limit($request->pageSize)
             ->offset(($request->currentPage) * $request->pageSize);
@@ -65,6 +66,18 @@ class AccountService
                 'commune_id' => $request->commune_id,
                 'address' => $request->address
             ]);
+
+            if ($request->isCustomer) {
+                $password = Hash::make($request->passwrod);
+                $info->update(['password' => $password]);
+                Customer::create(['customer_code' => $info->id]);
+
+                DB::commit();
+                return response([
+                    'message' => 'Create account success!',
+                    'code' => Response::HTTP_OK
+                ], Response::HTTP_OK);
+            }
 
             // create user
             $user = User::create([
@@ -119,11 +132,11 @@ class AccountService
         try {
             DB::beginTransaction();
             $account = User::with('info')->find($request->id);
+
+            if ($request->isCustomer) {
+                $account = Customer::with('info')->find($request->id);
+            }
             if ($account) {
-                $account->update([
-                    'role' => $request->role,
-                    'status' => $request->status,
-                ]);
                 if ($account->info) {
                     $account->info()->update([
                         'full_name' => $request->full_name,
@@ -148,8 +161,23 @@ class AccountService
                         'address' => $request->address
                     ]);
 
+                    if ($request->isCustomer) {
+                        $account->update([
+                            'customer_code' => $info->id,
+                        ]);
+                    } else {
+                        $account->update([
+                            'info_id' => $info->id,
+                        ]);
+                    }
+                }
+
+
+                if ($request->isCustomer) {
+                } else {
                     $account->update([
-                        'info_id' => $info->id,
+                        'role' => $request->role,
+                        'status' => $request->status,
                     ]);
                 }
                 DB::commit();

@@ -72,7 +72,6 @@ class LoginController extends Controller
         }
         $info = null;
         if ($request->isCustomer) {
-
             Auth::guard('customer')->login($user);
             $info = Auth::guard('customer')->user();
         } else {
@@ -99,13 +98,16 @@ class LoginController extends Controller
         ], Response::HTTP_OK);
     }
 
-    public function logout()
+    public function logout(Request $request)
     {
         $accessToken = Auth::guard('api')->user()->token();
         if ($request->isCustomer) {
             $accessToken = Auth::guard('customerApi')->user()->token();
         }
         $accessToken->revoke();
-        return true;
+        return response()->json([
+            'message' => 'success',
+            'code' => Response::HTTP_OK,
+        ], Response::HTTP_OK);
     }
 }

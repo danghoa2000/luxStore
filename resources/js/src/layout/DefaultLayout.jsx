@@ -13,6 +13,7 @@ import { SESSION_ACCESS_TOKEN } from "../../utils/sessionHelper";
 import { BASE_URL } from "../../constants/constants";
 import BasicModal from "../../components/partial/BasicModal";
 import RegisterAccountModal from "../../components/partial/Modal/RegisterAccountModal";
+import SignInAccountModal from "../../components/partial/Modal/SignInAccountModal";
 // import { MessengerChat } from "react-messenger-chat-plugin";
 // import { useRef } from "react";
 
@@ -23,6 +24,7 @@ const DefaultLayout = ({
     showNoti,
     setShowNoti,
     status,
+    setStatus,
     removeCartItem,
     type,
     setType,
@@ -65,7 +67,12 @@ const DefaultLayout = ({
     // }, []);
     return (
         <>
-            <Header CartItem={CartItem} toggleDrawer={toggleDrawer} />
+            <Header
+                CartItem={CartItem}
+                toggleDrawer={toggleDrawer}
+                setOpen={setOpen}
+                setType={setType}
+            />
             <Outlet />
             <Footer />
             <Drawer anchor="right" open={state} onClose={toggleDrawer(false)}>
@@ -200,17 +207,39 @@ const DefaultLayout = ({
                     <Button
                         variant="contained"
                         className="btn__checkcout"
-                        onClick={() => navigate("/customer/login")}
+                        onClick={() => {
+                            setOpen(true);
+                            setType(2);
+                        }}
                     >
                         Login now
                     </Button>
                 )}
             </Drawer>
-            {/* {open && ( */}
-                <BasicModal className="light__mode w-500" open={true} handleClose={() => setOpen(false)}>
-                    {type == 1 && <RegisterAccountModal />}
+            {open && (
+                <BasicModal
+                    className="light__mode w-500"
+                    open={open}
+                    handleClose={() => setOpen(false)}
+                >
+                    {type == 1 && (
+                        <RegisterAccountModal
+                            setShowNoti={setShowNoti}
+                            setStatus={setStatus}
+                            setOpen={setOpen}
+                            setType={setType}
+                        />
+                    )}
+                    {type == 2 && (
+                        <SignInAccountModal
+                            setShowNoti={setShowNoti}
+                            setStatus={setStatus}
+                            setOpen={setOpen}
+                            setType={setType}
+                        />
+                    )}
                 </BasicModal>
-            {/* )} */}
+            )}
             {showNoti && (
                 <ShowSnackbars
                     type={status.type}

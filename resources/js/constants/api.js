@@ -97,11 +97,12 @@ export const CUSTOMER_ADDRESS_API = {
 };
 
 export const CUSTOMER_API = {
-    LIST: API_BASE_URL + "api/customer-address",
-    CREATE: API_BASE_URL + "api/customer-address/create",
-    UPDATE: API_BASE_URL + "api/customer-address/update",
-    DELETE: API_BASE_URL + "api/customer-address/delete/",
-    SET_DEFAULT: API_BASE_URL + "api/customer-address/set-default",
+    LIST: API_BASE_URL + "api/customer",
+    CREATE: API_BASE_URL + "api/customer/create",
+    UPDATE: API_BASE_URL + "api/customer/update",
+    DELETE: API_BASE_URL + "api/customer/delete/",
+    SHOW: API_BASE_URL + "api/customer/show",
+    GET_ORDER: API_BASE_URL + "api/customer/getOrder",
 };
 
 export const ORDER_API = {

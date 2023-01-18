@@ -20,7 +20,7 @@ import { SearchFieldContext } from "./hooks/useSearchField";
 import { axiosClient } from "./hooks/useHttp";
 import { CART_API } from "./constants/api";
 import { object } from "yup";
-import { SESSION_ACCESS_TOKEN } from "./utils/sessionHelper";
+import { CUSTOMER_INFO, SESSION_ACCESS_TOKEN } from "./utils/sessionHelper";
 import { createBrowserHistory } from "history";
 
 // admin
@@ -108,7 +108,21 @@ const ProductContainer = lazy(() =>
 const CustomerLoginContainer = lazy(() =>
     import("./src/page/client/login/LoginContainer")
 );
+const ProfileContainer = lazy(() =>
+    import("./src/page/client/profile/ProfileContainer")
+);
 
+const CustomerOrderContainer = lazy(() =>
+    import("./src/page/client/profile/order/OrderContainer")
+);
+
+const CustomerInfoContainer = lazy(() =>
+    import("./src/page/client/profile/info/InfoContainer")
+);
+
+const CustomerAddressContainer = lazy(() =>
+    import("./src/page/client/profile/address/AddressContainer")
+);
 const App = () => {
     const [auth, setAuth] = useState({});
     const [user, setUser] = useState({});
@@ -119,7 +133,7 @@ const App = () => {
     const { shopItems } = Sdata;
     const [CartItem, setCartItem] = useState([]);
     const [open, setOpen] = useState(false);
-    const [type, setType] = useState(1);
+    const [type, setType] = useState(2);
     const history = createBrowserHistory();
 
     const getCart = () => {
@@ -256,10 +270,14 @@ const App = () => {
         const _token = window.sessionStorage.getItem(SESSION_ACCESS_TOKEN);
         const paths = history.location.pathname;
         const arrayPaths = paths.split("/");
-        if (_token && arrayPaths[1] !== "admin") {
-            getCart();
+        if (arrayPaths[1] !== "admin") {
+            if (_token) {
+                const info = JSON.parse(window.sessionStorage.getItem(CUSTOMER_INFO));
+                setUser(info);
+                getCart();
+            } else setCartItem([]);
         }
-    }, [user]);
+    }, []);
 
     return (
         <>
@@ -282,6 +300,7 @@ const App = () => {
                                             showNoti={showNoti}
                                             setShowNoti={setShowNoti}
                                             status={status}
+                                            setStatus={setStatus}
                                             CartItem={CartItem}
                                             addToCart={addToCart}
                                             decreaseQty={decreaseQty}
@@ -350,6 +369,68 @@ const App = () => {
                                             </Suspense>
                                         }
                                     />
+                                    <Route
+                                        path="profile"
+                                        element={
+                                            <Suspense fallback={<Loading />}>
+                                                <ProfileContainer
+                                                    showNoti={showNoti}
+                                                    setShowNoti={setShowNoti}
+                                                    setStatus={setStatus}
+                                                    CartItem={CartItem}
+                                                />
+                                            </Suspense>
+                                        }
+                                    >
+                                        <Route
+                                            index
+                                            element={
+                                                <Suspense
+                                                    fallback={<Loading />}
+                                                >
+                                                    <CustomerInfoContainer
+                                                        showNoti={showNoti}
+                                                        setShowNoti={
+                                                            setShowNoti
+                                                        }
+                                                        setStatus={setStatus}
+                                                    />
+                                                </Suspense>
+                                            }
+                                        />
+                                        <Route
+                                            path="order"
+                                            element={
+                                                <Suspense
+                                                    fallback={<Loading />}
+                                                >
+                                                    <CustomerOrderContainer
+                                                        showNoti={showNoti}
+                                                        setShowNoti={
+                                                            setShowNoti
+                                                        }
+                                                        setStatus={setStatus}
+                                                    />
+                                                </Suspense>
+                                            }
+                                        />
+                                        <Route
+                                            path="address"
+                                            element={
+                                                <Suspense
+                                                    fallback={<Loading />}
+                                                >
+                                                    <CustomerAddressContainer
+                                                        showNoti={showNoti}
+                                                        setShowNoti={
+                                                            setShowNoti
+                                                        }
+                                                        setStatus={setStatus}
+                                                    />
+                                                </Suspense>
+                                            }
+                                        />
+                                    </Route>
                                 </Route>
                                 <Route
                                     path="customer/login"

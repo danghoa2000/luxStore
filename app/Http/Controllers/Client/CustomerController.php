@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Client;
 
 use App\Http\Controllers\Controller;
+use App\Models\Customer;
 use App\Models\CustomerAddress;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
@@ -122,6 +123,52 @@ class CustomerController extends Controller
         return response([
             'message' => 'Update error!',
             'code' => Response::HTTP_NOT_FOUND
+        ], Response::HTTP_OK);
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function show(Request $request)
+    {
+        $account = Auth::guard('customerApi')->user()->load(['info']);
+        if ($account) {
+            return response([
+                'account' => $account,
+                'message' => 'success!',
+                'code' => Response::HTTP_OK
+            ], Response::HTTP_OK);
+        }
+
+        return response([
+            'account' => [],
+            'message' => 'This account dont exist!',
+            'code' => Response::HTTP_NOT_FOUND
+        ], Response::HTTP_NOT_FOUND);
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function getOrder(Request $request)
+    {
+        $customer = Customer::find(Auth::guard('customerApi')->user()->id);
+        $orders = $customer->orders();
+        $total = $orders->count();
+        if ($request->pageSize) {
+            $orders->limit($request->pageSize)
+                ->offset(($request->currentPage -1) * ($request->pageSize));
+        }
+        return response([
+            'orders' => $orders->get(),
+            'total' => $total,
+            'code' => Response::HTTP_OK
         ], Response::HTTP_OK);
     }
 }

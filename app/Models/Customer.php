@@ -13,6 +13,7 @@ class Customer extends Authenticatable
     use HasApiTokens, HasFactory, Notifiable, SoftDeletes;
 
     protected $table = "customer";
+    protected $guarded = [];
 
     public function info()
     {
@@ -27,5 +28,10 @@ class Customer extends Authenticatable
     public function address()
     {
         return $this->hasMany(CustomerAddress::class, 'code', 'id');
+    }
+
+    public function orders()
+    {
+        return $this->hasMany(Order::class, 'customer_id', 'id');
     }
 }

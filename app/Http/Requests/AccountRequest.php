@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Models\Customer;
 use App\Models\Info;
 use App\Models\User;
 use Illuminate\Foundation\Http\FormRequest;
@@ -28,16 +29,27 @@ class AccountRequest extends FormRequest
     {
 
         $rules = [
-            'user_code' => 'unique:users,user_code',
             'email' => 'unique:info,email',
-            'telephone' => ['nullable', 'unique:info,telephone', 'unique:manufacturer,telephone'],
         ];
+
+        if (!$this->isCustomer) {
+            $rules = [
+                'user_code' => 'unique:users,user_code',
+                'telephone' => ['nullable', 'unique:info,telephone', 'unique:manufacturer,telephone'],
+            ];
+        }
         if ($this->isMethod('put')) {
             $user = User::find($this->id);
+            if ($this->isCustomer) {
+                $user = Customer::find($this->id);
+            } else {
+                $rules = [
+                    'user_code' => 'unique:users,user_code,' . $this->id,
+                    'telephone' => ['nullable', 'unique:info,telephone,' .  $user->info->id, 'unique:manufacturer,telephone,' . $user->info->id],
+                ];
+            }
             $rules = [
-                'user_code' => 'unique:users,user_code,' . $this->id,
                 'email' => 'unique:info,email,' . $user->info->id,
-                'telephone' => ['nullable', 'unique:info,telephone,' .  $user->info->id, 'unique:manufacturer,telephone,' . $user->info->id],
             ];
         }
         return $rules;

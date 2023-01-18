@@ -541,8 +541,43 @@ label.active {
 
     .css-ittuaa-MuiInputAdornment-root,
     .css-1c2i806-MuiFormLabel-root-MuiInputLabel-root,
-    .css-1ptx2yq-MuiInputBase-root-MuiInput-root {
+    .css-1ptx2yq-MuiInputBase-root-MuiInput-root,
+    .css-cveggr-MuiListItemIcon-root,
+    .css-9ddj71-MuiInputBase-root-MuiOutlinedInput-root,
+    .css-1sumxir-MuiFormLabel-root-MuiInputLabel-root {
         color: rgba(0, 0, 0, 0.6) !important;
+    }
+
+    .css-1poimk-MuiPaper-root-MuiMenu-paper-MuiPaper-root-MuiPopover-paper {
+        background-color: #fff !important;
+        box-shadow: rgb(3 0 71 / 9%) 0px 8px 45px;
+    }
+
+    .css-uob957-MuiListSubheader-root {
+        background-color: #fff !important;
+    }
+
+    &.profile__bar {
+        .profile__bar__item-active {
+            .MuiListItemText-root,
+            .MuiListItemIcon-root {
+                color: rgb(233, 69, 96) !important;
+            }
+        }
+        .css-1p823my-MuiListItem-root:hover {
+            cursor: pointer;
+
+            .MuiListItemText-root,
+            .MuiListItemIcon-root {
+                color: rgb(233, 69, 96) !important;
+            }
+        }
+    }
+}
+
+.profile__bar__item-active {
+    svg {
+        color: rgb(233, 69, 96);
     }
 }
 
@@ -550,4 +585,35 @@ label.active {
     .css-s7asi4 {
         width: 500px;
     }
+}
+
+.antialiased {
+    padding: 0 !important;
+    overflow-y: scroll !important;
+}
+
+.css-1lgjx5b-MuiGrid-root > .MuiGrid-item.pl-0 {
+    padding-left: 0;
+}
+
+.order__item {
+    background-color: white;
+    margin: 16px 0;
+    border-radius: 10px;
+
+    .css-1lgjx5b-MuiGrid-root > .MuiGrid-item {
+        padding: 6px 18px;
+    }
+
+    &:first-child {
+        background-color: transparent;
+        margin: 0;
+        .css-1lgjx5b-MuiGrid-root > .MuiGrid-item {
+            padding: 0px 18px;
+        }
+    }
+}
+
+.font-bold {
+    font-weight: bold;
 }

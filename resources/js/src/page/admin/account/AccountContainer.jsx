@@ -92,7 +92,7 @@ const AccountContainer = () => {
                 setStatus({ type: 'error', message: response.data ? response.data.message : 'Server error' });
                 setShowNoti(true)
             });
-    }, []);
+    }, [order, orderBy, page, rowsPerPage, searchField]);
 
     return <Account
         open={open}

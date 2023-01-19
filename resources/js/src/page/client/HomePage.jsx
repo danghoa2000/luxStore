@@ -41,7 +41,7 @@ const HomePage = ({
                 </div>
             </section>
             <NewArrivals productItems={newArrivals} />
-            <Discount productItems={bigDiscounts} />
+            {/* <Discount productItems={bigDiscounts} /> */}
             <Shop shopItems={ortherProduct} addToCart={addToCart} brand={brand} />
             <Annocument />
             <Wrapper />

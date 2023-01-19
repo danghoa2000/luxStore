@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\AccountController;
 use App\Http\Controllers\admin\AttributeController;
 use App\Http\Controllers\Admin\CategoriesController;
+use App\Http\Controllers\Admin\CouponController;
 use App\Http\Controllers\admin\EventController;
 use App\Http\Controllers\Admin\GroupCategoryController;
 use App\Http\Controllers\Admin\HomeController as AdminHomeController;
@@ -87,6 +88,12 @@ Route::group([
         Route::put('order/update', [OrderController::class, 'update'])->name('admin.order.update');
         Route::get('order/show', [OrderController::class, 'show'])->name('order.show');
         Route::delete('order/delete/{id}', [OrderController::class, 'destroy'])->name('admin.order.delete');
+
+        Route::get('coupon', [CouponController::class, 'index'])->name('coupon');
+        Route::post('coupon/create', [CouponController::class, 'store'])->name('coupon.create');
+        Route::put('coupon/update', [CouponController::class, 'update'])->name('coupon.update');
+        Route::get('coupon/show', [CouponController::class, 'show'])->name('coupon.show');
+        Route::delete('coupon/delete/{id}', [ManufacturerController::class, 'destroy'])->name('coupon.delete');
     });
 });
 

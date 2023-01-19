@@ -1,7 +1,8 @@
 import React, { Fragment, useEffect, useState } from "react";
-import { Outlet, useNavigate } from "react-router-dom";
+import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import Header from "../../components/partial/header/Header";
 import Footer from "../../components/partial/footer/Footer";
+import { createBrowserHistory } from "history";
 
 import "../../../sass/app.scss";
 import "../../../sass/common.scss";
@@ -9,11 +10,12 @@ import { Button, Divider, Drawer, IconButton, Typography } from "@mui/material";
 import { Add, Clear, Remove, ShoppingCart } from "@mui/icons-material";
 import { formatPrice } from "../../utils/helper";
 import ShowSnackbars from "../../components/partial/ShowSnackbars";
-import { SESSION_ACCESS_TOKEN } from "../../utils/sessionHelper";
+import { CUSTOMER_INFO, SESSION_ACCESS_TOKEN } from "../../utils/sessionHelper";
 import { BASE_URL } from "../../constants/constants";
 import BasicModal from "../../components/partial/BasicModal";
 import RegisterAccountModal from "../../components/partial/Modal/RegisterAccountModal";
 import SignInAccountModal from "../../components/partial/Modal/SignInAccountModal";
+import { useAuth } from "../../hooks/useAuth";
 // import { MessengerChat } from "react-messenger-chat-plugin";
 // import { useRef } from "react";
 
@@ -30,6 +32,8 @@ const DefaultLayout = ({
     setType,
     open,
     setOpen,
+    setCartItem,
+    getCart
 }) => {
     const [state, setState] = useState(false);
     const toggleDrawer = (state) => (event) => {
@@ -42,6 +46,8 @@ const DefaultLayout = ({
         setState(state);
     };
     const navigate = useNavigate();
+    const history = createBrowserHistory();
+    const { setUser, user } = useAuth();
     // const MessengerRef = useRef();
     // useEffect(() => {
     //     MessengerRef.current.setAttribute("page_id", "your_page_id");
@@ -65,6 +71,22 @@ const DefaultLayout = ({
     //         fjs.parentNode.insertBefore(js, fjs);
     //     })(document, "script", "facebook-jssdk");
     // }, []);
+
+    useEffect(() => {
+        const _token = window.sessionStorage.getItem(SESSION_ACCESS_TOKEN);
+        const paths = history.location.pathname;
+        const arrayPaths = paths.split("/");
+        if (arrayPaths[1] !== "admin") {
+            if (_token) {
+                const info = JSON.parse(
+                    window.sessionStorage.getItem(CUSTOMER_INFO)
+                );
+                setUser(info);
+                getCart();
+            } else setCartItem([]);
+        }
+    }, []);
+
     return (
         <>
             <Header
@@ -72,6 +94,7 @@ const DefaultLayout = ({
                 toggleDrawer={toggleDrawer}
                 setOpen={setOpen}
                 setType={setType}
+                setCartItem={setCartItem}
             />
             <Outlet />
             <Footer />
@@ -236,6 +259,7 @@ const DefaultLayout = ({
                             setStatus={setStatus}
                             setOpen={setOpen}
                             setType={setType}
+                            getCart={getCart}
                         />
                     )}
                 </BasicModal>

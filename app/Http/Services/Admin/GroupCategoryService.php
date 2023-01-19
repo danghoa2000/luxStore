@@ -16,8 +16,7 @@ class GroupCategoryService
             'group_category_code',
             'name',
             'status',
-        )->filter($request)
-            ->where('status', config('constants.user.status.active'));
+        )->filter($request);
         $total = count($groupCategories->get());
         if ($request->pageSize) {
             $groupCategories->limit($request->pageSize)

@@ -132,7 +132,7 @@ const PaymentStep = ({
                                 variant="h7"
                                 style={{ fontWeight: "bold" }}
                             >
-                                {formatPrice(totalPrice)}
+                                0
                             </Typography>
                         </div>
 
@@ -147,16 +147,17 @@ const PaymentStep = ({
                                 variant="h7"
                                 style={{ fontWeight: "bold" }}
                             >
-                                {data?.voucher && Object.keys(data?.voucher) > 0 &&
-                                    data.voucher?.value}
+                                {data?.voucher && data?.voucher?.value
+                                    ? data.voucher?.value
+                                    : 0}
                             </Typography>
                         </div>
                     </div>
                     <h3 style={{ textAlign: "right" }}>
                         {formatPrice(
                             Number(totalPrice) -
-                                Number(data?.voucher?.value || 0) +
-                                Number(data.shipping)
+                                (Number(data?.voucher?.value || 0) +
+                                    Number(data.shipping))
                         )}
                     </h3>
                     <label htmlFor="" style={{ marginBottom: 10 }}>

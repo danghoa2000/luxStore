@@ -18,8 +18,7 @@ class CategoryService
             'description',
             'created_by',
             'status',
-        )->filter($request)
-            ->where('status', config('constants.user.status.active'));
+        )->filter($request);
         $total = count($categories->get());
         if ($request->pageSize) {
             $categories->with('groupCategory', 'createdBy.info')

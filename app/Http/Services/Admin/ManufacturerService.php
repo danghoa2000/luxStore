@@ -17,8 +17,7 @@ class ManufacturerService
             'telephone',
             'address',
             'status',
-        )->filter($request)
-            ->where('status', config('constants.user.status.active'));
+        )->filter($request);
         $total = count($manufacturers->get());
         if ($request->pageSize) {
             $manufacturers->limit($request->pageSize)

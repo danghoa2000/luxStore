@@ -39,3 +39,10 @@ export const PRODUCT_URL = {
     UPDATE: "/admin/product/update",
     CREATE: "/admin/product/create",
 };
+
+export const COUPON_URL = {
+    LIST: "/admin/coupon",
+    SHOW: "/admin/coupon/show",
+    UPDATE: "/admin/coupon/update",
+    CREATE: "/admin/coupon/create",
+};

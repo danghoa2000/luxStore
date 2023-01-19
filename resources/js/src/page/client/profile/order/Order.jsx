@@ -6,7 +6,7 @@ import {
     Typography,
 } from "@mui/material";
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import OrderStatus from "../../../admin/order/detail/OrderStatus";
 import { ShoppingBagOutlined } from "@mui/icons-material";
 import { useTranslation } from "react-i18next";
@@ -31,6 +31,7 @@ const Order = ({
     totalRecord,
 }) => {
     const [t] = useTranslation();
+    const navigate = useNavigate();
     return (
         <>
             <div
@@ -79,7 +80,17 @@ const Order = ({
                 {orderList &&
                     Object.keys(orderList).length > 0 &&
                     Object.values(orderList).map((item) => (
-                        <div className="order__item" key={item.id}>
+                        <div
+                            className="order__item"
+                            key={item.id}
+                            onClick={() =>
+                                navigate("/elite/profile/order/detail", {
+                                    state: {
+                                        id: item.id,
+                                    },
+                                })
+                            }
+                        >
                             <Grid
                                 container
                                 sx={{ margin: 0, padding: 1, width: "100%" }}

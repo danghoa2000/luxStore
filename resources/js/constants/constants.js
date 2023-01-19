@@ -55,6 +55,7 @@ export const CODE = {
     HTTP_NOT_FOUND: 404,
     UNPROCESSABLE_ENTITY: 422,
     HTTP_FOUND: 302,
+    UNAUTHENTICATED: 401,
 };
 
 export const BASE_URL = "http://127.0.0.1:8000/";

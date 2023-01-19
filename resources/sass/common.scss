@@ -573,6 +573,15 @@ label.active {
             }
         }
     }
+
+    &.card__admin {
+        background-color: #fff;
+        color: #212529;
+        box-shadow: none;
+        .product {
+            box-shadow: none;
+        }
+    }
 }
 
 .profile__bar__item-active {
@@ -600,6 +609,7 @@ label.active {
     background-color: white;
     margin: 16px 0;
     border-radius: 10px;
+    cursor: pointer;
 
     .css-1lgjx5b-MuiGrid-root > .MuiGrid-item {
         padding: 6px 18px;
@@ -611,6 +621,7 @@ label.active {
         .css-1lgjx5b-MuiGrid-root > .MuiGrid-item {
             padding: 0px 18px;
         }
+        cursor: unset;
     }
 }
 

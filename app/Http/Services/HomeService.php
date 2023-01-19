@@ -6,23 +6,26 @@ use App\Models\Category;
 use App\Models\Event;
 use App\Models\GroupCategory;
 use App\Models\Product;
+use Carbon\Carbon;
 use Illuminate\Http\Response;
 
 class HomeService
 {
     public function index()
     {
-        $flashDelas = Product::whereHas('events', function ($query) {
-            $query->where('event_type', Event::FLASH_DELAS);
-        })->with('productDetail:qty,sold_qty,product_id,price')
-            ->select('id', 'name', 'image', 'expried', 'sale_type', 'price', 'sale_off')
-            ->get();
-
-        $newArrivals = Product::whereHas('events', function ($query) {
-            $query->where('event_type', Event::NEW_ARRIVALS);
-        })
+        $flashDelas = Product::where('sale_type', '<>', -1)
+            ->where('expried', '>=', Carbon::now())
             ->with('productDetail:qty,sold_qty,product_id,price')
             ->select('id', 'name', 'image', 'expried', 'sale_type', 'price', 'sale_off')
+            ->limit(10)
+            ->offset(0)
+            ->get();
+
+        $newArrivals = Product::orderBy('updated_at', 'desc')
+            ->with('productDetail:qty,sold_qty,product_id,price')
+            ->select('id', 'name', 'image', 'expried', 'sale_type', 'price', 'sale_off')
+            ->limit(10)
+            ->offset(0)
             ->get();
 
         $bigDiscounts = Product::whereHas('events', function ($query) {
@@ -34,7 +37,8 @@ class HomeService
 
         $ortherProduct = Product::with('productDetail:qty,sold_qty,product_id,price')
             ->select('id', 'name', 'image', 'expried', 'sale_type', 'price', 'sale_off')
-            ->take(8)
+            ->limit(9)
+            ->offset(0)
             ->get();
 
         $topRateProduct = Product::select('id', 'name', 'image', 'expried', 'sale_type', 'price', 'sale_off')
@@ -55,6 +59,8 @@ class HomeService
             'status',
         )
             ->where('status', config('constants.user.status.active'))
+            ->limit(6)
+            ->offset(0)
             ->get();
         return response([
             'flashDelas' => $flashDelas,

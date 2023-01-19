@@ -76,6 +76,14 @@ export const ADMIN_ORDER_API = {
     DELETE: API_BASE_URL + "api/auth/admin/order/delete",
 };
 
+export const COUNPON_API = {
+    LIST: API_BASE_URL + "api/auth/admin/coupon",
+    CREATE: API_BASE_URL + "api/auth/admin/coupon/create",
+    UPDATE: API_BASE_URL + "api/auth/admin/coupon/update",
+    SHOW: API_BASE_URL + "api/auth/admin/coupon/show",
+    DELETE: API_BASE_URL + "api/auth/admin/coupon/delete",
+};
+
 export const HOME_API = API_BASE_URL + "api/home";
 export const SEARCH_API = API_BASE_URL + "api/search";
 export const FORM_SEARCH_API = API_BASE_URL + "api/getFormFilter";

@@ -14,16 +14,16 @@ import { Link, useNavigate } from "react-router-dom";
 import OrderStatus from "./OrderStatus";
 import { format } from "date-fns";
 import { parseISO } from "date-fns/esm";
-import { formatPrice } from "../../../../../utils/helper";
-import { BASE_URL, STATUS_ORDER } from "../../../../../constants/constants";
 import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { Controller } from "react-hook-form";
-import ShowSnackbars from "../../../../../components/partial/ShowSnackbars";
-import { Edit, EditAttributes } from "@mui/icons-material";
-import BasicModal from "../../../../../components/partial/BasicModal";
+import { Edit, EditAttributes, ShoppingBag } from "@mui/icons-material";
 import UpdateStatusModal from "./UpdateStatusModal";
 import { useState } from "react";
+import { formatPrice } from "../../../../../../utils/helper";
+import ShowSnackbars from "../../../../../../components/partial/ShowSnackbars";
+import BasicModal from "../../../../../../components/partial/BasicModal";
+import { BASE_URL } from "../../../../../../constants/constants";
 
 const OrderDetail = ({
     loading,
@@ -46,29 +46,34 @@ const OrderDetail = ({
     const navigate = useNavigate();
     return (
         <>
-            <div className="d-flex justify-content-between align-items-center">
-                <Typography variant="h4" gutterBottom>
-                    Orders
-                </Typography>
+            <div className="d-flex justify-content-between align-items-center profile__bar__item-active">
+                <div style={{ display: "flex", alignItems: "center" }}>
+                    <ShoppingBag></ShoppingBag>
+                    <Typography
+                        variant="h6"
+                        margin={"0"}
+                        style={{ fontWeight: "bold" }}
+                    >
+                        Orders
+                    </Typography>
+                </div>
+
                 <Breadcrumbs separator="›" aria-label="breadcrumb">
-                    <Link to="/admin">Home</Link>
-                    <Link to="/admin/orders">Order</Link>
-                    <Typography>Detail</Typography>
-                    <Typography>{state?.id}</Typography>
+                    <Button
+                        variant="contained"
+                        color="info"
+                        onClick={() => navigate(-1)}
+                        style={{ textTransform: "none" }}
+                    >
+                        Back
+                    </Button>
                 </Breadcrumbs>
             </div>
-            <div className="card__admin">
+            <div className="card__admin light__mode" style={{ marginTop: 20 }}>
                 <OrderStatus order={order} />
             </div>
-            <Button
-                variant="contained"
-                color="info"
-                onClick={() => navigate(-1)}
-                style={{ textTransform: "none", margin: "10px 0" }}
-            >
-                Back
-            </Button>
-            <div className="card__admin" style={{ boxShadow: "none" }}>
+
+            <div className="card__admin light__mode">
                 <div className="order__header">
                     <div className="order__id">{`Order ID: ${order?.id}`}</div>
                     <div className="order__placed">
@@ -166,7 +171,7 @@ const OrderDetail = ({
                 spacing={10}
             >
                 <Grid item xs={6} style={{ padding: "0 10px 0 0" }}>
-                    <div className="card__admin">
+                    <div className="card__admin light__mode">
                         <Typography
                             variant="h7"
                             className="color-title"
@@ -222,7 +227,7 @@ const OrderDetail = ({
                     </div>
                 </Grid>
                 <Grid item xs={6} style={{ padding: "0 0 0 10px" }}>
-                    <div className="card__admin">
+                    <div className="card__admin light__mode">
                         <Typography
                             className="color-title"
                             variant="h6"
@@ -244,9 +249,8 @@ const OrderDetail = ({
                                         style={{ fontWeight: "bold" }}
                                     >
                                         {formatPrice(
-                                            order?.price ||
-                                                0 + order?.price_discount ||
-                                                0
+                                            (order?.price || 0) +
+                                                (order?.price_discount || 0)
                                         )}
                                     </Typography>
                                 </div>

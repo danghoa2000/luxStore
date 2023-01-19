@@ -40,7 +40,7 @@ import {
     SESSION_ACCESS_TOKEN,
 } from "../../../utils/sessionHelper";
 
-const Search = ({ CartItem, toggleDrawer, setOpen, setType }) => {
+const Search = ({ CartItem, toggleDrawer, setOpen, setType, setCartItem }) => {
     const { searchField, setSearchFiled } = useSearchField();
     const [isLogin, setLogin] = useState(false);
     const { user, setUser } = useAuth();
@@ -93,6 +93,7 @@ const Search = ({ CartItem, toggleDrawer, setOpen, setType }) => {
                     setUser({});
                     window.sessionStorage.clear(SESSION_ACCESS_TOKEN);
                     window.sessionStorage.clear(CUSTOMER_INFO);
+                    setCartItem([]);
                 }
             })
             .catch((err) => {});
@@ -102,7 +103,9 @@ const Search = ({ CartItem, toggleDrawer, setOpen, setType }) => {
         <>
             <section className="search">
                 <div className="container d-flex align-items-center justifycontent-space-between">
-                    <div className="logo width ">
+                    <div className="logo width "
+                    onClick={() => navigate('/elite')}
+                    >
                         <img
                             src={
                                 "https://bonik-react.vercel.app/assets/images/logo.svg"

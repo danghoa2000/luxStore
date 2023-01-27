@@ -103,8 +103,9 @@ const Search = ({ CartItem, toggleDrawer, setOpen, setType, setCartItem }) => {
         <>
             <section className="search">
                 <div className="container d-flex align-items-center justifycontent-space-between">
-                    <div className="logo width "
-                    onClick={() => navigate('/elite')}
+                    <div
+                        className="logo width "
+                        onClick={() => navigate("/elite")}
                     >
                         <img
                             src={
@@ -142,7 +143,13 @@ const Search = ({ CartItem, toggleDrawer, setOpen, setType, setCartItem }) => {
                                         onClick={handleOpenUserMenu}
                                         sx={{ p: 0 }}
                                     >
-                                        <Avatar>{user?.info?.full_name}</Avatar>
+                                        <Avatar className="avatar__header">
+                                            {user?.info?.full_name
+                                                ? user?.info?.full_name.split(
+                                                      ""
+                                                  )[0]
+                                                : ""}
+                                        </Avatar>
                                     </IconButton>
                                     <Menu
                                         sx={{ mt: "45px" }}

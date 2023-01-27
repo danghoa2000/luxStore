@@ -16,6 +16,7 @@ class GroupCategoryService
             'group_category_code',
             'name',
             'status',
+            'image',
         )->filter($request);
         $total = count($groupCategories->get());
         if ($request->pageSize) {
@@ -37,9 +38,9 @@ class GroupCategoryService
             $groupCategory = GroupCategory::create([
                 'group_category_code' => $request->group_category_code,
                 'name' => $request->name,
-                'status' => $request->status
+                'status' => $request->status,
+                "image" => $request->avatar ? $request->avatar[0]["file"] : "",
             ]);
-
             DB::commit();
             return response([
                 'groupCategory' => $groupCategory,
@@ -82,6 +83,7 @@ class GroupCategoryService
                 $groupCategory->update([
                     'name' => $request->name,
                     'status' => $request->status,
+                    "image" => $request->avatar ? $request->avatar[0]["file"] : "",
                 ]);
 
                 DB::commit();
@@ -190,13 +192,14 @@ class GroupCategoryService
             'group_category_code',
             'name',
             'status',
+            'image'
         )
-        ->withCount(['products' => function ($query) {
-            $query->whereHas('orderDetail');
-        }])
-        ->orderBy('products_count', 'desc')
-        ->take(3)
-        ->get();
+            ->withCount(['products' => function ($query) {
+                $query->whereHas('orderDetail');
+            }])
+            ->orderBy('products_count', 'desc')
+            ->take(3)
+            ->get();
 
         return response([
             "groupCategories" => $groupCategories,

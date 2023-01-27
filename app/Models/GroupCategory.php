@@ -20,6 +20,7 @@ class GroupCategory extends Model
         'group_category_code',
         'name',
         'status',
+        'image'
     ];
 
     protected $table = 'group_category';

@@ -30,7 +30,8 @@ class Product extends Model
         'image',
         'sale_type',
         'sale_off',
-        'expried'
+        'expried',
+        'customer_review'
     ];
 
     protected $table = 'products';
@@ -86,7 +87,8 @@ class Product extends Model
     {
         return $this->belongsToMany(Customer::class, 'reviews', 'product_id', 'user_id')
             ->withPivot('rate', 'name', 'content', 'email', 'parent_id')
-            ->wherePivot('parent_id', null);
+            ->wherePivot('parent_id', null)
+            ->withTimestamps();
     }
 
     public function orderDetail()

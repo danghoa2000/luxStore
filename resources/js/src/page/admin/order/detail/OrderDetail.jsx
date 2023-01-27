@@ -244,9 +244,8 @@ const OrderDetail = ({
                                         style={{ fontWeight: "bold" }}
                                     >
                                         {formatPrice(
-                                            order?.price ||
-                                                0 + order?.price_discount ||
-                                                0
+                                            (order?.price || 0) +
+                                                (order?.price_discount || 0)
                                         )}
                                     </Typography>
                                 </div>

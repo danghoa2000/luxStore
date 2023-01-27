@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { GROUP_CATEGORY_API } from '../../../../../constants/api';
@@ -19,7 +19,7 @@ const GroupCategoryUpdateContainer = () => {
     const [showNoti, setShowNoti] = useState(false);
     const [groupCategory, setGroupCategory] = useState();
     const { state } = useLocation();
-
+    const avatarRef = useRef();
     const [t] = useTranslation();
     const redirectBack = () => navigate(-1);
 
@@ -115,6 +115,8 @@ const GroupCategoryUpdateContainer = () => {
         showNoti={showNoti}
         status={status}
         setShowNoti={setShowNoti}
+        avatarRef={avatarRef}
+        groupCategory={groupCategory}
     />
 };
 

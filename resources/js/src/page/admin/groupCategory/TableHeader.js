@@ -6,6 +6,12 @@
 // convert -> display data with translation
 
 const TableHeader = {
+    image: {
+        id: "image",
+        numeric: false,
+        label: "product.list.table.image",
+        type: "text",
+    },
     group_category_code: {
         id: "group_category_code",
         numeric: false,

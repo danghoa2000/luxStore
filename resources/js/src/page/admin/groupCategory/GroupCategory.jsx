@@ -23,7 +23,7 @@ import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import ShowSnackbars from '../../../../components/partial/ShowSnackbars';
 import EnhancedTableHead from '../../../../components/partial/table/EnhancedTableHead';
-import { ACCOUNT_API } from '../../../../constants/api';
+import { ACCOUNT_API, API_BASE_URL } from '../../../../constants/api';
 import { ACCOUNT_URL, GROUP_CATEGORY_URL } from '../../../../constants/pathUrl';
 import FormFilter from './FormFilter';
 
@@ -120,22 +120,37 @@ const GroupCategory = (props) => {
                                                     />
                                                 </TableCell>
                                                 {
-                                                    Object.keys(headCells).map((headCell, index) => (
-                                                        <TableCell
-                                                            component="td"
-                                                            key={index}
-                                                            scope="row"
-                                                            padding="normal"
-                                                        >
-                                                            {headCells[headCell].render
-                                                                ?
-                                                                headCells[headCell].convert ?
-                                                                    t(headCells[headCell].render(row)) :
-                                                                    headCells[headCell].render(row)
+                                                    Object.keys(headCells).map((headCell, index) => {
+                                                        if (headCells[headCell].id == "image") {
+                                                            return (
+                                                                <TableCell
+                                                                    component="td"
+                                                                    key={index}
+                                                                    scope="row"
+                                                                    style={{ padding: 10 }}
+                                                                >
+                                                                    <img src={API_BASE_URL + row[headCell]} alt="" style={{ maxHeight: 150, margin: 'auto', display: 'block' }} />
+                                                                </TableCell>
+                                                            )
+                                                        } else {
+                                                            return (
+                                                                <TableCell
+                                                                    component="td"
+                                                                    key={index}
+                                                                    scope="row"
+                                                                    padding="normal"
+                                                                >
+                                                                    {headCells[headCell].render
+                                                                        ?
+                                                                        headCells[headCell].convert ?
+                                                                            t(headCells[headCell].render(row)) :
+                                                                            headCells[headCell].render(row)
 
-                                                                : row[headCell]}
-                                                        </TableCell>
-                                                    ))
+                                                                        : row[headCell]}
+                                                                </TableCell>
+                                                            )
+                                                        }
+                                                    })
                                                 }
                                             </TableRow>
                                         );

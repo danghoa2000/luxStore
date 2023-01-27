@@ -76,8 +76,7 @@ const UpdateStatusModal = ({handleUpdate, handleSubmit, control, loading}) => {
 
                 <Button
                     variant="contained"
-                    className="m-1"
-                    style={{ textTransform: "none", maxWidth: "100%" }}
+                    style={{ textTransform: "none", maxWidth: "100%", marginLeft: 25 }}
                     onClick={handleSubmit(handleUpdate)}
                 >
                     {loading && (

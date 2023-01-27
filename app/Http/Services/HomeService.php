@@ -8,6 +8,7 @@ use App\Models\GroupCategory;
 use App\Models\Product;
 use Carbon\Carbon;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\DB;
 
 class HomeService
 {
@@ -42,12 +43,17 @@ class HomeService
             ->get();
 
         $topRateProduct = Product::select('id', 'name', 'image', 'expried', 'sale_type', 'price', 'sale_off')
+            ->withCount(
+                [
+                    'reviews AS rating' => function ($query) {
+                        $query->select(DB::raw('AVG(rate)'), 'product_id', 'user_id');
+                    }
+                ]
+            )
+            ->orderBy('rating', 'desc')
+            ->limit(10)
+            ->offset(0)
             ->get();
-
-        $topRateProduct = $topRateProduct->sortByDesc(function ($item) {
-            return $item->total_rate;
-        })->take(3);
-
 
         $brand = Category::select(
             'id',

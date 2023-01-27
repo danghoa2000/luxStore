@@ -628,3 +628,43 @@ label.active {
 .font-bold {
     font-weight: bold;
 }
+
+.dark__mode {
+    .css-78trlr-MuiButtonBase-root-MuiIconButton-root {
+        color: #fff;
+    }
+    .css-1c99szj-MuiRating-icon {
+        color: #f8fafc69;
+    }
+    .css-d0uhtl {
+        color: #fff;
+    }
+}
+
+.box_product__review {
+    display: flex;
+    margin: 20px 20px 0 20px;
+    .product__review__avatar {
+        width: 65px;
+        margin-right: 10px;
+    }
+
+    &.MuiGrid-item {
+        padding: 10px 20px !important;
+    }
+}
+
+.product__review__rate {
+    > div {
+       display: flex;
+       flex-direction: row; 
+    }
+}
+
+.detail__product__info-rate {
+    &.review {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+    }
+}

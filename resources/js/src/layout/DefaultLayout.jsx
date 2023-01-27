@@ -33,7 +33,7 @@ const DefaultLayout = ({
     open,
     setOpen,
     setCartItem,
-    getCart
+    getCart,
 }) => {
     const [state, setState] = useState(false);
     const toggleDrawer = (state) => (event) => {

@@ -65,7 +65,30 @@ class CouponController extends Controller
 
     public function show(Request $request)
     {
-        $coupon = Coupon::where('coupon_code',$request->coupon_code)->where('status', 1)->first();
+        $coupon = Coupon::find($request->id);
+        if ($coupon) {
+            return response([
+                'coupon' => $coupon,
+                'message' => 'success!',
+                'code' => Response::HTTP_OK
+            ], Response::HTTP_OK);
+
+            return response([
+                'message' => 'Voucher is Invalid!',
+                'code' => Response::HTTP_NOT_FOUND
+            ], Response::HTTP_NOT_FOUND);
+        }
+
+        return response([
+            'coupon' => [],
+            'message' => 'This coupon dont exist!',
+            'code' => Response::HTTP_NOT_FOUND
+        ], Response::HTTP_NOT_FOUND);
+    }
+
+    public function checkValid(Request $request)
+    {
+        $coupon = Coupon::where('coupon_code', $request->coupon_code)->where('status', 1)->first();
         if ($coupon) {
             if ($coupon->qty > 0 && Carbon::parse($coupon->date_finish)->format('Y-m-d') >= Carbon::now()->format('Y-m-d')) {
                 return response([
@@ -80,15 +103,14 @@ class CouponController extends Controller
             return response([
                 'message' => 'Voucher is Invalid!',
                 'code' => Response::HTTP_NOT_FOUND
-            ], Response::HTTP_NOT_FOUND);
-            
+            ], Response::HTTP_OK);
         }
 
         return response([
             'coupon' => [],
             'message' => 'This coupon dont exist!',
             'code' => Response::HTTP_NOT_FOUND
-        ], Response::HTTP_NOT_FOUND);
+        ], Response::HTTP_OK);
     }
 
     public function update(Request $request)

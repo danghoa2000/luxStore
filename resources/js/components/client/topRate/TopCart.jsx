@@ -5,21 +5,29 @@ import "slick-carousel/slick/slick-theme.css"
 import Tdata from "./Tdata"
 import { Rating } from "@mui/material"
 import { Star } from "@mui/icons-material"
+import { useNavigate } from "react-router-dom"
 
 const TopCart = ({ topRateProduct }) => {
   const settings = {
     dots: false,
     infinite: true,
-    slidesToShow: 3,
+    slidesToShow: 5,
     slidesToScroll: 1,
-    autoplay: true,
+    autoplay: false,
   }
+  const navigate = useNavigate();
   return (
     <>
       <Slider {...settings}>
         {topRateProduct?.map((value, index) => {
           return (
-            <div className='box' key={index}>
+            <div className='box' key={index}
+            onClick={() => navigate('/elite/product', {
+              state: {
+                id: value?.id
+              }
+            })}
+            >
               <div className="product">
                 <div className='img'>
                   {value?.sale_persen ? <span className='discount'>{value?.sale_persen}% Off</span> : ""}

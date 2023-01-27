@@ -25,13 +25,12 @@ const DetailStep = ({
     const applyVoucher = (data) => {
         if (data?.voucher?.name) {
             axiosClient
-                .get(COUNPON_API.SHOW, {
+                .get(COUNPON_API.CHECK_VALID, {
                     params: {
                         coupon_code: data?.voucher?.name,
                     },
                 })
                 .then((response) => {
-                    setShowNoti(true);
                     if (response.data.code === CODE.HTTP_OK) {
                         setData({
                             ...data,
@@ -42,6 +41,7 @@ const DetailStep = ({
                             },
                         });
                     } else {
+                        setShowNoti(true);
                         setStatus({
                             type: "warning",
                             message:

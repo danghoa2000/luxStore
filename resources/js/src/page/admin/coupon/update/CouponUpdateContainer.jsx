@@ -50,11 +50,18 @@ const CouponUpdateContainer = () => {
                 },
             })
             .then((response) => {
-                setCoupon(response.data.coupon);
-                if (response.data.code === CODE.HTTP_NOT_FOUND) {
+                if (response.data.code === CODE.HTTP_OK) {
+                    setCoupon(response.data.coupon);
+                } else if (response.data.code === CODE.HTTP_NOT_FOUND) {
                     setStatus({
                         type: "error",
                         message: response.data.message,
+                    });
+                    setShowNoti(true);
+                } else {
+                    setStatus({
+                        type: "error",
+                        message: "Error!",
                     });
                     setShowNoti(true);
                 }
@@ -116,7 +123,9 @@ const CouponUpdateContainer = () => {
                 }
                 setShowNoti(true);
                 setLoading(false);
-                navigate(-1);
+                setTimeout(() => {
+                    navigate(-1);
+                }, 1500);
             })
             .catch(({ response }) => {
                 if (response.data.code === CODE.UNPROCESSABLE_ENTITY) {
@@ -140,14 +149,24 @@ const CouponUpdateContainer = () => {
             });
     }, []);
 
-    
-
-
     useEffect(() => {
         setValue("id", coupon ? coupon.id : "");
-        setValue("coupon_code", coupon && coupon.coupon_code ? coupon.coupon_code : "");
-        setValue("date_start", coupon && coupon.date_start ? format(parseISO(coupon.date_start), 'yyyy-MM-dd') : "");
-        setValue("date_finish", coupon && coupon.date_finish ? format(parseISO(coupon.date_finish), 'yyyy-MM-dd') : "");
+        setValue(
+            "coupon_code",
+            coupon && coupon.coupon_code ? coupon.coupon_code : ""
+        );
+        setValue(
+            "date_start",
+            coupon && coupon.date_start
+                ? format(parseISO(coupon.date_start), "yyyy-MM-dd")
+                : ""
+        );
+        setValue(
+            "date_finish",
+            coupon && coupon.date_finish
+                ? format(parseISO(coupon.date_finish), "yyyy-MM-dd")
+                : ""
+        );
         setValue("status", coupon ? coupon.status : -1);
         setValue("value", coupon && coupon.value ? coupon.value : "");
         setValue("qty", coupon && coupon.qty ? coupon.qty : "");

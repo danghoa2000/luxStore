@@ -24,6 +24,9 @@ import { formatPrice } from "../../../../../../utils/helper";
 import ShowSnackbars from "../../../../../../components/partial/ShowSnackbars";
 import BasicModal from "../../../../../../components/partial/BasicModal";
 import { BASE_URL } from "../../../../../../constants/constants";
+import ReviewModal from "../../../../../../components/partial/Modal/ReviewModal";
+import { useAuth } from "../../../../../../hooks/useAuth";
+import ShowReviewModal from "../../../../../../components/partial/Modal/ShowReviewModal";
 
 const OrderDetail = ({
     loading,
@@ -37,6 +40,10 @@ const OrderDetail = ({
     control,
     open,
     setOpen,
+    type,
+    setType,
+    setStatus,
+    getOrder,
 }) => {
     const ADDRESS = useMemo(
         () => (order?.address ? JSON.parse(order?.address) : {}),
@@ -44,6 +51,9 @@ const OrderDetail = ({
     );
     const [t] = useTranslation();
     const navigate = useNavigate();
+    const [productReview, setProductReview] = useState();
+    const [productIdReview, setProductIdReview] = useState();
+    const { user } = useAuth();
     return (
         <>
             <div className="d-flex justify-content-between align-items-center profile__bar__item-active">
@@ -158,7 +168,38 @@ const OrderDetail = ({
                                             )
                                         }`}
                                     </div>
-                                    <div className="order__product__item-properties"></div>
+                                    <div className="order__product__item-properties">
+                                        {item?.product?.customer_review &&
+                                        JSON.parse(
+                                            item?.product?.customer_review
+                                        ).includes(user?.id) ? (
+                                            <Button
+                                                variant="contained"
+                                                className="btn__view_cart"
+                                                onClick={() => {
+                                                    setOpen(true);
+                                                    setType(3);
+                                                    setProductIdReview(
+                                                        item?.product_id
+                                                    );
+                                                }}
+                                            >
+                                                Show a Review
+                                            </Button>
+                                        ) : (
+                                            <Button
+                                                variant="contained"
+                                                className="btn__view_cart"
+                                                onClick={() => {
+                                                    setOpen(true);
+                                                    setType(2);
+                                                    setProductReview(item);
+                                                }}
+                                            >
+                                                Write a Review
+                                            </Button>
+                                        )}
+                                    </div>
                                 </div>
                             );
                         })}
@@ -317,12 +358,32 @@ const OrderDetail = ({
             </Grid>
             {open && (
                 <BasicModal open={open} handleClose={() => setOpen(false)}>
-                    <UpdateStatusModal
-                        handleUpdate={handleUpdate}
-                        handleSubmit={handleSubmit}
-                        control={control}
-                        loading={loading}
-                    />
+                    {type == 1 && (
+                        <UpdateStatusModal
+                            handleUpdate={handleUpdate}
+                            handleSubmit={handleSubmit}
+                            control={control}
+                            loading={loading}
+                        />
+                    )}
+                    {type == 2 && (
+                        <ReviewModal
+                            product={productReview}
+                            setStatus={setStatus}
+                            setShowNoti={setShowNoti}
+                            setOpen={setOpen}
+                            getOrder={getOrder}
+                        />
+                    )}
+
+                    {type == 3 && (
+                        <ShowReviewModal
+                            productId={productIdReview}
+                            setStatus={setStatus}
+                            setShowNoti={setShowNoti}
+                            setOpen={setOpen}
+                        />
+                    )}
                 </BasicModal>
             )}
             {showNoti && (

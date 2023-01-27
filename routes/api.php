@@ -96,7 +96,7 @@ Route::group([
         Route::delete('coupon/delete/{id}', [ManufacturerController::class, 'destroy'])->name('coupon.delete');
     });
 });
-
+Route::get('auth/admin/coupon/check-valid', [CouponController::class, 'checkValid'])->name('coupon.checkValid');
 Route::post('auth/admin/account/create', [AccountController::class, 'store'])->name('account.create');
 Route::put('auth/admin/account/update', [AccountController::class, 'update'])->name('account.update');
 
@@ -140,5 +140,8 @@ Route::group([
         Route::put('order/update', [OrderController::class, 'update'])->name('order.update');
         Route::get('order/show', [OrderController::class, 'show'])->name('order.show');
         Route::delete('order/delete/{id}', [OrderController::class, 'destroy'])->name('order.delete');
+    
+        Route::post('product/review', [ProductController::class, 'review'])->name('product.review');
+        Route::post('product/review/show', [ProductController::class, 'reviewShow'])->name('product.review.show');
     });
 });

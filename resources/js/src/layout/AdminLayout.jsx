@@ -253,12 +253,12 @@ const AdminLayout = () => {
                                 </ListItemIcon>
                                 <ListItemText>Products</ListItemText>
                             </MenuItem>
-                            <MenuItem onClick={() => redirect('event')}>
+                            {/* <MenuItem onClick={() => redirect('event')}>
                                 <ListItemIcon>
                                     <BookOnline fontSize="small" />
                                 </ListItemIcon>
                                 <ListItemText>Events</ListItemText>
-                            </MenuItem>
+                            </MenuItem> */}
                             <MenuItem onClick={() => redirect('orders')}>
                                 <ListItemIcon>
                                     <BookOnline fontSize="small" />

@@ -13,7 +13,7 @@ const OrderDetailContainer = () => {
     const [showNoti, setShowNoti] = useState(false);
     const [order, setOrder] = useState();
     const [open, setOpen] = useState(false);
-
+    const [type, setType] = useState(1);
     const { state } = useLocation();
 
     const { handleSubmit, control, reset, setValue, getValues } = useForm({
@@ -108,6 +108,7 @@ const OrderDetailContainer = () => {
             loading={loading}
             showNoti={showNoti}
             status={status}
+            setStatus={setStatus}
             setShowNoti={setShowNoti}
             order={order}
             state={state}
@@ -116,6 +117,9 @@ const OrderDetailContainer = () => {
             control={control}
             open={open}
             setOpen={setOpen}
+            type={type}
+            setType={setType}
+            getOrder={getOrder}
         />
     );
 };

@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { formatPrice } from "../../../utils/helper";
-import { Box, Button, TextField, Typography } from "@mui/material";
+import { Box, Button, Chip, TextField, Typography } from "@mui/material";
 import { axiosClient } from "../../../hooks/useHttp";
-import { CUSTOMER_ADDRESS_API } from "../../../constants/api";
+import { COUNPON_API, CUSTOMER_ADDRESS_API } from "../../../constants/api";
 import { useAuth } from "../../../hooks/useAuth";
 import { CODE } from "../../../constants/constants";
 
@@ -19,8 +19,51 @@ const DetailStep = ({
     address,
     currentAddress,
     setOpen,
+    setStatus,
+    setShowNoti,
 }) => {
-    const applyVoucher = () => {};
+    const applyVoucher = (data) => {
+        if (data?.voucher?.name) {
+            axiosClient
+                .get(COUNPON_API.CHECK_VALID, {
+                    params: {
+                        coupon_code: data?.voucher?.name,
+                    },
+                })
+                .then((response) => {
+                    if (response.data.code === CODE.HTTP_OK) {
+                        setData({
+                            ...data,
+                            voucher: {
+                                ...data.voucher,
+                                value: response?.data.value,
+                                id: response?.data.id,
+                            },
+                        });
+                    } else {
+                        setShowNoti(true);
+                        setStatus({
+                            type: "warning",
+                            message:
+                                response.data.message || "Voucher is Invalid",
+                        });
+                    }
+                })
+                .catch((err) => {
+                    setShowNoti(true);
+                    setStatus({
+                        type: "error",
+                        message: err?.data ? err.data.message : "Server error",
+                    });
+                });
+        } else {
+            setShowNoti(true);
+            setStatus({
+                type: "warning",
+                message: "Please enter your voucher!",
+            });
+        }
+    };
     return (
         <React.Fragment>
             <div className="container d-flex">
@@ -171,7 +214,7 @@ const DetailStep = ({
                                 variant="h7"
                                 style={{ fontWeight: "bold" }}
                             >
-                                {formatPrice(totalPrice)}
+                                -
                             </Typography>
                         </div>
 
@@ -186,13 +229,13 @@ const DetailStep = ({
                                 variant="h7"
                                 style={{ fontWeight: "bold" }}
                             >
-                                -
+                                {formatPrice(data?.voucher?.value || 0)}
                             </Typography>
                         </div>
                     </div>
                     <h3 style={{ textAlign: "right" }}>
                         {" "}
-                        {formatPrice(totalPrice)}
+                        {formatPrice(totalPrice - (data?.voucher?.value ?? 0))}
                     </h3>
                     <label htmlFor="" style={{ marginBottom: 10 }}>
                         Additional Comments
@@ -219,33 +262,41 @@ const DetailStep = ({
                         }
                         margin="dense"
                     />
+                    {data?.voucher && data?.voucher?.id ? (
+                        <Chip
+                            label={data?.voucher?.name}
+                            onDelete={() => setData({ ...data, voucher: {} })}
+                        />
+                    ) : (
+                        <>
+                            <TextField
+                                name="voucher"
+                                variant="outlined"
+                                placeholder="Voucher"
+                                className="voucher"
+                                margin="dense"
+                                value={data.voucher.name || ""}
+                                onChange={(e) =>
+                                    setData({
+                                        ...data,
+                                        voucher: {
+                                            ...data.voucher,
+                                            name: e.target.value,
+                                        },
+                                    })
+                                }
+                            />
 
-                    <TextField
-                        name="voucher"
-                        variant="outlined"
-                        placeholder="Voucher"
-                        className="voucher"
-                        margin="dense"
-                        value={data.voucher.name || ''}
-                        onChange={(e) =>
-                            setData({
-                                ...data,
-                                voucher: {
-                                    ...data.voucher,
-                                    name: e.target.value,
-                                },
-                            })
-                        }
-                    />
-
-                    <Button
-                        variant="contained"
-                        className="btn__view_cart"
-                        style={{ margin: 0 }}
-                        onClick={applyVoucher}
-                    >
-                        Apply Voucher
-                    </Button>
+                            <Button
+                                variant="contained"
+                                className="btn__view_cart"
+                                style={{ margin: 0 }}
+                                onClick={() => applyVoucher(data)}
+                            >
+                                Apply Voucher
+                            </Button>
+                        </>
+                    )}
                 </div>
             </div>
         </React.Fragment>

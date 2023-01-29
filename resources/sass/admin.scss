@@ -470,3 +470,9 @@ table {
 .MuiTypography-root.MuiTypography-h7 {
     display: block;
 } 
+
+.card__admin {
+    .product {
+        box-shadow: none;
+    }
+}

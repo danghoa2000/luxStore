@@ -26,7 +26,13 @@ import {
 } from "../../../utils/sessionHelper";
 import { useAuth } from "../../../hooks/useAuth";
 
-const SignInAccountModal = ({ setShowNoti, setStatus, setOpen, setType }) => {
+const SignInAccountModal = ({
+    setShowNoti,
+    setStatus,
+    setOpen,
+    setType,
+    getCart,
+}) => {
     const [t] = useTranslation();
     const { setUser } = useAuth();
     const [loading, setLoading] = useState(false);
@@ -74,6 +80,7 @@ const SignInAccountModal = ({ setShowNoti, setStatus, setOpen, setType }) => {
                     CUSTOMER_INFO,
                     JSON.stringify(res.data.info)
                 );
+                getCart();
                 setLoading(false);
                 setOpen(false);
             })
@@ -230,7 +237,7 @@ const SignInAccountModal = ({ setShowNoti, setStatus, setOpen, setType }) => {
                         display: "flex",
                         alignItems: "center",
                         justifyContent: "center",
-                        width: '100%'
+                        width: "100%",
                     }}
                 >
                     <Typography
@@ -243,7 +250,11 @@ const SignInAccountModal = ({ setShowNoti, setStatus, setOpen, setType }) => {
 
                     <span
                         onClick={() => setType(1)}
-                        style={{ textDecoration: "underline", margin: 5, color: 'blue' }}
+                        style={{
+                            textDecoration: "underline",
+                            margin: 5,
+                            color: "blue",
+                        }}
                     >
                         Register
                     </span>

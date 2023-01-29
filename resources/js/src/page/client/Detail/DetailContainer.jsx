@@ -15,18 +15,31 @@ const DetailContainer = ({ CartItem, addToCart, decreaseQty, showNoti, setShowNo
     const [option, setOption] = useState({});
     const [stock, setStock] = useState(0);
     const [currentOption, setCurrentOption] = useState({});
+    const [totalRecord, setTotalRecord] = useState(0);
+    const [totalRate, setTotalRate] = useState(0);
+    const [page, setPage] = useState(1);
+    const [rowsPerPage, setRowsPerPage] = useState(5);
 
     const handleChange = (event, newValue) => {
         setTab(newValue);
     };
     const getProduct = useCallback(() => {
+        const paramater = {
+            pageSize: rowsPerPage,
+            currentPage: page,
+            id: state?.id 
+        };
         axiosClient.get(PRODUCT_API.SHOW, {
             params: {
-                id: state?.id || 1
+                ...paramater
             }
         }).then((response) => {
+            if (response.data.code === CODE.HTTP_OK) {
             setProduct(response.data.product);
-            if (response.data.code === CODE.HTTP_NOT_FOUND) {
+            setTotalRecord(response.data.totalRecord)
+            setTotalRate(response.data.totalRate)
+            }
+            else if (response.data.code === CODE.HTTP_NOT_FOUND) {
                 setStatus({ type: 'error', message: response.data.message });
                 setShowNoti(true)
             };
@@ -34,10 +47,10 @@ const DetailContainer = ({ CartItem, addToCart, decreaseQty, showNoti, setShowNo
             setStatus({ type: 'error', message: response.data ? response.data.message : 'Server error' });
             setShowNoti(true)
         });
-    }, [state])
+    }, [state, page, rowsPerPage])
     useEffect(() => {
         getProduct();
-    }, [state])
+    }, [state, page, rowsPerPage])
 
     const checkExitProduct = () => {
         const optionTemp = (Object.values(option)).sort();
@@ -179,6 +192,11 @@ const DetailContainer = ({ CartItem, addToCart, decreaseQty, showNoti, setShowNo
         customPaging={customPaging}
         SALLED={SALLED}
         currentOption={currentOption}
+        page={page}
+        setPage={setPage}
+        totalRecord={totalRecord}
+        rowsPerPage={rowsPerPage}
+        totalRate={totalRate}
     />
 };
 

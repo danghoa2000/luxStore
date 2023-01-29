@@ -57,6 +57,19 @@
             }
         }
     },
+    "coupon": {
+        "list": {
+            "table": {
+                "coupon_code": "Coupon code",
+                "status": "Status",
+                "date_start": "Date start",
+                "date_finish": "Date finish",
+                "price_discount": "Price discount",
+                "qty": "qty"
+            }
+        }
+    },
+
     "shipping": {
         "list": {
             "table": {

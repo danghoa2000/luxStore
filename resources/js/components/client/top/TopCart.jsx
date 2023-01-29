@@ -3,14 +3,15 @@ import Slider from "react-slick"
 import "slick-carousel/slick/slick.css"
 import "slick-carousel/slick/slick-theme.css"
 import Tdata from "./Tdata"
+import { API_BASE_URL } from "../../../constants/api"
 
 const TopCart = ({ topGroupCategory }) => {
   const settings = {
     dots: false,
     infinite: true,
-    slidesToShow: 2,
+    slidesToShow: 3,
     slidesToScroll: 1,
-    autoplay: true,
+    autoplay: false,
   }
   return (
     <>
@@ -24,7 +25,7 @@ const TopCart = ({ topGroupCategory }) => {
                   <span className='tright'>{value?.name}</span>
                 </div>
                 <div className='img has__hover'>
-                  <img src={value?.image} alt='' />
+                  <img src={API_BASE_URL + value?.image} alt='' />
                 </div>
               </div>
             </div>

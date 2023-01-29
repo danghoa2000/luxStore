@@ -23,6 +23,7 @@ export default function Paypal({ totalPrice, setData, data, handelSubmit }) {
                 onApprove: async (res, actions) => {
                     const order = await actions.order.capture();
                     if(order.status === "COMPLETED") {
+                        console.log(1111111);
                         handelSubmit({...data, orderStatus: 1})
                     }
                 },

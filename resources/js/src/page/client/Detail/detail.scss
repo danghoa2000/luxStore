@@ -45,6 +45,12 @@
 
     .detail__product__info-rate {
         padding-left: 0;
+
+        &.review {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
     }
 
     .detail__product__info-price {
@@ -271,7 +277,7 @@ span.total__rate {
     box-sizing: border-box;
     padding: 1.875rem;
     flex-direction: column;
-    
+
     .rating__overview__rate {
         color: #ee4d2d;
     }

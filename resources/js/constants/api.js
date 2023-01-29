@@ -54,6 +54,8 @@ export const PRODUCT_API = {
     UPDATE: API_BASE_URL + "api/auth/admin/product/update",
     SHOW: API_BASE_URL + "api/auth/admin/product/show",
     ATTRIBUTE: API_BASE_URL + "api/auth/admin/product/attribute",
+    REVIEW: API_BASE_URL + "api/product/review",
+    REVIEW_SHOW: API_BASE_URL + "api/product/review/show",
 };
 
 export const API_UPPLOAD = API_BASE_URL + "api/upload";
@@ -74,6 +76,15 @@ export const ADMIN_ORDER_API = {
     UPDATE: API_BASE_URL + "api/auth/admin/order/update",
     SHOW: API_BASE_URL + "api/auth/admin/order/show",
     DELETE: API_BASE_URL + "api/auth/admin/order/delete",
+};
+
+export const COUNPON_API = {
+    LIST: API_BASE_URL + "api/auth/admin/coupon",
+    CREATE: API_BASE_URL + "api/auth/admin/coupon/create",
+    UPDATE: API_BASE_URL + "api/auth/admin/coupon/update",
+    SHOW: API_BASE_URL + "api/auth/admin/coupon/show",
+    DELETE: API_BASE_URL + "api/auth/admin/coupon/delete",
+    CHECK_VALID: API_BASE_URL + "api/auth/admin/coupon/check-valid"
 };
 
 export const HOME_API = API_BASE_URL + "api/home";

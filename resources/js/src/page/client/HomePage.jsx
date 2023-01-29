@@ -1,15 +1,15 @@
-import React from 'react';
+import React from "react";
 
-import Home from "../../../components/client/MainPage/Home"
-import FlashDeals from "../../../components/client/flashDeals/FlashDeals"
-import TopCate from "../../../components/client/top/TopCate"
-import NewArrivals from "../../../components/client/newarrivals/NewArrivals"
-import Discount from "../../../components/client/discount/Discount"
-import Shop from "../../../components/client/shops/Shop"
-import Annocument from "../../../components/client/annocument/Annocument"
-import Wrapper from "../../../components/client/wrapper/Wrapper"
-import TopRate from '../../../components/client/topRate/TopRate';
-import TemporaryDrawer from '../../../components/partial/TemporaryDrawer';
+import Home from "../../../components/client/MainPage/Home";
+import FlashDeals from "../../../components/client/flashDeals/FlashDeals";
+import TopCate from "../../../components/client/top/TopCate";
+import NewArrivals from "../../../components/client/newarrivals/NewArrivals";
+import Discount from "../../../components/client/discount/Discount";
+import Shop from "../../../components/client/shops/Shop";
+import Annocument from "../../../components/client/annocument/Annocument";
+import Wrapper from "../../../components/client/wrapper/Wrapper";
+import TopRate from "../../../components/client/topRate/TopRate";
+import TemporaryDrawer from "../../../components/partial/TemporaryDrawer";
 
 const HomePage = ({
     productItems,
@@ -30,19 +30,33 @@ const HomePage = ({
         <>
             <Home CartItem={CartItem} />
             <FlashDeals productItems={flashDelas} addToCart={addToCart} />
-            <section className='background'>
-                <div className="container" style={{ display: 'flex', flexWrap: 'wrap' }}>
-                    <div style={{ width: "50%" }}>
+            <section className="background">
+                <div
+                    className="container"
+                    style={{ display: "flex", flexWrap: "wrap" }}
+                >
+                    <div style={{ width: "100%" }}>
                         <TopCate topGroupCategory={topGroupCategory} />
                     </div>
-                    <div style={{ width: "50%" }}>
+                </div>
+            </section>
+            <section className="background">
+                <div
+                    className="container"
+                    style={{ display: "flex", flexWrap: "wrap" }}
+                >
+                    <div style={{ width: "100%" }}>
                         <TopRate topRateProduct={topRateProduct} />
                     </div>
                 </div>
             </section>
             <NewArrivals productItems={newArrivals} />
-            <Discount productItems={bigDiscounts} />
-            <Shop shopItems={ortherProduct} addToCart={addToCart} brand={brand} />
+            {/* <Discount productItems={bigDiscounts} /> */}
+            <Shop
+                shopItems={ortherProduct}
+                addToCart={addToCart}
+                brand={brand}
+            />
             <Annocument />
             <Wrapper />
         </>

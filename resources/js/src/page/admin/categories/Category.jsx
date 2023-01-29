@@ -54,13 +54,13 @@ const Category = (props) => {
         <>
             <div className="d-flex justify-content-between align-items-center">
                 <Typography variant="h4" gutterBottom>
-                    Category
+                    Brand
                 </Typography>
                 <Breadcrumbs separator="›" aria-label="breadcrumb">
                     <Link to="/admin">
                         Home
                     </Link>
-                    <Typography>Category</Typography>
+                    <Typography>Brand</Typography>
                 </Breadcrumbs>
             </div>
             <div style={{ marginBottom: 10 }}>

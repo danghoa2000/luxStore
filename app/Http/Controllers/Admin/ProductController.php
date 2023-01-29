@@ -5,7 +5,11 @@ namespace App\Http\Controllers\admin;
 use App\Http\Controllers\Controller;
 use App\Http\Services\Admin\ProductService;
 use App\Http\Services\UploadService;
+use App\Models\Product;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class ProductController extends Controller
 {
@@ -71,23 +75,79 @@ class ProductController extends Controller
         return $this->productService->delete($id);
     }
 
-    /**
-     * Display a listing attribute of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function attribute(Request $request)
-    {
-        return $this->productService->attribute($request);
-    }
 
     /**
-     * Display a listing options of the resource.
+     * Review product.
      *
      * @return \Illuminate\Http\Response
      */
-    public function options(Request $request)
+    public function review(Request $request)
     {
-        return $this->productService->options($request);
+        try {
+            DB::beginTransaction();
+            $product = Product::find($request->id);
+            $user = Auth::guard('customerApi')->user();
+            $option[$user->id] = [
+                'content' => $request->content,
+                'rate' => $request->rate,
+                'name' => $user->info->full_name
+            ];
+            if ($product) {
+                $product->reviews()->attach($option);
+                if ($product->customer_review) {
+                    $arr = json_decode($product->customer_review);
+                    $arr[] = $user->id;
+
+                    $product->update(['customer_review' => json_encode($arr)]);
+                } else {
+                    $arr[] = $user->id;
+                    $product->update(['customer_review' => json_encode($arr)]);
+                }
+                DB::commit();
+                return response([
+                    'message' => 'Review success!',
+                    'code' => Response::HTTP_OK
+                ], Response::HTTP_OK);
+            }
+            return response([
+                'message' => 'This product dont exist!',
+                'code' => Response::HTTP_NOT_FOUND
+            ], Response::HTTP_OK);
+        } catch (\Throwable $th) {
+            return response([
+                'message' => 'Server error!',
+                'code' => Response::HTTP_INTERNAL_SERVER_ERROR
+            ], Response::HTTP_OK);
+        }
+    }
+
+    public function reviewShow(Request $request)
+    {
+        $review = Product::join('reviews', 'products.id', '=', 'reviews.product_id')
+            ->join('customer', 'customer.id', '=', 'reviews.user_id')
+            ->where('products.id', $request->productId)
+            ->where('customer.id', $request->userId)
+            ->select(
+                'products.id',
+                'products.product_code',
+                'products.name',
+                'products.description',
+                'products.category_id',
+                'products.group_category_id',
+                'products.manufacturer_id',
+                'products.image',
+                'products.status',
+                'products.price',
+                'products.expried',
+                'products.sale_type',
+                'products.sale_off'
+            )
+            ->selectRaw(('reviews.rate, reviews.content, reviews.created_at, reviews.name as customer_name'))
+            ->first();
+        return response([
+            'review' => $review,
+            'message' => 'Review success!',
+            'code' => Response::HTTP_OK
+        ], Response::HTTP_OK);
     }
 }

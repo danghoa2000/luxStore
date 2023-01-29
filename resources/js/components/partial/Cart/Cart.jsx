@@ -248,9 +248,7 @@ const Cart = ({
                 setShowNoti(true);
                 setStatus({
                     type: "error",
-                    message: err?.data
-                        ? err.data.message
-                        : "Server error",
+                    message: err?.data ? err.data.message : "Server error",
                 });
             });
     };
@@ -381,6 +379,8 @@ const Cart = ({
                         address={address}
                         currentAddress={currentAddress}
                         setOpen={setOpen}
+                        setStatus={setStatus}
+                        setShowNoti={setShowNoti}
                     />
                 )}
 

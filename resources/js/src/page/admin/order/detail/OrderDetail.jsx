@@ -1,5 +1,6 @@
 import {
     Breadcrumbs,
+    Button,
     Divider,
     FormControl,
     Grid,
@@ -9,7 +10,7 @@ import {
     Typography,
 } from "@mui/material";
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import OrderStatus from "./OrderStatus";
 import { format } from "date-fns";
 import { parseISO } from "date-fns/esm";
@@ -42,6 +43,7 @@ const OrderDetail = ({
         [order]
     );
     const [t] = useTranslation();
+    const navigate = useNavigate();
     return (
         <>
             <div className="d-flex justify-content-between align-items-center">
@@ -58,7 +60,14 @@ const OrderDetail = ({
             <div className="card__admin">
                 <OrderStatus order={order} />
             </div>
-
+            <Button
+                variant="contained"
+                color="info"
+                onClick={() => navigate(-1)}
+                style={{ textTransform: "none", margin: "10px 0" }}
+            >
+                Back
+            </Button>
             <div className="card__admin" style={{ boxShadow: "none" }}>
                 <div className="order__header">
                     <div className="order__id">{`Order ID: ${order?.id}`}</div>
@@ -199,7 +208,6 @@ const OrderDetail = ({
                             {t(`payment_method.${order?.payment_method || 0}`)}
                         </Typography>
 
-                        
                         <Typography
                             variant="h7"
                             className="color-title"
@@ -209,7 +217,7 @@ const OrderDetail = ({
                         </Typography>
 
                         <Typography variant="h8">
-                            {order?.note || 'Null'}
+                            {order?.note || "Null"}
                         </Typography>
                     </div>
                 </Grid>
@@ -235,7 +243,10 @@ const OrderDetail = ({
                                         variant="h7"
                                         style={{ fontWeight: "bold" }}
                                     >
-                                        {formatPrice(order?.price || 0)}
+                                        {formatPrice(
+                                            (order?.price || 0) +
+                                                (order?.price_discount || 0)
+                                        )}
                                     </Typography>
                                 </div>
 
@@ -280,11 +291,18 @@ const OrderDetail = ({
                                         variant="h7"
                                         style={{ fontWeight: "bold" }}
                                     >
-                                        -
+                                        {formatPrice(
+                                            order?.price_discount || 0
+                                        )}
                                     </Typography>
                                 </div>
                             </div>
-                            <h3 style={{ textAlign: "right" }}>
+                            <h3
+                                style={{
+                                    textAlign: "right",
+                                    fontWeight: "bold",
+                                }}
+                            >
                                 {" "}
                                 {formatPrice(order?.price || 0)}
                             </h3>

@@ -21,7 +21,7 @@ const Info = ({
     handleUpdate,
     status,
     showNoti,
-    setShowNoti
+    setShowNoti,
 }) => {
     return (
         <>
@@ -46,7 +46,7 @@ const Info = ({
             >
                 <div style={{}}>
                     <Avatar sx={{ width: 50, height: 50 }}>
-                        {account?.info?.full_name}
+                        {account?.info?.full_name ? account?.info?.full_name.split("")[0] : ""}
                     </Avatar>
                 </div>
                 <form onSubmit={handleSubmit(handleUpdate)}>

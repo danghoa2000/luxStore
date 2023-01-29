@@ -38,8 +38,7 @@ class ProductService
                 'sale_off'
             )
             ->withSum('productDetail', 'qty')
-            ->filter($request)
-        ->where('status', config('constants.user.status.active'));
+            ->filter($request);
         $total = count($products->get());
         if ($request->pageSize) {
             $products->limit($request->pageSize)
@@ -134,11 +133,22 @@ class ProductService
                 'sale_off',
                 'expried',
                 'price'
-            )
-            ->find($request->id);
+            );
+
+        if ($request->pageSize) {
+            $product->with(['reviews' => function ($query) use ($request) {
+                $query->limit($request->pageSize)
+                    ->offset(($request->currentPage - 1) * ($request->pageSize));
+            }]);
+        }
+        $product = $product->find($request->id);
         if ($product) {
+            $totalRecord = $product->reviews()->count();
+            $totalRate = $product->reviews()->avg('rate');
             return response([
                 'product' => $product,
+                'totalRecord' => $totalRecord,
+                'totalRate' => $totalRate,
                 'message' => 'success!',
                 'code' => Response::HTTP_OK
             ], Response::HTTP_OK);

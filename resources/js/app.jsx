@@ -12,7 +12,7 @@ import DefaultLayout from "./src/layout/DefaultLayout";
 import { AuthContext } from "./hooks/useAuth";
 import { CODE, ROLE } from "./constants/constants";
 import PrivateAdminRoute from "./PrivateAdminRoute";
-
+import PrivateUserRoute from "./PrivateUserRoute";
 import Data from "./components/client/Data";
 import Sdata from "./components/client/shops/Sdata";
 import Loading from "./components/partial/Loading";
@@ -21,7 +21,6 @@ import { axiosClient } from "./hooks/useHttp";
 import { CART_API } from "./constants/api";
 import { object } from "yup";
 import { CUSTOMER_INFO, SESSION_ACCESS_TOKEN } from "./utils/sessionHelper";
-import { createBrowserHistory } from "history";
 
 // admin
 const AdminLoginContainer = lazy(() =>
@@ -72,13 +71,13 @@ const AdminGroupCategoryUpdateContainer = lazy(() =>
 );
 
 const AdminProductContainer = lazy(() =>
-    import("./src/page/admin/Product/ProductContainer")
+    import("./src/page/admin/product/ProductContainer")
 );
 const AdminProductCreateContainer = lazy(() =>
-    import("./src/page/admin/Product/create/ProductCreateContainer")
+    import("./src/page/admin/product/create/ProductCreateContainer")
 );
 const AdminProductUpdateContainer = lazy(() =>
-    import("./src/page/admin/Product/update/ProductUpdateContainer")
+    import("./src/page/admin/product/update/ProductUpdateContainer")
 );
 
 const AdminShippingContainer = lazy(() =>
@@ -93,6 +92,17 @@ const AdminOrderContainer = lazy(() =>
 const AdminOrderDetailContainer = lazy(() =>
     import("./src/page/admin/order/detail/OrderDetailContainer")
 );
+
+const AdminCouponContainer = lazy(() =>
+    import("./src/page/admin/coupon/CouponContainer")
+);
+const AdminCouponCreateContainer = lazy(() =>
+    import("./src/page/admin/coupon/create/CouponCreateContainer")
+);
+const AdminCouponUpdateContainer = lazy(() =>
+    import("./src/page/admin/coupon/update/CouponUpdateContainer")
+);
+
 // ====
 
 const HomePageContainer = lazy(() =>
@@ -116,6 +126,10 @@ const CustomerOrderContainer = lazy(() =>
     import("./src/page/client/profile/order/OrderContainer")
 );
 
+const CustomerOrderDetailContainer = lazy(() =>
+    import("./src/page/client/profile/order/detail/OrderDetailContainer")
+);
+
 const CustomerInfoContainer = lazy(() =>
     import("./src/page/client/profile/info/InfoContainer")
 );
@@ -134,7 +148,6 @@ const App = () => {
     const [CartItem, setCartItem] = useState([]);
     const [open, setOpen] = useState(false);
     const [type, setType] = useState(2);
-    const history = createBrowserHistory();
 
     const getCart = () => {
         axiosClient
@@ -209,6 +222,13 @@ const App = () => {
                         });
                     });
                 }
+                if (response.response.status === CODE.UNAUTHENTICATED) {
+                    setStatus({
+                        type: "warning",
+                        message: 'Sign in to purchase'
+                    });
+                }
+                
             });
     }, []);
 
@@ -240,6 +260,12 @@ const App = () => {
                         ? response.data.message
                         : "Server error",
                 });
+                if (response.response.status === CODE.UNAUTHENTICATED) {
+                    setStatus({
+                        type: "warning",
+                        message: 'Sign in to purchase'
+                    });
+                }
             });
     };
 
@@ -264,19 +290,6 @@ const App = () => {
 
     const urlNotExist = useCallback(() => {
         return <Navigate to="/elite" replace />;
-    }, []);
-
-    useEffect(() => {
-        const _token = window.sessionStorage.getItem(SESSION_ACCESS_TOKEN);
-        const paths = history.location.pathname;
-        const arrayPaths = paths.split("/");
-        if (arrayPaths[1] !== "admin") {
-            if (_token) {
-                const info = JSON.parse(window.sessionStorage.getItem(CUSTOMER_INFO));
-                setUser(info);
-                getCart();
-            } else setCartItem([]);
-        }
     }, []);
 
     return (
@@ -309,6 +322,8 @@ const App = () => {
                                             setType={setType}
                                             open={open}
                                             setOpen={setOpen}
+                                            setCartItem={setCartItem}
+                                            getCart={getCart}
                                         />
                                     }
                                 >
@@ -329,19 +344,25 @@ const App = () => {
                                         path="cart"
                                         element={
                                             <Suspense fallback={<Loading />}>
-                                                <CartContainer
-                                                    CartItem={CartItem}
-                                                    addToCart={addToCart}
-                                                    decreaseQty={decreaseQty}
-                                                    removeCartItem={
-                                                        removeCartItem
-                                                    }
-                                                    getCart={getCart}
-                                                    showNoti={showNoti}
-                                                    setShowNoti={setShowNoti}
-                                                    status={status}
-                                                    setStatus={setStatus}
-                                                />
+                                                <PrivateUserRoute>
+                                                    <CartContainer
+                                                        CartItem={CartItem}
+                                                        addToCart={addToCart}
+                                                        decreaseQty={
+                                                            decreaseQty
+                                                        }
+                                                        removeCartItem={
+                                                            removeCartItem
+                                                        }
+                                                        getCart={getCart}
+                                                        showNoti={showNoti}
+                                                        setShowNoti={
+                                                            setShowNoti
+                                                        }
+                                                        status={status}
+                                                        setStatus={setStatus}
+                                                    />
+                                                </PrivateUserRoute>
                                             </Suspense>
                                         }
                                     />
@@ -373,12 +394,16 @@ const App = () => {
                                         path="profile"
                                         element={
                                             <Suspense fallback={<Loading />}>
-                                                <ProfileContainer
-                                                    showNoti={showNoti}
-                                                    setShowNoti={setShowNoti}
-                                                    setStatus={setStatus}
-                                                    CartItem={CartItem}
-                                                />
+                                                <PrivateUserRoute>
+                                                    <ProfileContainer
+                                                        showNoti={showNoti}
+                                                        setShowNoti={
+                                                            setShowNoti
+                                                        }
+                                                        setStatus={setStatus}
+                                                        CartItem={CartItem}
+                                                    />
+                                                </PrivateUserRoute>
                                             </Suspense>
                                         }
                                     >
@@ -399,12 +424,29 @@ const App = () => {
                                             }
                                         />
                                         <Route
+                                            exact
                                             path="order"
                                             element={
                                                 <Suspense
                                                     fallback={<Loading />}
                                                 >
                                                     <CustomerOrderContainer
+                                                        showNoti={showNoti}
+                                                        setShowNoti={
+                                                            setShowNoti
+                                                        }
+                                                        setStatus={setStatus}
+                                                    />
+                                                </Suspense>
+                                            }
+                                        ></Route>
+                                        <Route
+                                            path="order/detail"
+                                            element={
+                                                <Suspense
+                                                    fallback={<Loading />}
+                                                >
+                                                    <CustomerOrderDetailContainer
                                                         showNoti={showNoti}
                                                         setShowNoti={
                                                             setShowNoti
@@ -451,19 +493,6 @@ const App = () => {
                                             <Suspense fallback={<Loading />}>
                                                 <AdminHomeContainer />
                                             </Suspense>
-                                        }
-                                    />
-                                    <Route
-                                        path="blogs"
-                                        element={
-                                            <PrivateAdminRoute
-                                                roles={[
-                                                    ROLE.MANAGER,
-                                                    ROLE.EMPLOYEE,
-                                                ]}
-                                            >
-                                                <div>blogs</div>
-                                            </PrivateAdminRoute>
                                         }
                                     />
                                     <Route
@@ -617,6 +646,63 @@ const App = () => {
                                                         ]}
                                                     >
                                                         <AdminManufacturerUpdateContainer />
+                                                    </PrivateAdminRoute>
+                                                </Suspense>
+                                            }
+                                        />
+                                    </Route>
+                                    <Route
+                                        path="coupon"
+                                        element={<Outlet />}
+                                    >
+                                        <Route
+                                            index
+                                            element={
+                                                <Suspense
+                                                    fallback={<Loading />}
+                                                >
+                                                    <PrivateAdminRoute
+                                                        roles={[
+                                                            ROLE.MANAGER,
+                                                            ROLE.EMPLOYEE,
+                                                        ]}
+                                                    >
+                                                        <AdminCouponContainer />
+                                                    </PrivateAdminRoute>
+                                                </Suspense>
+                                            }
+                                        />
+
+                                        <Route
+                                            path="create"
+                                            element={
+                                                <Suspense
+                                                    fallback={<Loading />}
+                                                >
+                                                    <PrivateAdminRoute
+                                                        roles={[
+                                                            ROLE.MANAGER,
+                                                            ROLE.EMPLOYEE,
+                                                        ]}
+                                                    >
+                                                        <AdminCouponCreateContainer />
+                                                    </PrivateAdminRoute>
+                                                </Suspense>
+                                            }
+                                        />
+                                        <Route
+                                            path="update"
+                                            element={
+                                                <Suspense
+                                                    fallback={<Loading />}
+                                                >
+                                                    <PrivateAdminRoute
+                                                        roles={[
+                                                            ROLE.MANAGER,
+                                                            ROLE.EMPLOYEE,
+                                                        ]}
+                                                    >
+                                                        <AdminCouponUpdateContainer />
                                                     </PrivateAdminRoute>
                                                 </Suspense>
                                             }

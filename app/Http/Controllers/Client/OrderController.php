@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Client;
 
 use App\Http\Controllers\Controller;
+use App\Models\Coupon;
 use App\Models\Order;
 use App\Models\ProductDetail;
 use App\Models\Voucher;
@@ -55,7 +56,8 @@ class OrderController extends Controller
                 'price' => $request->totalPrice + $request->shipping,
                 'price_discount' => 0,
                 'note' => $request->note,
-                'address' => $request->address
+                'address' => $request->address,
+                'payment_method' => $request->paymentMethod,
             ]);
 
             $productList = [];
@@ -71,13 +73,16 @@ class OrderController extends Controller
             }
 
             $productList = array_unique($productList);
-            if (isset($request->voucher->id)) {
-                $voucher = Voucher::find($request->voucher->id);
+            if (isset($request->voucher["id"])) {
+                $voucher = Coupon::find($request->voucher["id"]);
                 $user = Auth::guard('customerApi')->user();
-                if ($this->checkVouchervalid($voucher, $productList, $user->id)) {
+                if ($voucher->qty > 0 && Carbon::parse($voucher->date_finish)->format('Y-m-d') >= Carbon::now()->format('Y-m-d')) {
                     $order->update([
-                        'price' => $order->price - $voucher->price,
-                        'price_discount' => $voucher->price
+                        'price' => $order->price - $voucher->value,
+                        'price_discount' => $voucher->value
+                    ]);
+                    $voucher->update([
+                        'qty' => $voucher->qty - 1
                     ]);
                 }
             }

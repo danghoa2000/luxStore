@@ -239,31 +239,37 @@ const AdminLayout = () => {
                                 <ListItemIcon>
                                     <BookOnline fontSize="small" />
                                 </ListItemIcon>
-                                <ListItemText>Categories</ListItemText>
+                                <ListItemText>Brand</ListItemText>
                             </MenuItem>
-                            <MenuItem onClick={() => redirect('shipping')}>
+                            {/* <MenuItem onClick={() => redirect('shipping')}>
                                 <ListItemIcon>
                                     <BookOnline fontSize="small" />
                                 </ListItemIcon>
                                 <ListItemText>Shipping</ListItemText>
-                            </MenuItem>
+                            </MenuItem> */}
                             <MenuItem onClick={() => redirect('product')}>
                                 <ListItemIcon>
                                     <BookOnline fontSize="small" />
                                 </ListItemIcon>
                                 <ListItemText>Products</ListItemText>
                             </MenuItem>
-                            <MenuItem onClick={() => redirect('event')}>
+                            {/* <MenuItem onClick={() => redirect('event')}>
                                 <ListItemIcon>
                                     <BookOnline fontSize="small" />
                                 </ListItemIcon>
                                 <ListItemText>Events</ListItemText>
-                            </MenuItem>
+                            </MenuItem> */}
                             <MenuItem onClick={() => redirect('orders')}>
                                 <ListItemIcon>
                                     <BookOnline fontSize="small" />
                                 </ListItemIcon>
                                 <ListItemText>Orders</ListItemText>
+                            </MenuItem>
+                            <MenuItem onClick={() => redirect('coupon')}>
+                                <ListItemIcon>
+                                    <BookOnline fontSize="small" />
+                                </ListItemIcon>
+                                <ListItemText>Coupons</ListItemText>
                             </MenuItem>
 
                         </MenuList>

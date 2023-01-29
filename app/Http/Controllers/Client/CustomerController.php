@@ -159,7 +159,7 @@ class CustomerController extends Controller
     public function getOrder(Request $request)
     {
         $customer = Customer::find(Auth::guard('customerApi')->user()->id);
-        $orders = $customer->orders();
+        $orders = $customer->orders()->orderBy('created_at', 'desc');
         $total = $orders->count();
         if ($request->pageSize) {
             $orders->limit($request->pageSize)

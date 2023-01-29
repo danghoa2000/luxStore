@@ -128,7 +128,7 @@ class Product extends Model
             if ($this->attributes['sale_type'] == config('constants.sale_type.persen')) {
                 return $this->attributes['sale_off'];
             } else {
-                return 100 - ceil(($this->attributes['sale_off'] / $this->attributes['price']) * 100);
+                return 100 - ceil(($this->attributes['sale_off'] / $this->getMinPriceAttribute()) * 100);
             }
         }
         return 0;

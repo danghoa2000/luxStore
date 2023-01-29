@@ -53,10 +53,10 @@ const SaleOff = ({
                             <MenuItem key={-1} value={-1}>
                                 {"Select sale type"}
                             </MenuItem>
-                            <MenuItem disabled key={1} value={1}>
+                            <MenuItem  key={1} value={1}>
                                 {"vnđ"}
                             </MenuItem>
-                            <MenuItem key={0} value={2}>
+                            <MenuItem disabled key={0} value={2}>
                                 {"%"}
                             </MenuItem>
                         </Select>

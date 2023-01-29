@@ -84,7 +84,7 @@ const ProductUpdateContainer = () => {
             },
             then: () => Yup.string().required(t('validate.required', { name: 'Expried sale' }))
                 .test("", "Invalid value", value => {
-                    return format(parseISO(value), DATE_TIME) > format(new Date(), DATE_TIME)
+                    return value > format(new Date(), 'yyyy-MM-dd')
                 })
         }),
     }, [['sale_type', 'expried'], ['expried', 'price_saled'], ['sale_type', 'price_saled']]);

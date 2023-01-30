@@ -10,6 +10,7 @@ use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 
 class LoginController extends Controller
 {
@@ -100,9 +101,11 @@ class LoginController extends Controller
 
     public function logout(Request $request)
     {
-        $accessToken = Auth::guard('api')->user()->token();
+        $accessToken = '';
         if ($request->isCustomer) {
             $accessToken = Auth::guard('customerApi')->user()->token();
+        } else {
+            $accessToken = Auth::guard('api')->user()->token();
         }
         $accessToken->revoke();
         return response()->json([

@@ -37,7 +37,6 @@ class HomeController extends Controller
             ->selectRaw(('COUNT(case when status = 0 then 1 end) as order_pending'))
             ->selectRaw(('COUNT(case when status = 2 then 1 end) as order_success'))
             ->selectRaw(('COUNT(case when status = 3 then 1 end) as order_cancel'));
-
         $startDate = Carbon::now()->format('Y-m-01');
         $endDate = Carbon::now()->endOfMonth()->format('Y-m-d');
         if ($request->date_from) {
@@ -104,7 +103,7 @@ class HomeController extends Controller
                     $data[$index] = [
                         'total' => 0,
                         'order_pending' => 0,
-                        'order_success' => 0,
+                        'order_cancel' => 0,
                         'order_success' => 0,
                     ];
                 } while ($startDate1->add(1, 'week')->lte($endDate1));
@@ -112,7 +111,7 @@ class HomeController extends Controller
                     $index = 'week: ' . ($chart->week < 10 ? ('0' . $chart->week) : $chart->week) . ', ' . $chart->year;
                     $data[$index]['total'] = $chart->total;
                     $data[$index]['order_pending'] = $chart->order_pending;
-                    $data[$index]['order_success'] = $chart->order_success;
+                    $data[$index]['order_cancel'] = $chart->order_cancel;
                     $data[$index]['order_success'] = $chart->order_success;
                 }
                 break;
@@ -124,7 +123,7 @@ class HomeController extends Controller
                     $data[$index] = [
                         'total' => 0,
                         'order_pending' => 0,
-                        'order_success' => 0,
+                        'order_cancel' => 0,
                         'order_success' => 0,
                     ];
                 } while ($startDate1->add(1, 'month')->lte($endDate1));
@@ -132,7 +131,7 @@ class HomeController extends Controller
                     $index = $chart->year . '-' . $chart->month;
                     $data[$index]['total'] = $chart->total;
                     $data[$index]['order_pending'] = $chart->order_pending;
-                    $data[$index]['order_success'] = $chart->order_success;
+                    $data[$index]['order_cancel'] = $chart->order_cancel;
                     $data[$index]['order_success'] = $chart->order_success;
                 }
                 break;
@@ -145,7 +144,7 @@ class HomeController extends Controller
                     $data[$index] = [
                         'total' => 0,
                         'order_pending' => 0,
-                        'order_success' => 0,
+                        'order_cancel' => 0,
                         'order_success' => 0,
                     ];
                 } while ($startDate1->add(1, 'year')->lte($endDate1));
@@ -153,7 +152,7 @@ class HomeController extends Controller
                     $index = $chart->year;
                     $data[$index]['total'] = $chart->total;
                     $data[$index]['order_pending'] = $chart->order_pending;
-                    $data[$index]['order_success'] = $chart->order_success;
+                    $data[$index]['order_cancel'] = $chart->order_cancel;
                     $data[$index]['order_success'] = $chart->order_success;
                 }
                 break;
@@ -165,7 +164,7 @@ class HomeController extends Controller
                     $data[$index] = [
                         'total' => 0,
                         'order_pending' => 0,
-                        'order_success' => 0,
+                        'order_cancel' => 0,
                         'order_success' => 0,
                     ];
                 } while ($startDate1->add(1, 'day')->lte($endDate1));
@@ -173,7 +172,7 @@ class HomeController extends Controller
                     $index = $chart->date;
                     $data[$index]['total'] = $chart->total;
                     $data[$index]['order_pending'] = $chart->order_pending;
-                    $data[$index]['order_success'] = $chart->order_success;
+                    $data[$index]['order_cancel'] = $chart->order_cancel;
                     $data[$index]['order_success'] = $chart->order_success;
                 }
                 break;

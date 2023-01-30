@@ -65,9 +65,13 @@ const ProductContainer = () => {
         });
     };
 
-    const getFormFilter = useCallback(() => {
+    const getFormFilter = useCallback((id) => {
         setComplateSetting(false);
-        axiosClient.get(FORM_SEARCH_API).then((response) => {
+        axiosClient.get(FORM_SEARCH_API, {
+            params: {
+                group_category_id: id
+            }
+        }).then((response) => {
             if (response.data.code === CODE.HTTP_OK) {
                 setFormFilter(response.data.formFilter);
                 setComplateSetting(true)
@@ -79,14 +83,12 @@ const ProductContainer = () => {
     }, []);
 
     useEffect(() => {
-        getFormFilter();
-    }, [])
+        getFormFilter(getValues('group_category_id'));
+    }, [getValues('group_category_id')])
 
     useEffect(() => {
-        if (isCompleteSetting) {
             getProductList();
-        }
-    }, [orderBy, page, rowsPerPage, isCompleteSetting])
+    }, [orderBy, page, rowsPerPage])
 
 
     return (

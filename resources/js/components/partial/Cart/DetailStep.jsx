@@ -110,18 +110,17 @@ const DetailStep = ({
                         </div>
                     </div>
 
-                    <div className="cart-list product">
+                    <div className="cart-list product cart-item">
                         <Typography variant="h7" style={{ fontWeight: "bold" }}>
                             Order detail
                         </Typography>
 
                         {CartItem.map((item, index) => {
                             let price = item.price;
-                            if (item.sale_price) {
-                                price = item.sale_price;
+                            if (item.sale_price && item.sale_price != 0) {
+                                price = item.price - item.sale_price;
                             }
                             const productQty = price * item.pivot.qty;
-
                             return (
                                 <div className="d-flex" key={item.id}>
                                     <span
@@ -134,7 +133,7 @@ const DetailStep = ({
                                         <h3>{item.product.name}</h3>
                                         <h4>
                                             {formatPrice(
-                                                item.sale_price || item.price
+                                               price
                                             )}{" "}
                                             * {item.pivot.qty}
                                             <span>

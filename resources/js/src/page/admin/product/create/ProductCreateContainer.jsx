@@ -56,7 +56,7 @@ const ProductCreateContainer = () => {
                     .required(t('validate.required', { name: 'Price saled' }))
                     .test("", "Invalid value", (value, testContext) => {
                         if (testContext.parent.sale_type == SALE_TYPE.PRICE) {
-                            return value <= testContext.parent.price
+                            return value
                         }
                         else if (testContext.parent.sale_type == SALE_TYPE.PERSEN) {
                             return 0 <= value <= 100

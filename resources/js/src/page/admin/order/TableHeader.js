@@ -25,8 +25,11 @@ const TableHeader = {
         label: "order.list.table.customer_name",
         type: "text",
         render: (value) => {
-            let data = JSON.parse(value.address);
-            return data.full_name;
+            if (value && value?.address) {
+                let data = JSON.parse(value?.address);
+                return data?.full_name;
+            }
+            return "";
         },
     },
     status: {
@@ -54,8 +57,11 @@ const TableHeader = {
         numeric: false,
         label: "order.list.table.address",
         render: (value) => {
-            let data = JSON.parse(value.address);
-            return data.address;
+            if (value && value?.address) {
+                let data = JSON.parse(value?.address);
+                return data?.address;
+            }
+            return "";
         },
     },
     order_date: {
@@ -63,7 +69,7 @@ const TableHeader = {
         numeric: false,
         label: "order.list.table.order_date",
         render: (value) => {
-            return format(parseISO(value.created_at), 'yyyy-MM-dd');
+            return format(parseISO(value.created_at), "yyyy-MM-dd");
         },
     },
 };

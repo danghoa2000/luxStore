@@ -127,12 +127,22 @@ const DetailContainer = ({ CartItem, addToCart, decreaseQty, showNoti, setShowNo
         const optionTemp = OPTION;
         if (optionTemp) {
             return Object.keys(optionTemp).map((value, index) => {
+                    let data = [];
+                    let uniqueId = [];
+                    optionTemp[value].option.forEach(element => {
+                        if(!uniqueId.includes(element.id)) {
+                            data.push(element);
+                            uniqueId.push(element.id)
+                        }
+                    })
+                    
                 return (
                     <div className='product__option__item' key={index}>
                         <span className='product__option__item-name' data-id={optionTemp[value].id}>{value}</span>
                         <div className='product__option__list'>
+  
                             {
-                                Object.values(optionTemp[value].option).map((opt) => (
+                                Object.values(data).map((opt) => (
                                     <div className={`product__option-check ${option && Object.values(option).includes(opt.id) ? 'option-checked' : ''}`} data-id={opt.id} key={opt.id}
                                         onClick={() => {
                                             const newOptions = { ...option }

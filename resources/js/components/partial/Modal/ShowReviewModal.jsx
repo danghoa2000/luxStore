@@ -95,6 +95,7 @@ const ShowReviewModal = ({ productId, setStatus, setShowNoti }) => {
                     borderColor: "rgb(246, 249, 252)",
                     borderBottomWidth: "thin",
                     opacity: 0.5,
+                    margin: 10
                 }}
             />
             <Grid
@@ -145,7 +146,7 @@ const ShowReviewModal = ({ productId, setStatus, setShowNoti }) => {
                                                         }
                                                         readOnly
                                                     />
-                                                    <span className="font-bold mx-2 text-white">
+                                                    <span className="font-bold mx-2 text-white" style={{ fontSize: 14 }}>
                                                         {review?.created_at
                                                             ? format(
                                                                   parseISO(

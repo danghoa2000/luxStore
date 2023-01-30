@@ -134,7 +134,7 @@ const ProductContainer = () => {
                 setStatus({ type: 'error', message: response.data ? response.data.message : 'Server error' });
                 setShowNoti(true)
             });
-    }, []);
+    }, [order, orderBy, page, rowsPerPage, searchField]);
 
     return <Product
         open={open}

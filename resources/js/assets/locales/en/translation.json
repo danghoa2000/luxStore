@@ -93,7 +93,8 @@
                 "manufacturer_id": "Manufacturer",
                 "description": "Description",
                 "avatar": "Avatar",
-                "qty": "Qty"
+                "qty": "Qty",
+                "sold_qty": "Sold qty"
             }
         }
     },
@@ -129,7 +130,7 @@
         "0": "Block"
     },
     "payment_method": {
-        "0": "Pay on delivery",
-        "1": "Pay with Paypal"
+        "1": "Pay on delivery",
+        "2": "Pay with Paypal"
     }
 }

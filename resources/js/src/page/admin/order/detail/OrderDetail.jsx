@@ -205,7 +205,7 @@ const OrderDetail = ({
                         </Typography>
 
                         <Typography variant="h8">
-                            {t(`payment_method.${order?.payment_method || 0}`)}
+                            {t(`payment_method.${order?.payment_method || 1}`)}
                         </Typography>
 
                         <Typography

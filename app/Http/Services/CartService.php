@@ -23,8 +23,9 @@ class CartService
                 if ($auth->cart) {
                     $auth->cart->products()->attach($product->id, ['qty' => $request->qty]);
                 } else {
-                    $cart = $auth->cart->create(['customer_id' => $auth->id]);
-                    $cart->products()->attach($request->id, ['qty' => $request->qty]);
+                    $cart = $auth->cart()->create();
+                    $auth->update(['cart_id' => $cart->id]);
+                    $cart->products()->attach($product->id, ['qty' => $request->qty]);
                 }
                 DB::commit();
                 return response([
@@ -53,7 +54,7 @@ class CartService
             'cart.products.propertyValue:attribute_value_name',
             'cart.products.product:id,name,image,expried,sale_type,price,sale_off'
         )->find(Auth::guard('customerApi')->user()->id);
-        $cart = $user->cart->products;
+        $cart = $user->cart ? $user->cart->products : [];
         return response([
             'cart' => $cart,
             'message' => 'success!',

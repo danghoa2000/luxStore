@@ -180,7 +180,7 @@ const Cart = ({
     const totalPrice = CartItem.reduce((price, item) => {
         let newPrice = item.price;
         if (item.sale_price) {
-            newPrice = item.sale_price;
+            newPrice = item.price - item.sale_price;
         }
         return price + item.pivot.qty * newPrice;
     }, 0);
@@ -284,9 +284,7 @@ const Cart = ({
     }, []);
 
     useEffect(() => {
-        if (Object.keys(CartItem).length > 0) {
-            setData({ ...data, cart: CartItem, totalPrice: totalPrice });
-        }
+        setData({ ...data, cart: CartItem, totalPrice: totalPrice });
     }, [CartItem]);
 
     const getProvince = useCallback(() => {

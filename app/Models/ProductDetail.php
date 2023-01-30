@@ -50,7 +50,7 @@ class ProductDetail extends Model
                 if ($this->product->sale_type == config('constants.sale_type.price')) {
                     return  $this->product->sale_off;
                 } else {
-                    return $this->attributes['price'] ? $this->attributes['price'] - floor(($this->attributes['price'] *  $this->product->sale_off) / 100) : 0;
+                    return $this->attributes['price'] ? floor(($this->attributes['price'] * $this->product->sale_off) / 100) : 0;
                 }
             }
             return 0;
@@ -68,7 +68,7 @@ class ProductDetail extends Model
             if ( $this->product->sale_type == config('constants.sale_type.persen')) {
                 return  $this->product->sale_off;
             } else {
-                return 100 - ceil(( $this->product->sale_off / $this->attributes['price']) * 100);
+                return ceil(( $this->product->sale_off / $this->attributes['price']) * 100);
             }
         }
         return 0;

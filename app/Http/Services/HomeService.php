@@ -123,39 +123,40 @@ class HomeService
 
     public function getFormFilter($request)
     {
-        $data = json_decode($request->searchField, true);
+        $data = $request->group_category_id;
         $formFilter = [];
-        $groupCategory = GroupCategory::select('id', 'name');
-        if (!empty($data['name'])) {
-            $groupCategory->where('name', 'like', '%' . $data['name'] . '%');
-        }
-        $groupCategory = $groupCategory->get();
-        $category = Category::whereHas('products', function ($query) use ($groupCategory) {
-            $query->whereIn('group_category_id', $groupCategory->pluck('id')->toArray());
-        })
-            ->select('id', 'name')
-            ->get();
+        $groupCategory = GroupCategory::select('id', 'name')->get();
         $formFilter['groupCategory'] = $groupCategory;
-        $formFilter['category'] = $category;
+        if ($data) {
+            $groupCategory = GroupCategory::select('id', 'name')->where('id', $data);
+            $category = Category::where('group_category_id', $data)
+                ->select('id', 'name')
+                ->get();
+            
+            $formFilter['category'] = $category;
 
-        $attributes = $groupCategory->first() ? $groupCategory->first()->attributes : null;
-        if ($attributes) {
-            foreach ($attributes as $item) {
-                $formFilter['attribute'][$item->id] = [
-                    'name' => $item->name,
-                    'option' => $item->attributeValue
-                        ->filter(function ($value) {
-                            return $value->products()->count();
-                        })
-                        ->map(function ($data) {
-                            $newData = [];
-                            $newData['id'] = $data['id'];
-                            $newData['name'] = $data['attribute_value_name'];
-                            return $newData;
-                        })
-                ];
+            $attributes = $groupCategory->first() ? $groupCategory->first()->attributes : null;
+            if ($attributes) {
+                foreach ($attributes as $item) {
+                    $formFilter['attribute'][$item->id] = [
+                        'name' => $item->name,
+                        'option' => $item->attributeValue
+                            ->filter(function ($value) {
+                                return $value->products()->count();
+                            })
+                            ->map(function ($data) {
+                                $newData = [];
+                                $newData['id'] = $data['id'];
+                                $newData['name'] = $data['attribute_value_name'];
+                                return $newData;
+                            })
+                    ];
+                }
             }
         }
+
+
+
         $formFilter['rate'] = true;
         $formFilter['price'] = true;
 

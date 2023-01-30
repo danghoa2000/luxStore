@@ -30,13 +30,13 @@ const CartStep = ({
                     {CartItem.map((item) => {
                         let price = item.price;
                         if (item.sale_price) {
-                            price = item.sale_price;
+                            price = item.price - item.sale_price;
                         }
                         const productQty = price * item.pivot.qty;
 
                         return (
                             <div
-                                className="cart-list product d-flex"
+                                className="cart-list product cart-item d-flex"
                                 key={item.id}
                             >
                                 <div className="img">
@@ -49,7 +49,7 @@ const CartStep = ({
                                     <h3>{item.product.name}</h3>
                                     <h4>
                                         {formatPrice(
-                                            item.sale_price || item.price
+                                            price
                                         )}{" "}
                                         * {item.pivot.qty}
                                         <span>{formatPrice(productQty)}</span>

@@ -47,28 +47,30 @@ const PaymentStep = ({
                                     control={<Radio />}
                                     label={"Pay with Paypal"}
                                 />
-                                <div
-                                    style={{
-                                        height:
-                                            data.paymentMethod == "2"
-                                                ? "auto"
-                                                : "0",
-                                        position: "relative",
-                                        overflow: "hidden",
-                                        transition: "height 0.5s",
-                                        display:
-                                            data.paymentMethod == "2"
-                                                ? "block"
-                                                : "none",
-                                    }}
-                                >
-                                    <Paypal
-                                        totalPrice={totalPrice}
-                                        handelSubmit={handelSubmit}
-                                        data={data}
-                                        setData={setData}
-                                    />
-                                </div>
+                                {data.paymentMethod == "2" && (
+                                    <div
+                                        style={{
+                                            height:
+                                                data.paymentMethod == "2"
+                                                    ? "auto"
+                                                    : "0",
+                                            position: "relative",
+                                            overflow: "hidden",
+                                            transition: "height 0.5s",
+                                            display:
+                                                data.paymentMethod == "2"
+                                                    ? "block"
+                                                    : "none",
+                                        }}
+                                    >
+                                        <Paypal
+                                            totalPrice={totalPrice}
+                                            handelSubmit={handelSubmit}
+                                            data={data}
+                                            setData={setData}
+                                        />
+                                    </div>
+                                )}
                             </RadioGroup>
                         </FormControl>
                     </div>

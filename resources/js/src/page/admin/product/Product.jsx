@@ -108,7 +108,7 @@ const Product = (props) => {
                             />
                             <TableBody>
                                 {
-                                    productList.length > 0 ? productList.map((row, index) => {
+                                    Object.keys(productList).length > 0 ? Object.values(productList).map((row, index) => {
                                         return (
                                             <TableRow
                                                 hover

@@ -75,7 +75,6 @@ class OrderController extends Controller
             $productList = array_unique($productList);
             if (isset($request->voucher["id"])) {
                 $voucher = Coupon::find($request->voucher["id"]);
-                $user = Auth::guard('customerApi')->user();
                 if ($voucher->qty > 0 && Carbon::parse($voucher->date_finish)->format('Y-m-d') >= Carbon::now()->format('Y-m-d')) {
                     $order->update([
                         'price' => $order->price - $voucher->value,
@@ -87,7 +86,6 @@ class OrderController extends Controller
                 }
             }
             $order->orderDetail()->attach($productsOrder);
-
             // update qty product
             $product = ProductDetail::whereIn('id', array_keys($productsOrder))->get();
             $options = [];
@@ -169,19 +167,20 @@ class OrderController extends Controller
                     }
 
                     ProductDetail::upsert($options, ['id'], ['qty', 'sold_qty']);
-                    DB::commit();
                 }
+                DB::commit();
                 return response([
                     'order' => $order,
                     'message' => 'success!',
                     'code' => Response::HTTP_OK
                 ], Response::HTTP_OK);
+            } else {
+                return response([
+                    'message' => 'This order dont exist!',
+                    'code' => Response::HTTP_NOT_FOUND
+                ], Response::HTTP_NOT_FOUND);
             }
 
-            return response([
-                'message' => 'This order dont exist!',
-                'code' => Response::HTTP_NOT_FOUND
-            ], Response::HTTP_NOT_FOUND);
         } catch (\Throwable $th) {
             DB::rollBack();
             return response([

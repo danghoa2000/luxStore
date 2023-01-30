@@ -57,6 +57,7 @@ const FormFilter = (props) => {
                 && headCells[headCell].id !== 'image'
                 && headCells[headCell].id !== 'description'
                 && headCells[headCell].id !== 'qty'
+                && headCells[headCell].id !== 'sold_qty'
                 && headCells[headCell].id !== 'status') {
                 if (headCells[headCell].type === 'date') {
                     formFilter.push(

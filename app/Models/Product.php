@@ -36,7 +36,7 @@ class Product extends Model
 
     protected $table = 'products';
 
-    protected $appends = ['total_rate', 'sale_price', 'sale_persen', 'max_price', 'min_price'];
+    protected $appends = ['total_rate', 'sale_price', 'sale_persen', 'max_price', 'min_price', 'sold_qty'];
 
     public function productDetail()
     {
@@ -108,9 +108,9 @@ class Product extends Model
         ) {
             if ($this->attributes['sale_type'] && $this->attributes['sale_type'] != -1) {
                 if ($this->attributes['sale_type'] == config('constants.sale_type.price')) {
-                    return $this->attributes['sale_off'];
+                    return $this->getMinPriceAttribute() - $this->attributes['sale_off'];
                 } else {
-                    return $this->getMinPriceAttribute() ? $this->getMinPriceAttribute() - floor(($this->getMinPriceAttribute() * $this->attributes['sale_off']) / 100) : 0;
+                    return $this->getMinPriceAttribute() ? floor(($this->getMinPriceAttribute() * $this->attributes['sale_off']) / 100) : 0;
                 }
             }
             return 0;
@@ -128,7 +128,7 @@ class Product extends Model
             if ($this->attributes['sale_type'] == config('constants.sale_type.persen')) {
                 return $this->attributes['sale_off'];
             } else {
-                return 100 - ceil(($this->attributes['sale_off'] / $this->getMinPriceAttribute()) * 100);
+                return ceil(($this->attributes['sale_off'] / $this->getMinPriceAttribute()) * 100);
             }
         }
         return 0;
@@ -144,6 +144,12 @@ class Product extends Model
     {
         return $this->productDetail()->max('price');
     }
+
+    public function getSoldQtyAttribute()
+    {
+        return $this->productDetail()->sum('sold_qty');
+    }
+
 
     // public function getImageAttribute()
     // {

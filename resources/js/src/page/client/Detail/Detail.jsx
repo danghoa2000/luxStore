@@ -198,7 +198,7 @@ const Detail = ({
                                         className="new-price detail__product__info-price font-bold"
                                         style={{ marginLeft: 5 }}
                                     >
-                                        {formatPrice(currentOption?.sale_price)}
+                                        {formatPrice(currentOption?.price - currentOption?.sale_price)}
                                     </span>
                                     <span
                                         className="saled_price detail__product__info-price font-bold"
@@ -371,7 +371,7 @@ const Detail = ({
                                                                       }
                                                                       readOnly
                                                                   />
-                                                                  <span className="font-bold mx-2">
+                                                                  <span className="font-bold mx-2" style={{ fontSize: 14 }}>
                                                                       {review
                                                                           ?.pivot
                                                                           ?.created_at

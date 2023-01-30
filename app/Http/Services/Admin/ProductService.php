@@ -39,13 +39,37 @@ class ProductService
             )
             ->withSum('productDetail', 'qty')
             ->filter($request);
-        $total = count($products->get());
+
+        
+
         if ($request->pageSize) {
             $products->limit($request->pageSize)
                 ->offset(($request->currentPage) * $request->pageSize);
         }
+
+        $data = json_decode($request->searchField, true);
+        $allProduct = $products->get();
+        if (!empty($data['price_min']) || !empty($data['price_max'])) {
+            $allProduct = $allProduct->filter(function ($product) use ($data) {
+                $result = true;
+                if (!empty($data['price_min'])) {
+                    if ($product['min_price'] < $data['price_min']) {
+                        $result = false;
+                    }
+                }
+                
+                if (!empty($data['price_max'])) {
+                    if ($product['max_price'] > $data['price_max']) {
+                        $result = false;
+                    }
+                }
+                return $result;
+            });
+        }
+        $total = count($allProduct);
+
         return response([
-            'products' => $products->get(),
+            'products' => $allProduct->toArray(),
             'total' => $total,
             'code' => Response::HTTP_OK
         ], Response::HTTP_OK);
@@ -204,10 +228,10 @@ class ProductService
                         $productDetail->propertyValue()->sync($propertyValue);
                     }
                 }
-                $product->productMedia()->updateOrCreate(['product_id'=>$product->id], [ "url" => collect($request->file)->map(function ($item) {
+                $product->productMedia()->updateOrCreate(['product_id' => $product->id], ["url" => collect($request->file)->map(function ($item) {
                     return $item["file"];
                 })]);
-      
+
                 DB::commit();
                 return response([
                     'message' => 'Update product success!',

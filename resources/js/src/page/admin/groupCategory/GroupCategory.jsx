@@ -129,7 +129,7 @@ const GroupCategory = (props) => {
                                                                     scope="row"
                                                                     style={{ padding: 10 }}
                                                                 >
-                                                                    <img src={API_BASE_URL + row[headCell]} alt="" style={{ maxHeight: 150, margin: 'auto', display: 'block' }} />
+                                                                    <img src={API_BASE_URL + row[headCell]} alt="" style={{ height: 150, width: 350, margin: 'auto', display: 'block' }} />
                                                                 </TableCell>
                                                             )
                                                         } else {

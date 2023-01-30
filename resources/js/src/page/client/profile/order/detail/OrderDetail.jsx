@@ -23,7 +23,7 @@ import { useState } from "react";
 import { formatPrice } from "../../../../../../utils/helper";
 import ShowSnackbars from "../../../../../../components/partial/ShowSnackbars";
 import BasicModal from "../../../../../../components/partial/BasicModal";
-import { BASE_URL } from "../../../../../../constants/constants";
+import { BASE_URL, STATUS_ORDER } from "../../../../../../constants/constants";
 import ReviewModal from "../../../../../../components/partial/Modal/ReviewModal";
 import { useAuth } from "../../../../../../hooks/useAuth";
 import ShowReviewModal from "../../../../../../components/partial/Modal/ShowReviewModal";
@@ -136,8 +136,13 @@ const OrderDetail = ({
                                     >
                                         <img
                                             src={BASE_URL + item?.product.image}
-                                            style={{ maxWidth: 125 }}
+                                            style={{ maxWidth: 125, cursor: 'pointer' }}
                                             alt=""
+                                            onClick={() => navigate('/elite/product', {
+                                                state: {
+                                                    id: item?.product_id
+                                                }
+                                            })}
                                         />
 
                                         <div className="order__product__item-name">
@@ -168,38 +173,40 @@ const OrderDetail = ({
                                             )
                                         }`}
                                     </div>
-                                    <div className="order__product__item-properties">
-                                        {item?.product?.customer_review &&
-                                        JSON.parse(
-                                            item?.product?.customer_review
-                                        ).includes(user?.id) ? (
-                                            <Button
-                                                variant="contained"
-                                                className="btn__view_cart"
-                                                onClick={() => {
-                                                    setOpen(true);
-                                                    setType(3);
-                                                    setProductIdReview(
-                                                        item?.product_id
-                                                    );
-                                                }}
-                                            >
-                                                Show a Review
-                                            </Button>
-                                        ) : (
-                                            <Button
-                                                variant="contained"
-                                                className="btn__view_cart"
-                                                onClick={() => {
-                                                    setOpen(true);
-                                                    setType(2);
-                                                    setProductReview(item);
-                                                }}
-                                            >
-                                                Write a Review
-                                            </Button>
-                                        )}
-                                    </div>
+                                    {order?.status == STATUS_ORDER.SUCCESS && (
+                                        <div className="order__product__item-properties">
+                                            {item?.product?.customer_review &&
+                                            JSON.parse(
+                                                item?.product?.customer_review
+                                            ).includes(user?.id) ? (
+                                                <Button
+                                                    variant="contained"
+                                                    className="btn__view_cart"
+                                                    onClick={() => {
+                                                        setOpen(true);
+                                                        setType(3);
+                                                        setProductIdReview(
+                                                            item?.product_id
+                                                        );
+                                                    }}
+                                                >
+                                                    Show a Review
+                                                </Button>
+                                            ) : (
+                                                <Button
+                                                    variant="contained"
+                                                    className="btn__view_cart"
+                                                    onClick={() => {
+                                                        setOpen(true);
+                                                        setType(2);
+                                                        setProductReview(item);
+                                                    }}
+                                                >
+                                                    Write a Review
+                                                </Button>
+                                            )}
+                                        </div>
+                                    )}
                                 </div>
                             );
                         })}

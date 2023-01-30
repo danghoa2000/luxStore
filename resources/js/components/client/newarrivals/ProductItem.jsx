@@ -6,7 +6,7 @@ const ProductItem = ({ val }) => {
     const navigate = useNavigate();
     return (
         <div className='box' style={{ margin: "0 5px" }}>
-            <div className='img has__hover'
+            <div className='img'
                 onClick={() => navigate('/elite/product', {
                     state: {
                         id: val.id

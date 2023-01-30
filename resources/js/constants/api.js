@@ -56,6 +56,7 @@ export const PRODUCT_API = {
     ATTRIBUTE: API_BASE_URL + "api/auth/admin/product/attribute",
     REVIEW: API_BASE_URL + "api/product/review",
     REVIEW_SHOW: API_BASE_URL + "api/product/review/show",
+    DELETE: API_BASE_URL + "api/auth/admin/product/delete",
 };
 
 export const API_UPPLOAD = API_BASE_URL + "api/upload";

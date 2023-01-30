@@ -67,10 +67,10 @@ class AccountService
             ]);
 
             if ($request->isCustomer) {
-                $password = Hash::make($request->passwrod);
+                $password = Hash::make($request->password);
+                // dd($password, $info->password);
                 $info->update(['password' => $password]);
                 Customer::create(['customer_code' => $info->id]);
-
                 DB::commit();
                 return response([
                     'message' => 'Create account success!',

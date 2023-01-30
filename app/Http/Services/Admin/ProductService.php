@@ -163,6 +163,7 @@ class ProductService
 
     public function edit($request)
     {
+        // dd($request->all());
         try {
             DB::beginTransaction();
             $product = Product::find($request->id);
@@ -203,9 +204,10 @@ class ProductService
                         $productDetail->propertyValue()->sync($propertyValue);
                     }
                 }
-                $product->productMedia()->update(["url" => collect($request->file)->map(function ($item) {
+                $product->productMedia()->updateOrCreate(['product_id'=>$product->id], [ "url" => collect($request->file)->map(function ($item) {
                     return $item["file"];
                 })]);
+      
                 DB::commit();
                 return response([
                     'message' => 'Update product success!',
@@ -218,6 +220,8 @@ class ProductService
             ], Response::HTTP_NOT_FOUND);
         } catch (\Throwable $th) {
             DB::rollBack();
+            dd($th);
+
             return response([
                 'message' => 'Update product error!',
                 'code' => Response::HTTP_INTERNAL_SERVER_ERROR

@@ -80,6 +80,7 @@ const ProductCreateContainer = () => {
             },
             then: () => Yup.string().required(t('validate.required', { name: 'Expried sale' }))
             .test("", "Invalid value", value => {
+                console.log(value, format(new Date(), 'yyyy-MM-dd'));
                 return value > format(new Date(), 'yyyy-MM-dd');
             })
         }),

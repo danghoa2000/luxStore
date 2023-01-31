@@ -1,5 +1,5 @@
 import axios from 'axios';
-import React, { useCallback, useContext, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';
 import { API_BASE_URL, LOGIN_API } from '../../../../constants/api';
 import { useAuth } from '../../../../hooks/useAuth';

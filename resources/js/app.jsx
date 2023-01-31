@@ -27,7 +27,7 @@ const AdminLoginContainer = lazy(() =>
     import("./src/page/admin/login/LoginContainer")
 );
 const AdminHomeContainer = lazy(() =>
-    import("./src/page/admin/Home/HomeContainer")
+    import("./src/page/admin/home/HomeContainer")
 );
 
 const AdminCategoryContainer = lazy(() =>
@@ -37,7 +37,7 @@ const AdminCategoryCreateContainer = lazy(() =>
     import("./src/page/admin/categories/create/CategoryCreateContainer")
 );
 const AdminCategoryUpdateContainer = lazy(() =>
-    import("./src/page/admin/categories/Update/CategoryUpdateContainer")
+    import("./src/page/admin/categories/update/CategoryUpdateContainer")
 );
 
 const AdminAccountContainer = lazy(() =>

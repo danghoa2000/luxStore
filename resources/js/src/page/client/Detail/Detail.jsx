@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import SliderProduct from "./SliderProduct";
 import "./detail.scss";
-import "../../../../components/client/MainPage/home.css";
+import "../../../../components/client/MainPage/Home.css";
 import Sdata from "../../../../components/client/MainPage/Sdata";
 import { BASE_URL } from "../../../../constants/constants";
 import {

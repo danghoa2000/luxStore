@@ -25,8 +25,10 @@ import ShowSnackbars from "../../../../../../components/partial/ShowSnackbars";
 import BasicModal from "../../../../../../components/partial/BasicModal";
 import { BASE_URL, STATUS_ORDER } from "../../../../../../constants/constants";
 import ReviewModal from "../../../../../../components/partial/Modal/ReviewModal";
-import { useAuth } from "../../../../../../hooks/useAuth";
+// import { useAuth } from "../../../../../../hooks/useAuth";
 import ShowReviewModal from "../../../../../../components/partial/Modal/ShowReviewModal";
+import { useContext } from "react";
+import { AuthContext } from "../../../../../../hooks/useAuth";
 
 const OrderDetail = ({
     loading,
@@ -53,7 +55,7 @@ const OrderDetail = ({
     const navigate = useNavigate();
     const [productReview, setProductReview] = useState();
     const [productIdReview, setProductIdReview] = useState();
-    const { user } = useAuth();
+    const { user } = useContext(AuthContext);
     return (
         <>
             <div className="d-flex justify-content-between align-items-center profile__bar__item-active">

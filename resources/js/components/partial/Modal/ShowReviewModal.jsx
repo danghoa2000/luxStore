@@ -17,8 +17,10 @@ import { Reply, Star } from "@mui/icons-material";
 import { axiosClient } from "../../../hooks/useHttp";
 import { CODE } from "../../../constants/constants";
 import { useEffect } from "react";
-import { useAuth } from "../../../hooks/useAuth";
+// import { useAuth } from "../../../hooks/useAuth";
 import { format, parseISO } from "date-fns";
+import { useContext } from "react";
+import { AuthContext } from "../../../hooks/useAuth";
 
 const ShowReviewModal = ({ productId, setStatus, setShowNoti }) => {
     const labels = {
@@ -29,7 +31,7 @@ const ShowReviewModal = ({ productId, setStatus, setShowNoti }) => {
         5: "Excellent",
     };
 
-    const { user } = useAuth();
+    const { user } = useContext(AuthContext);
     const [review, setReview] = useState();
     const getReview = () => {
         axiosClient

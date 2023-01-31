@@ -9,7 +9,6 @@ import {
 import AdminLayout from "./src/layout/AdminLayout";
 import DefaultLayout from "./src/layout/DefaultLayout";
 
-import { AuthContext } from "./hooks/useAuth";
 import { CODE, ROLE } from "./constants/constants";
 import PrivateAdminRoute from "./PrivateAdminRoute";
 import PrivateUserRoute from "./PrivateUserRoute";
@@ -21,6 +20,7 @@ import { axiosClient } from "./hooks/useHttp";
 import { CART_API } from "./constants/api";
 import { object } from "yup";
 import { CUSTOMER_INFO, SESSION_ACCESS_TOKEN } from "./utils/sessionHelper";
+import { AuthContext } from "./hooks/useAuth";
 
 // admin
 const AdminLoginContainer = lazy(() =>

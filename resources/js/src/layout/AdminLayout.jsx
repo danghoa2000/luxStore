@@ -4,7 +4,7 @@ import { ADMIN_SESSION_ACCESS_TOKEN } from "../../utils/sessionHelper";
 import Loading from "../../components/partial/Loading";
 import axios from "axios";
 import { API_BASE_URL, LOGIN_API } from "../../constants/api";
-import { useAuth } from "../../hooks/useAuth";
+// import { useAuth } from "../../hooks/useAuth";
 import { axiosClient } from "../../hooks/useHttp";
 import { MENU_MAPPING } from "../../constants/constants";
 import {
@@ -63,9 +63,11 @@ import NotificationsIcon from "@mui/icons-material/Notifications";
 import MoreIcon from "@mui/icons-material/MoreVert";
 import { BranchesOutlined } from "@ant-design/icons";
 import { useState } from "react";
+import { useContext } from "react";
+import { AuthContext } from "../../hooks/useAuth";
 const AdminLayout = () => {
     const navigate = useNavigate();
-    const { setAuth } = useAuth();
+    const { setAuth } = useContext(AuthContext);
 
     useEffect(() => {
         const adminToken = window.sessionStorage.getItem(

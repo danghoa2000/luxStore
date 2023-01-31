@@ -1,16 +1,18 @@
 import React, { useCallback, useEffect, useState } from "react";
 import Info from "./Info";
 import { useForm } from "react-hook-form";
-import { useAuth } from "../../../../../hooks/useAuth";
+// import { useAuth } from "../../../../../hooks/useAuth";
 import * as Yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useTranslation } from "react-i18next";
 import { ACCOUNT_API, CUSTOMER_API } from "../../../../../constants/api";
 import { axiosClient } from "../../../../../hooks/useHttp";
 import { CODE } from "../../../../../constants/constants";
+import { useContext } from "react";
+import { AuthContext } from "../../../../../hooks/useAuth";
 
 const InfoContainer = () => {
-    const { user } = useAuth();
+    const { user } = useContext(AuthContext);
     const [loading, setLoading] = useState(false);
     const [t] = useTranslation();
     const [account, setAccount] = useState();

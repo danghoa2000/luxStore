@@ -15,7 +15,9 @@ import { BASE_URL } from "../../constants/constants";
 import BasicModal from "../../components/partial/BasicModal";
 import RegisterAccountModal from "../../components/partial/Modal/RegisterAccountModal";
 import SignInAccountModal from "../../components/partial/Modal/SignInAccountModal";
-import { useAuth } from "../../hooks/useAuth";
+import { useContext } from "react";
+import { AuthContext } from "../../hooks/useAuth";
+// import { useAuth } from "../../hooks/useAuth";
 // import { MessengerChat } from "react-messenger-chat-plugin";
 // import { useRef } from "react";
 
@@ -47,7 +49,7 @@ const DefaultLayout = ({
     };
     const navigate = useNavigate();
     const history = createBrowserHistory();
-    const { setUser, user } = useAuth();
+    const { setUser, user } = useContext(AuthContext);
     // const MessengerRef = useRef();
     // useEffect(() => {
     //     MessengerRef.current.setAttribute("page_id", "your_page_id");

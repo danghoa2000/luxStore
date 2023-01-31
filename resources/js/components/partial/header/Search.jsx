@@ -31,7 +31,7 @@ import React, { useEffect, useState } from "react";
 import { useCallback } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useSearchField } from "../../../hooks/useSearchField";
-import { useAuth } from "../../../hooks/useAuth";
+// import { useAuth } from "../../../hooks/useAuth";
 import { axiosClient } from "../../../hooks/useHttp";
 import { LOGIN_API } from "../../../constants/api";
 import { CODE } from "../../../constants/constants";
@@ -39,11 +39,13 @@ import {
     CUSTOMER_INFO,
     SESSION_ACCESS_TOKEN,
 } from "../../../utils/sessionHelper";
+import { useContext } from "react";
+import { AuthContext } from "../../../hooks/useAuth";
 
 const Search = ({ CartItem, toggleDrawer, setOpen, setType, setCartItem }) => {
     const { searchField, setSearchFiled } = useSearchField();
     const [isLogin, setLogin] = useState(false);
-    const { user, setUser } = useAuth();
+    const { user, setUser } = useContext(AuthContext);
     const [name, setName] = useState("");
     const [anchorElUser, setAnchorElUser] = useState(null);
 

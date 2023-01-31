@@ -2,13 +2,15 @@ import axios from 'axios';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';
 import { API_BASE_URL, LOGIN_API } from '../../../../constants/api';
-import { useAuth } from '../../../../hooks/useAuth';
+// import { useAuth } from '../../../../hooks/useAuth';
 import { axiosClient } from '../../../../hooks/useHttp';
 import { ADMIN_INFO, ADMIN_SESSION_ACCESS_TOKEN, getAccessToken, saveAccessToken } from '../../../../utils/sessionHelper';
 import Login from './Login';
+import { useContext } from 'react';
+import { AuthContext } from '../../../../hooks/useAuth';
 
 const LoginContainer = () => {
-    const { setAuth } = useAuth();
+    const { setAuth } = useContext(AuthContext);
     const [isLoginFailed, setisLoginFailed] = useState({});
     const navigate = useNavigate();
 

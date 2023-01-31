@@ -2,16 +2,17 @@ import axios from "axios";
 import React, { useCallback, useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import { LOGIN_API } from "../../../../constants/api";
-import { useAuth } from "../../../../hooks/useAuth";
+// import { useAuth } from "../../../../hooks/useAuth";
 import { axiosClient } from "../../../../hooks/useHttp";
 import {
     SESSION_ACCESS_TOKEN,
     CUSTOMER_INFO,
 } from "../../../../utils/sessionHelper";
 import Login from "./Login";
+import { AuthContext } from "../../../../hooks/useAuth";
 
 const LoginContainer = () => {
-    const { setUser } = useAuth();
+    const { setUser } = useContext(AuthContext);
     const [loading, setLoading] = useState(false);
     const [isLoginFailed, setisLoginFailed] = useState({});
     const navigate = useNavigate();

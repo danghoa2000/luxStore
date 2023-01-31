@@ -24,7 +24,9 @@ import {
     CUSTOMER_INFO,
     SESSION_ACCESS_TOKEN,
 } from "../../../utils/sessionHelper";
-import { useAuth } from "../../../hooks/useAuth";
+import { useContext } from "react";
+import { AuthContext } from "../../../hooks/useAuth";
+// import { useAuth } from "../../../hooks/useAuth";
 
 const SignInAccountModal = ({
     setShowNoti,
@@ -34,7 +36,7 @@ const SignInAccountModal = ({
     getCart,
 }) => {
     const [t] = useTranslation();
-    const { setUser } = useAuth();
+    const { setUser } = useContext(AuthContext);
     const [loading, setLoading] = useState(false);
     const [isLoginFailed, setisLoginFailed] = useState({});
     const navigate = useNavigate();

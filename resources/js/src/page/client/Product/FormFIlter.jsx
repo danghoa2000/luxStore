@@ -20,7 +20,7 @@ const FormFIlter = ({
     const ADVANCE_SEARCH = useMemo(() => {
         return formFilter && Object.keys(formFilter).map((option, index) => {
             if (option == 'groupCategory') {
-                return <Fragment key={index}>
+                return <div key={index}>
                     <OptionGroupCategory
                         option={formFilter[option]}
                         setSearchFiled={setSearchFiled}
@@ -34,9 +34,9 @@ const FormFIlter = ({
                         handleSubmit={handleSubmit}
                     />
                     <Divider style={{ borderColor: "rgb(246, 249, 252)", borderBottomWidth: "medium", opacity: 1 }} />
-                </Fragment>
+                </div>
             } else if (option == 'category') {
-                return <Fragment key={index}>
+                return <div key={index}>
                     <Option
                         option={formFilter[option]}
                         label="Category"
@@ -51,7 +51,7 @@ const FormFIlter = ({
                         handleSubmit={handleSubmit}
                     />
                     <Divider style={{ borderColor: "rgb(246, 249, 252)", borderBottomWidth: "medium", opacity: 1 }} />
-                </Fragment>
+                </div>
             } else if (option == 'attribute') {
                 return <OptionAttribute
                     option={option}
@@ -68,7 +68,7 @@ const FormFIlter = ({
                     handleSubmit={handleSubmit}
                 />
             } else if (option == 'price') {
-                return <Fragment key={index}>
+                return <div key={index}>
                     {
                         <OptionPrice
                             setSearchFiled={setSearchFiled}
@@ -82,9 +82,9 @@ const FormFIlter = ({
                             handleSubmit={handleSubmit}
                         />
                     }
-                </Fragment>
+                </div>
             } else if (option == 'rate') {
-                return <Fragment key={index}>
+                return <div key={index}>
                     <OptionRate
                         setSearchFiled={setSearchFiled}
                         name="rate"
@@ -97,7 +97,7 @@ const FormFIlter = ({
                         handleSubmit={handleSubmit}
                     />
                     <Divider style={{ borderColor: "rgb(246, 249, 252)", borderBottomWidth: "medium", opacity: 1 }} />
-                </Fragment>
+                </div>
             }
         })
     }, [formFilter, searchField]);

@@ -71,10 +71,10 @@ const ProductAttributeValue = ({
                     InputProps={{
                         ...params.InputProps,
                         endAdornment: (
-                            <React.Fragment>
+                            <div>
                                 {loading ? <CircularProgress size={20} /> : null}
                                 {params.InputProps.endAdornment}
-                            </React.Fragment>
+                            </div>
                         ),
                     }}
                 />

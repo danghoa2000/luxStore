@@ -124,7 +124,7 @@ const DefaultLayout = ({
                     {CartItem?.length > 0 ? (
                         CartItem.map((item) => {
                             return (
-                                <Fragment key={item.id}>
+                                <div key={item.id}>
                                     <div className="cart__product">
                                         <div className="cart__product__btn">
                                             <IconButton
@@ -202,7 +202,7 @@ const DefaultLayout = ({
                                             opacity: 1,
                                         }}
                                     />
-                                </Fragment>
+                                </div>
                             );
                         })
                     ) : (

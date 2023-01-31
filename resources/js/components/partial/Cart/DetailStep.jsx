@@ -65,7 +65,7 @@ const DetailStep = ({
         }
     };
     return (
-        <React.Fragment>
+        <div>
             <div className="container d-flex">
                 <div className="cart-details">
                     <div className="cart-list product">
@@ -298,7 +298,7 @@ const DetailStep = ({
                     )}
                 </div>
             </div>
-        </React.Fragment>
+        </div>
     );
 };
 

@@ -230,7 +230,7 @@ const ProductProperty = (props, ref) => {
     const renderProperty = useCallback(
         (key, item) => {
             return (
-                <React.Fragment key={key}>
+                <div key={key}>
                     <ProductPropertyItem
                         setCurrentRef={setCurrentRef}
                         index={key}
@@ -244,7 +244,7 @@ const ProductProperty = (props, ref) => {
                         attributeValueList={attributeValueList}
                         attributeSelectedList={attributeSelectedList}
                     />
-                </React.Fragment>
+                </div>
             );
         },
         [
@@ -388,7 +388,7 @@ const ProductProperty = (props, ref) => {
                             propertiesList.map((item, index) => {
                                 const { qty, price, ...newItem } = item;
                                 return (
-                                    <React.Fragment key={index}>
+                                    <div key={index}>
                                         {
                                             <p>
                                                 {Object.values(newItem).map(
@@ -425,7 +425,7 @@ const ProductProperty = (props, ref) => {
                                                 </span>
                                             </p>
                                         }
-                                    </React.Fragment>
+                                    </div>
                                 );
                             })}
                     </Grid>

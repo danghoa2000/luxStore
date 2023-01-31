@@ -8,7 +8,7 @@ import {
     SESSION_ACCESS_TOKEN,
     CUSTOMER_INFO,
 } from "../../../../utils/sessionHelper";
-import Login from "./login";
+import Login from "./Login";
 
 const LoginContainer = () => {
     const { setUser } = useAuth();

@@ -5,7 +5,7 @@ import { API_BASE_URL, LOGIN_API } from '../../../../constants/api';
 import { useAuth } from '../../../../hooks/useAuth';
 import { axiosClient } from '../../../../hooks/useHttp';
 import { ADMIN_INFO, ADMIN_SESSION_ACCESS_TOKEN, getAccessToken, saveAccessToken } from '../../../../utils/sessionHelper';
-import Login from './login';
+import Login from './Login';
 
 const LoginContainer = () => {
     const { setAuth } = useAuth();

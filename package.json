@@ -45,9 +45,12 @@
         "react-messenger-chat-plugin": "^3.0.5",
         "react-router-dom": "^6.3.0",
         "react-slick": "^0.29.0",
-        "slick-carousel": "^1.8.1"
+        "slick-carousel": "^1.8.1",
+        "styled-components": "^5.3.6",
+        "yup": "^0.32.11"
     },
     "engines": {
-        "node": ">= 18.9.1"
-    }
+        "node": ">= 18.9.1",
+        "npm": ">= 8.19.1"
+      }
 }

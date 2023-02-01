@@ -73,39 +73,37 @@ const Categories = () => {
     ];
 
     return (
-        <div>
-            <div className="category">
-                {Object.keys(category).length > 0 &&
-                    Object.values(category).map((value, index) => {
-                        let i = 0;
-                        if (index !== 0) {
-                            let intNumber = index / data.length;
-                            if (intNumber !== 0) {
-                                const surplus = index % data.length;
-                                i = surplus;
-                            } else {
-                                i = index;
-                            }
+        <div className="category">
+            {Object.keys(category).length > 0 &&
+                Object.values(category).map((value, index) => {
+                    let i = 0;
+                    if (index !== 0) {
+                        let intNumber = index / data.length;
+                        if (intNumber !== 0) {
+                            const surplus = index % data.length;
+                            i = surplus;
+                        } else {
+                            i = index;
                         }
-                        return (
-                            <div
-                                className="box d-flex"
-                                style={{ alignItems: "center" }}
-                                key={index}
-                                onClick={() =>
-                                    navigate("/elite/search", {
-                                        state: {
-                                            group_category_id: value.id,
-                                        },
-                                    })
-                                }
-                            >
-                                <img src={data[i].cateImg} alt="" />
-                                <span>{value.name}</span>
-                            </div>
-                        );
-                    })}
-            </div>
+                    }
+                    return (
+                        <div
+                            className="box d-flex"
+                            style={{ alignItems: "center" }}
+                            key={index}
+                            onClick={() =>
+                                navigate("/elite/search", {
+                                    state: {
+                                        group_category_id: value.id,
+                                    },
+                                })
+                            }
+                        >
+                            <img src={data[i].cateImg} alt="" />
+                            <span>{value.name}</span>
+                        </div>
+                    );
+                })}
         </div>
     );
 };

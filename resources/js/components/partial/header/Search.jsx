@@ -104,131 +104,120 @@ const Search = ({
     };
 
     return (
-        <div>
-            <section className="search">
-                <div className="container d-flex align-items-center justifycontent-space-between">
-                    <div
-                        className="logo width "
-                        onClick={() => navigate("/elite")}
-                    >
-                        <img
-                            src={
-                                "https://bonik-react.vercel.app/assets/images/logo.svg"
-                            }
-                            alt=""
-                        />
-                    </div>
+        <section className="search">
+            <div className="container d-flex align-items-center justifycontent-space-between">
+                <div className="logo width " onClick={() => navigate("/elite")}>
+                    <img
+                        src={
+                            "https://bonik-react.vercel.app/assets/images/logo.svg"
+                        }
+                        alt=""
+                    />
+                </div>
 
-                    <div className="search-box f_flex">
-                        <i
-                            className="fa fa-search"
-                            style={{ cursor: "pointer" }}
-                            onClick={handleSearch}
-                        ></i>
-                        <input
-                            type="text"
-                            placeholder="Search and hit enter..."
-                            value={keySearch}
-                            onChange={(e) => setKeySearch(e.target.value)}
-                            onBlur={(e) => {
-                                setKeySearch(
-                                    e.target.value ? e.target.value.trim() : ""
-                                );
-                            }}
-                        />
-                        <span>All Category</span>
-                    </div>
+                <div className="search-box f_flex">
+                    <i
+                        className="fa fa-search"
+                        style={{ cursor: "pointer" }}
+                        onClick={handleSearch}
+                    ></i>
+                    <input
+                        type="text"
+                        placeholder="Search and hit enter..."
+                        value={keySearch}
+                        onChange={(e) => setKeySearch(e.target.value)}
+                        onBlur={(e) => {
+                            setKeySearch(
+                                e.target.value ? e.target.value.trim() : ""
+                            );
+                        }}
+                    />
+                    <span>All Category</span>
+                </div>
 
-                    <div className="icon f_flex width">
-                        {isLogin ? (
-                            <div>
-                                <Box sx={{ flexGrow: 0 }}>
-                                    <IconButton
-                                        onClick={handleOpenUserMenu}
-                                        sx={{ p: 0 }}
-                                    >
-                                        <Avatar className="avatar__header">
-                                            {user?.info?.full_name
-                                                ? user?.info?.full_name.split(
-                                                      ""
-                                                  )[0]
-                                                : ""}
-                                        </Avatar>
-                                    </IconButton>
-                                    <Menu
-                                        sx={{ mt: "45px" }}
-                                        id="menu-appbar"
-                                        anchorEl={anchorElUser}
-                                        anchorOrigin={{
-                                            vertical: "top",
-                                            horizontal: "right",
-                                        }}
-                                        keepMounted
-                                        transformOrigin={{
-                                            vertical: "top",
-                                            horizontal: "right",
-                                        }}
-                                        open={Boolean(anchorElUser)}
-                                        onClose={handleCloseUserMenu}
-                                        className="light__mode"
-                                    >
-                                        <ListItem disablePadding>
-                                            <ListItemButton
-                                                onClick={() => {
-                                                    handleCloseUserMenu();
-                                                    logout();
-                                                }}
-                                                key={"logout"}
-                                            >
-                                                <ListItemIcon>
-                                                    <Logout />
-                                                </ListItemIcon>
-                                                <ListItemText
-                                                    primary={"Logout"}
-                                                />
-                                            </ListItemButton>
-                                        </ListItem>
+                <div className="icon f_flex width">
+                    {isLogin ? (
+                        <div>
+                            <Box sx={{ flexGrow: 0 }}>
+                                <IconButton
+                                    onClick={handleOpenUserMenu}
+                                    sx={{ p: 0 }}
+                                >
+                                    <Avatar className="avatar__header">
+                                        {user?.info?.full_name
+                                            ? user?.info?.full_name.split("")[0]
+                                            : ""}
+                                    </Avatar>
+                                </IconButton>
+                                <Menu
+                                    sx={{ mt: "45px" }}
+                                    id="menu-appbar"
+                                    anchorEl={anchorElUser}
+                                    anchorOrigin={{
+                                        vertical: "top",
+                                        horizontal: "right",
+                                    }}
+                                    keepMounted
+                                    transformOrigin={{
+                                        vertical: "top",
+                                        horizontal: "right",
+                                    }}
+                                    open={Boolean(anchorElUser)}
+                                    onClose={handleCloseUserMenu}
+                                    className="light__mode"
+                                >
+                                    <ListItem disablePadding>
+                                        <ListItemButton
+                                            onClick={() => {
+                                                handleCloseUserMenu();
+                                                logout();
+                                            }}
+                                            key={"logout"}
+                                        >
+                                            <ListItemIcon>
+                                                <Logout />
+                                            </ListItemIcon>
+                                            <ListItemText primary={"Logout"} />
+                                        </ListItemButton>
+                                    </ListItem>
 
-                                        <ListItem disablePadding>
-                                            <ListItemButton
-                                                onClick={() => {
-                                                    navigate("/elite/profile");
-                                                    handleCloseUserMenu();
-                                                }}
-                                                key={"profile"}
-                                            >
-                                                <ListItemIcon>
-                                                    <Person2 />
-                                                </ListItemIcon>
-                                                <ListItemText
-                                                    primary={"Profile"}
-                                                />
-                                            </ListItemButton>
-                                        </ListItem>
-                                    </Menu>
-                                </Box>
-                            </div>
-                        ) : (
-                            <i
-                                className="fa fa-user icon-circle"
-                                onClick={() => {
-                                    setOpen(true);
-                                    setType(2);
-                                }}
-                            ></i>
-                        )}
-                        <div className="cart" onClick={toggleDrawer(true)}>
-                            <i className="fa fa-shopping-bag icon-circle"></i>
-                            {CartItem.length === 0 ? (
-                                ""
-                            ) : (
-                                <span>{CartItem.length}</span>
-                            )}
+                                    <ListItem disablePadding>
+                                        <ListItemButton
+                                            onClick={() => {
+                                                navigate("/elite/profile");
+                                                handleCloseUserMenu();
+                                            }}
+                                            key={"profile"}
+                                        >
+                                            <ListItemIcon>
+                                                <Person2 />
+                                            </ListItemIcon>
+                                            <ListItemText primary={"Profile"} />
+                                        </ListItemButton>
+                                    </ListItem>
+                                </Menu>
+                            </Box>
                         </div>
+                    ) : (
+                        <i
+                            className="fa fa-user icon-circle"
+                            onClick={() => {
+                                setOpen(true);
+                                setType(2);
+                            }}
+                        ></i>
+                    )}
+                    <div className="cart" onClick={toggleDrawer(true)}>
+                        <i className="fa fa-shopping-bag icon-circle"></i>
+                        {CartItem.length === 0 ? (
+                            ""
+                        ) : (
+                            <span>{CartItem.length}</span>
+                        )}
                     </div>
                 </div>
-            </section>
-        </div>
+            </div>
+        </section>
     );
 };
 

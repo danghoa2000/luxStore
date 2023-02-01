@@ -1,5 +1,5 @@
 import React from "react";
-import App from "./app";
+import App from "./App";
 import { I18nextProvider } from "react-i18next";
 import i18n from "./i18n";
 import { createRoot } from "react-dom/client";

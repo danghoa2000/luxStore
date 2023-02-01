@@ -71,7 +71,7 @@ const Categories = () => {
   ]
 
   return (
-    <>
+    <div>
       {
         <div className='category'>
           {Object.keys(category).length > 0 &&
@@ -99,7 +99,7 @@ const Categories = () => {
             })}
         </div>
       }
-    </>
+    </div>
   )
 }
 

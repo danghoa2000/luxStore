@@ -17,7 +17,7 @@ const TopCart = ({ topRateProduct }) => {
   }
   const navigate = useNavigate();
   return (
-    <>
+    <div>
       <Slider {...settings}>
         {topRateProduct?.map((value, index) => {
           return (
@@ -47,7 +47,7 @@ const TopCart = ({ topRateProduct }) => {
           )
         })}
       </Slider>
-    </>
+    </div>
   )
 }
 

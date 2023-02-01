@@ -54,7 +54,7 @@ const CouponCreate = (props) => {
     const [t] = useTranslation();
     console.log(111111);
     return (
-        <>
+        <div>
             <div className="d-flex justify-content-between align-items-center">
                 <Typography variant="h4" gutterBottom>
                     Coupon
@@ -325,7 +325,7 @@ const CouponCreate = (props) => {
                     setShowNoti={setShowNoti}
                 />
             )}
-        </>
+        </div>
     );
 };
 

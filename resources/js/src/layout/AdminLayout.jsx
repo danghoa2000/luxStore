@@ -172,7 +172,7 @@ const AdminLayout = () => {
     const [activeMenu, setActiveMenu] = useState(1);
 
     return (
-        <>
+        <div>
             <AppBar position="fixed">
                 <Container maxWidth="xl" className="admin__header">
                     <Toolbar disableGutters>
@@ -396,7 +396,7 @@ const AdminLayout = () => {
                     </Box>
                 </div>
             </Container>
-        </>
+        </div>
     );
 };
 

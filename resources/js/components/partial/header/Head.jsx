@@ -2,7 +2,7 @@ import React from "react"
 
 const Head = () => {
   return (
-    <>
+    <div>
       <section className='head'>
         <div className='container d_flex'>
           <div className='left row'>
@@ -21,7 +21,7 @@ const Head = () => {
           </div>
         </div>
       </section>
-    </>
+    </div>
   )
 }
 

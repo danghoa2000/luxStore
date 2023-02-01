@@ -27,7 +27,7 @@ const HomePage = ({
     showNoti,
 }) => {
     return (
-        <>
+        <div>
             <Home CartItem={CartItem} />
             <FlashDeals productItems={flashDelas} addToCart={addToCart} />
             <section className="background">
@@ -59,7 +59,7 @@ const HomePage = ({
             />
             <Annocument />
             <Wrapper />
-        </>
+        </div>
     );
 };
 

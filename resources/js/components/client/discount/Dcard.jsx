@@ -36,10 +36,10 @@ const Dcard = ({ productItems }) => {
               <div style={{ display: 'flex', alignItems: 'baseline' }}>
                 {value?.sale_price ?
                   (
-                    <>
+                    <div>
                       <span className="old-price">{formatPrice(value?.min_price)}</span>
                       <span className="new-price" style={{ marginLeft: 5 }}>{formatPrice(value?.sale_price)}</span>
-                    </>
+                    </div>
                   )
                   :
                   (<span className="new-price">{formatPrice(value?.min_price)}</span>)

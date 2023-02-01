@@ -68,7 +68,7 @@ const Home = ({
     ratingStatistic,
 }) => {
     return (
-        <>
+        <div>
             <div className="d-flex justify-content-between align-items-center">
                 <Typography variant="h4" gutterBottom>
                     Home
@@ -307,7 +307,7 @@ const Home = ({
                     setShowNoti={setShowNoti}
                 />
             )}
-        </>
+        </div>
     );
 };
 

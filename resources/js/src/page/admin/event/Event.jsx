@@ -20,7 +20,7 @@ const Event = (props) => {
         setShowNoti,
     } = props;
     return (
-        <>
+        <div>
             <div className="d-flex justify-content-between align-items-center">
                 <Typography variant="h4" gutterBottom>
                     Event
@@ -71,7 +71,7 @@ const Event = (props) => {
                 </Button>
             </div>
             {showNoti && <ShowSnackbars type={status.type} message={status.message} setShowNoti={setShowNoti} />}
-        </>
+        </div>
     );
 };
 

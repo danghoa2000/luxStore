@@ -4,7 +4,7 @@ import "./style.css"
 
 const NewArrivals = ({ productItems }) => {
   return (
-    <>
+    <div>
       <section className='NewArrivals background'>
         <div className='container'>
           <div className='heading d-flex justify-content-between align-items-center'>
@@ -21,7 +21,7 @@ const NewArrivals = ({ productItems }) => {
           <Cart productItems={productItems} />
         </div>
       </section>
-    </>
+    </div>
   )
 }
 

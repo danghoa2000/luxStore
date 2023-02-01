@@ -104,7 +104,7 @@ const Search = ({
     };
 
     return (
-        <>
+        <div>
             <section className="search">
                 <div className="container d-flex align-items-center justifycontent-space-between">
                     <div
@@ -141,7 +141,7 @@ const Search = ({
 
                     <div className="icon f_flex width">
                         {isLogin ? (
-                            <>
+                            <div>
                                 <Box sx={{ flexGrow: 0 }}>
                                     <IconButton
                                         onClick={handleOpenUserMenu}
@@ -207,7 +207,7 @@ const Search = ({
                                         </ListItem>
                                     </Menu>
                                 </Box>
-                            </>
+                            </div>
                         ) : (
                             <i
                                 className="fa fa-user icon-circle"
@@ -228,7 +228,7 @@ const Search = ({
                     </div>
                 </div>
             </section>
-        </>
+        </div>
     );
 };
 

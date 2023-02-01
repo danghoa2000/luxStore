@@ -83,7 +83,7 @@ const ReviewModal = ({
             });
     };
     return (
-        <>
+        <div>
             <div style={{ display: "flex", alignItems: "center" }}>
                 <div style={{ marginRight: 10 }} className="dark__mode">
                     <IconButton aria-label="back">
@@ -219,7 +219,7 @@ const ReviewModal = ({
                     Update
                 </Button>
             </Grid>
-        </>
+        </div>
     );
 };
 

@@ -230,7 +230,7 @@ const ProductProperty = (props, ref) => {
     const renderProperty = useCallback(
         (key, item) => {
             return (
-                <React.Fragment key={key}>
+                <div key={key}>
                     <ProductPropertyItem
                         setCurrentRef={setCurrentRef}
                         index={key}
@@ -244,7 +244,7 @@ const ProductProperty = (props, ref) => {
                         attributeValueList={attributeValueList}
                         attributeSelectedList={attributeSelectedList}
                     />
-                </React.Fragment>
+                </div>
             );
         },
         [
@@ -329,7 +329,7 @@ const ProductProperty = (props, ref) => {
                             })}
                     </Grid>
                     {properties && Object.keys(properties).length > 0 && (
-                        <>
+                        <div>
                             <Grid item xs={5} style={{ margin: "10px 0" }}>
                                 <TextField
                                     label="Qty"
@@ -348,7 +348,7 @@ const ProductProperty = (props, ref) => {
                                     onChange={(e) => setPrice(e.target.value)}
                                 />
                             </Grid>
-                        </>
+                        </div>
                     )}
                     <Grid>
                         <IconButton
@@ -388,7 +388,7 @@ const ProductProperty = (props, ref) => {
                             propertiesList.map((item, index) => {
                                 const { qty, price, ...newItem } = item;
                                 return (
-                                    <React.Fragment key={index}>
+                                    <div key={index}>
                                         {
                                             <p>
                                                 {Object.values(newItem).map(
@@ -425,7 +425,7 @@ const ProductProperty = (props, ref) => {
                                                 </span>
                                             </p>
                                         }
-                                    </React.Fragment>
+                                    </div>
                                 );
                             })}
                     </Grid>
@@ -433,7 +433,7 @@ const ProductProperty = (props, ref) => {
 
                 <Grid item xs={2}>
                     {properties && Object.keys(properties).length > 0 && (
-                        <>
+                        <div>
                             <Button
                                 variant="contained"
                                 className="m-1"
@@ -480,7 +480,7 @@ const ProductProperty = (props, ref) => {
                                 <Save style={{ marginRight: 2 }} />
                                 Save
                             </Button>
-                        </>
+                        </div>
                     )}
                 </Grid>
             </Grid>

@@ -294,7 +294,7 @@ const App = () => {
     }, []);
 
     return (
-        <>
+        <div>
             {/* Admin route  */}
             <BrowserRouter>
                 <AuthContext.Provider value={{ auth, setAuth, user, setUser }}>
@@ -954,7 +954,7 @@ const App = () => {
                     </SearchFieldContext.Provider>
                 </AuthContext.Provider>
             </BrowserRouter>
-        </>
+        </div>
     );
 };
 

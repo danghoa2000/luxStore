@@ -15,7 +15,7 @@ const Header = ({
     setComplateSetting
 }) => {
     return (
-        <>
+        <div>
             <Search
                 CartItem={CartItem}
                 toggleDrawer={toggleDrawer}
@@ -28,7 +28,7 @@ const Header = ({
                 setComplateSetting={setComplateSetting}
             />
             <Navbar />
-        </>
+        </div>
     );
 };
 

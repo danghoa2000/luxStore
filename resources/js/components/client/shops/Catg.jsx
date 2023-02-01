@@ -28,7 +28,7 @@ const Catg = ({brand}) => {
     },
   ]
   return (
-    <>
+    <div>
       <div className='category'>
         <div className='chead d-flex'>
           <h1 style={{ flex: "1" }}>Brands </h1>
@@ -56,7 +56,7 @@ const Catg = ({brand}) => {
           <button>View All Brands</button>
         </div>
       </div>
-    </>
+    </div>
   )
 }
 

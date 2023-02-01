@@ -92,7 +92,7 @@ const DefaultLayout = ({
     }, []);
 
     return (
-        <>
+        <div>
             <Header
                 CartItem={CartItem}
                 toggleDrawer={toggleDrawer}
@@ -222,7 +222,7 @@ const DefaultLayout = ({
                     )}
                 </div>
                 {window.sessionStorage.getItem(SESSION_ACCESS_TOKEN) ? (
-                    <>
+                    <div>
                         <Button variant="contained" className="btn__checkcout">
                             Checkout Now
                         </Button>
@@ -233,7 +233,7 @@ const DefaultLayout = ({
                         >
                             View cart
                         </Button>
-                    </>
+                    </div>
                 ) : (
                     <Button
                         variant="contained"
@@ -288,7 +288,7 @@ const DefaultLayout = ({
                 id="fb-customer-chat"
                 className="fb-customerchat"
             ></div> */}
-        </>
+        </div>
     );
 };
 

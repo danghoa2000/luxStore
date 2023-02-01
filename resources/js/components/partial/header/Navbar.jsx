@@ -5,7 +5,7 @@ const Navbar = () => {
   // Toogle Menu
   const [MobileMenu, setMobileMenu] = useState(false)
   return (
-    <>
+    <div>
       <header className='header'>
         <div className='container d-flex justify-content-between'>
           <div className='catgrories d-flex'>
@@ -16,7 +16,7 @@ const Navbar = () => {
           </div>
         </div>
       </header>
-    </>
+    </div>
   )
 }
 

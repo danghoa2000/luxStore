@@ -26,7 +26,7 @@ const FormFIlter = ({
             Object.keys(formFilter).map((option, index) => {
                 if (option == "groupCategory") {
                     return (
-                        <Fragment key={index}>
+                        <div key={index}>
                             <OptionGroupCategory
                                 option={formFilter[option]}
                                 setSearchFiled={setSearchFiled}
@@ -48,11 +48,11 @@ const FormFIlter = ({
                                     opacity: 1,
                                 }}
                             />
-                        </Fragment>
+                        </div>
                     );
                 } else if (option == "category") {
                     return (
-                        <Fragment key={index}>
+                        <div key={index}>
                             <Option
                                 option={formFilter[option]}
                                 label="Brand"
@@ -75,7 +75,7 @@ const FormFIlter = ({
                                     opacity: 1,
                                 }}
                             />
-                        </Fragment>
+                        </div>
                     );
                 } else if (option == "attribute") {
                     return (
@@ -98,7 +98,7 @@ const FormFIlter = ({
                     );
                 } else if (option == "price") {
                     return (
-                        <Fragment key={index}>
+                        <div key={index}>
                             {
                                 <OptionPrice
                                     setSearchFiled={setSearchFiled}
@@ -114,11 +114,11 @@ const FormFIlter = ({
                                     setComplateSetting={setComplateSetting}
                                 />
                             }
-                        </Fragment>
+                        </div>
                     );
                 } else if (option == "rate") {
                     return (
-                        <Fragment key={index}>
+                        <div key={index}>
                             <OptionRate
                                 setSearchFiled={setSearchFiled}
                                 name="rate"
@@ -139,7 +139,7 @@ const FormFIlter = ({
                                     opacity: 1,
                                 }}
                             />
-                        </Fragment>
+                        </div>
                     );
                 }
             })

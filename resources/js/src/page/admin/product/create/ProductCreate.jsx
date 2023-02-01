@@ -40,7 +40,7 @@ const ProductCreate = (props) => {
     } = props;
 
     const [t] = useTranslation();
-    return <>
+    return <div>
         <div className="d-flex justify-content-between align-items-center">
             <Typography variant="h4" gutterBottom>
                 Product
@@ -137,7 +137,7 @@ const ProductCreate = (props) => {
             </div>
         </form>
         {showNoti && <ShowSnackbars type={status.type} message={status.message} setShowNoti={setShowNoti} />}
-    </>
+    </div>
 };
 
 export default ProductCreate;

@@ -13,7 +13,7 @@ const Cart = ({ productItems }) => {
     autoplay: true,
   }
   return (
-    <>
+    <div>
       <Slider 
       {...settings}
         className="content grid product"
@@ -24,7 +24,7 @@ const Cart = ({ productItems }) => {
           )
         })}
       </Slider>
-    </>
+    </div>
   )
 }
 

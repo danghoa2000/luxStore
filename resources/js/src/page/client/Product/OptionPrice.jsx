@@ -16,7 +16,7 @@ const OptionPrice = ({
     setComplateSetting
 }) => {
     return (
-        <>
+        <div>
             <div
                 style={{
                     display: "flex",
@@ -115,7 +115,7 @@ const OptionPrice = ({
                     Clear
                 </Button>
             </div>
-        </>
+        </div>
     );
 };
 

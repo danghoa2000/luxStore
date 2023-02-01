@@ -100,7 +100,7 @@ const CreateAttributeValueModal = ({
         }
     }, [groupCategoryId])
     return (
-        <>
+        <div>
             <Typography id="modal-modal-title" variant="h6" component="h2" textAlign={"center"} color="#fff">
                 Create new value
             </Typography>
@@ -115,7 +115,7 @@ const CreateAttributeValueModal = ({
                                     <FormControl variant="standard">
                                         <Select
                                             {...field}
-                                            label={<>{"Group category"}<span className='required'></span></>}
+                                            label={<div>{"Group category"}<span className='required'></span></div>}
                                             size="small"
                                             value={groupCategoryId}
                                             onChange={e => {
@@ -153,7 +153,7 @@ const CreateAttributeValueModal = ({
                                 <FormControl variant="standard">
                                     <Select
                                         {...field}
-                                        label={<>{"attribute"}<span className='required'></span></>}
+                                        label={<div>{"attribute"}<span className='required'></span></div>}
                                         size="small"
                                         value={attribute}
                                         onChange={e => {
@@ -215,7 +215,7 @@ const CreateAttributeValueModal = ({
                     </Button>
                 </Grid>
             </form>
-        </>
+        </div>
     );
 };
 

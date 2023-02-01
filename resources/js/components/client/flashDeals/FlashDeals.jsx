@@ -4,7 +4,7 @@ import "./style.css"
 
 const FlashDeals = ({ productItems, addToCart }) => {
   return (
-    <>
+    <div>
       <section className='flash'>
         <div className='container'>
           <div className='heading d-flex align-items-center'>
@@ -14,7 +14,7 @@ const FlashDeals = ({ productItems, addToCart }) => {
           <FlashCard productItems={productItems} addToCart={addToCart} />
         </div>
       </section>
-    </>
+    </div>
   )
 }
 

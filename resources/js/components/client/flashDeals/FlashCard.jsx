@@ -43,7 +43,7 @@ const FlashCard = ({ productItems, addToCart }) => {
     prevArrow: <SamplePrevArrow />,
   }
   return (
-    <>
+    <div>
       <Slider {...settings}>
         {productItems.map((items) => {
           return (
@@ -78,10 +78,10 @@ const FlashCard = ({ productItems, addToCart }) => {
                     <div style={{ display: 'flex', alignItems: 'baseline' }}>
                       {items?.sale_price ?
                         (
-                          <>
+                          <div>
                             <span className="old-price">{formatPrice(items?.min_price)}</span>
                             <span className="new-price" style={{ marginLeft: 5 }}>{formatPrice(items?.sale_price)}</span>
-                          </>
+                          </div>
                         )
                         :
                         (<span className="new-price">{formatPrice(items?.min_price)}</span>)
@@ -100,7 +100,7 @@ const FlashCard = ({ productItems, addToCart }) => {
           )
         })}
       </Slider>
-    </>
+    </div>
   )
 }
 

@@ -203,7 +203,7 @@ const Product = (props) => {
                                                                 }}
                                                             >
                                                                 {value?.sale_price ? (
-                                                                    <>
+                                                                    <div>
                                                                         <span className="old-price">
                                                                             {formatPrice(
                                                                                 value?.min_price
@@ -219,7 +219,7 @@ const Product = (props) => {
                                                                                 value?.sale_price
                                                                             )}
                                                                         </span>
-                                                                    </>
+                                                                    </div>
                                                                 ) : (
                                                                     <span className="new-price">
                                                                         {formatPrice(

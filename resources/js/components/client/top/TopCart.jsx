@@ -15,7 +15,7 @@ const TopCart = ({ topGroupCategory }) => {
     autoplay: false,
   }
   return (
-    <>
+    <div>
       <Slider {...settings}>
         {topGroupCategory?.map((value, index) => {
           return (
@@ -33,7 +33,7 @@ const TopCart = ({ topGroupCategory }) => {
           )
         })}
       </Slider>
-    </>
+    </div>
   )
 }
 

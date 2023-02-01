@@ -61,7 +61,7 @@ const AccountUpdate = (props) => {
     } = props;
 
     return (
-        <>
+        <div>
             <div className="d-flex justify-content-between align-items-center">
                 <Typography variant="h4" gutterBottom>
                     Account
@@ -534,7 +534,7 @@ const AccountUpdate = (props) => {
                     setShowNoti={setShowNoti}
                 />
             )}
-        </>
+        </div>
     );
 };
 

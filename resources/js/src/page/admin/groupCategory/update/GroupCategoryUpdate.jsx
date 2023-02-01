@@ -48,7 +48,7 @@ const GroupCategoryUpdate = (props) => {
 
     const [t] = useTranslation();
     return (
-        <>
+        <div>
             <div className="d-flex justify-content-between align-items-center">
                 <Typography variant="h4" gutterBottom>
                     Group category
@@ -264,7 +264,7 @@ const GroupCategoryUpdate = (props) => {
                     setShowNoti={setShowNoti}
                 />
             )}
-        </>
+        </div>
     );
 };
 

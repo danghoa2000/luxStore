@@ -113,7 +113,7 @@ const Detail = ({
                                 product?.sale_price ? (
                                     product?.max_price ===
                                     product?.min_price ? (
-                                        <>
+                                        <div>
                                             <span className="old-price detail__product__info-price font-bold">
                                                 {formatPrice(
                                                     product?.max_price
@@ -131,9 +131,9 @@ const Detail = ({
                                                 className="saled_price detail__product__info-price font-bold"
                                                 style={{ marginLeft: 5 }}
                                             >{`${product?.sale_persen}% off`}</span>
-                                        </>
+                                        </div>
                                     ) : (
-                                        <>
+                                        <div>
                                             <span className="old-price detail__product__info-price font-bold">
                                                 {formatPrice(
                                                     product?.min_price
@@ -169,7 +169,7 @@ const Detail = ({
                                                 className="saled_price detail__product__info-price font-bold"
                                                 style={{ marginLeft: 5 }}
                                             >{`${product?.sale_persen}% off`}</span>
-                                        </>
+                                        </div>
                                     )
                                 ) : product?.max_price ===
                                   product?.min_price ? (
@@ -177,7 +177,7 @@ const Detail = ({
                                         {formatPrice(product?.max_price)}
                                     </span>
                                 ) : (
-                                    <>
+                                    <div>
                                         <span className="new-price detail__product__info-price font-bold">
                                             {formatPrice(product?.min_price)}
                                         </span>
@@ -187,10 +187,10 @@ const Detail = ({
                                         <span className="new-price detail__product__info-price font-bold">
                                             {formatPrice(product?.max_price)}
                                         </span>
-                                    </>
+                                    </div>
                                 )
                             ) : currentOption?.sale_price ? (
-                                <>
+                                <div>
                                     <span className="old-price detail__product__info-price font-bold">
                                         {formatPrice(currentOption?.price)}
                                     </span>
@@ -204,7 +204,7 @@ const Detail = ({
                                         className="saled_price detail__product__info-price font-bold"
                                         style={{ marginLeft: 5 }}
                                     >{`${currentOption?.sale_persen}% off`}</span>
-                                </>
+                                </div>
                             ) : (
                                 <span className="new-price detail__product__info-price font-bold">
                                     {formatPrice(currentOption?.price)}

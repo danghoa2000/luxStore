@@ -59,7 +59,7 @@ const AccountCreate = (props) => {
     } = props;
 
     return (
-        <>
+        <div>
             <div className="d-flex justify-content-between align-items-center">
                 <Typography variant="h4" gutterBottom>
                     Account
@@ -535,7 +535,7 @@ const AccountCreate = (props) => {
                     setShowNoti={setShowNoti}
                 />
             )}
-        </>
+        </div>
     );
 };
 

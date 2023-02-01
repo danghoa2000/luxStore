@@ -7,7 +7,7 @@ import { STATUS_ORDER } from "../../../../../../constants/constants";
 const UpdateStatusModal = ({handleUpdate, handleSubmit, control, loading}) => {
     const [t] = useTranslation();
     return (
-        <>
+        <div>
             <Typography
                 id="modal-modal-title"
                 variant="h6"
@@ -93,7 +93,7 @@ const UpdateStatusModal = ({handleUpdate, handleSubmit, control, loading}) => {
                     Update
                 </Button>
             </Grid>
-        </>
+        </div>
     );
 };
 

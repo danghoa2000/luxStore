@@ -65,7 +65,7 @@ const DetailStep = ({
         }
     };
     return (
-        <React.Fragment>
+        <div>
             <div className="container d-flex">
                 <div className="cart-details">
                     <div className="cart-list product">
@@ -267,7 +267,7 @@ const DetailStep = ({
                             onDelete={() => setData({ ...data, voucher: {} })}
                         />
                     ) : (
-                        <>
+                        <div>
                             <TextField
                                 name="voucher"
                                 variant="outlined"
@@ -294,11 +294,11 @@ const DetailStep = ({
                             >
                                 Apply Voucher
                             </Button>
-                        </>
+                        </div>
                     )}
                 </div>
             </div>
-        </React.Fragment>
+        </div>
     );
 };
 

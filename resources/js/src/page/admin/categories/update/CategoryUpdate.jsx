@@ -49,7 +49,7 @@ const CategoryUpdate = (props) => {
 
     const [t] = useTranslation();
     return (
-        <>
+        <div>
             <div className="d-flex justify-content-between align-items-center">
                 <Typography variant="h4" gutterBottom>
                     Brand
@@ -316,7 +316,7 @@ const CategoryUpdate = (props) => {
                     setShowNoti={setShowNoti}
                 />
             )}
-        </>
+        </div>
     );
 };
 

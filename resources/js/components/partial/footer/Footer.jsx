@@ -3,7 +3,7 @@ import "./style.css"
 
 const Footer = () => {
   return (
-    <>
+    <div>
       <footer>
         <div className='container grid2'>
           <div className='box'>
@@ -41,7 +41,7 @@ const Footer = () => {
           </div>
         </div>
       </footer>
-    </>
+    </div>
   )
 }
 

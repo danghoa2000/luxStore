@@ -4,7 +4,7 @@ import TopCart from "./TopCart"
 
 const TopRate = ({ topRateProduct }) => {
   return (
-    <>
+    <div>
       <section className='' style={{ width: "100%" }}>
         <div className=''>
           <div className='heading d-flex justify-content-between align-items-center'>
@@ -20,7 +20,7 @@ const TopRate = ({ topRateProduct }) => {
           <TopCart topRateProduct={topRateProduct} />
         </div>
       </section>
-    </>
+    </div>
   )
 }
 

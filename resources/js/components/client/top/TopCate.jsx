@@ -4,7 +4,7 @@ import TopCart from "./TopCart"
 
 const TopCate = ({ topGroupCategory }) => {
   return (
-    <>
+    <div>
       <section className='TopCate' style={{ width: "100%" }}>
         <div className=''>
           <div className='heading d-flex justify-content-between align-items-center'>
@@ -20,7 +20,7 @@ const TopCate = ({ topGroupCategory }) => {
           <TopCart topGroupCategory={topGroupCategory} />
         </div>
       </section>
-    </>
+    </div>
   )
 }
 

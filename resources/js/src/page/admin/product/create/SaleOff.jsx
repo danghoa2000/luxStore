@@ -13,7 +13,7 @@ const SaleOff = ({
 }) => {
     const [t] = useTranslation();
     return (
-        <>
+        <div>
             <Controller
                 name="price_saled"
                 control={control}
@@ -47,7 +47,7 @@ const SaleOff = ({
                     >
                         <Select
                             {...field}
-                            label={<>{t('product.list.table.manufacturer_id')}<span className='required'></span></>}
+                            label={<div>{t('product.list.table.manufacturer_id')}<span className='required'></span></div>}
                             size="small"
                         >
                             <MenuItem key={-1} value={-1}>
@@ -83,7 +83,7 @@ const SaleOff = ({
                     </FormControl>}
             />
             {errors.expried && <p className='text-danger'>{errors.expried.message}</p>}
-        </>
+        </div>
     );
 };
 

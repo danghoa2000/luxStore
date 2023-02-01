@@ -35,10 +35,10 @@ const ProductItem = ({ addToCart, shopItems }) => {
                         <div style={{ display: 'flex', alignItems: 'baseline' }}>
                             {shopItems?.sale_price ?
                                 (
-                                    <>
+                                    <div>
                                         <span className="old-price">{formatPrice(shopItems?.min_price)}</span>
                                         <span className="new-price" style={{ marginLeft: 5 }}>{formatPrice(shopItems?.sale_price)}</span>
-                                    </>
+                                    </div>
                                 )
                                 :
                                 (<span className="new-price">{formatPrice(shopItems?.min_price)}</span>)

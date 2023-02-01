@@ -25,7 +25,7 @@ const ManufacturerUpdate = (props) => {
     } = props;
 
     const [t] = useTranslation();
-    return <>
+    return <div>
         <div className="d-flex justify-content-between align-items-center">
             <Typography variant="h4" gutterBottom>
                 Manufacturer
@@ -200,7 +200,7 @@ const ManufacturerUpdate = (props) => {
             </div>
         </form>
         {showNoti && <ShowSnackbars type={status.type} message={status.message} setShowNoti={setShowNoti} />}
-    </>
+    </div>
 };
 
 export default ManufacturerUpdate;

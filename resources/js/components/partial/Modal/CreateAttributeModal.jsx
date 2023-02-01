@@ -71,7 +71,7 @@ const CreateAttributeModal = ({
             });
     }, []);
     return (
-        <>
+        <div>
             <Typography id="modal-modal-title" variant="h6" component="h2" textAlign={"center"} color="#fff">
                 Create new Attribute
             </Typography>
@@ -85,7 +85,7 @@ const CreateAttributeModal = ({
                                 <FormControl variant="standard">
                                     <Select
                                         {...field}
-                                        label={<>{t('product.list.table.group_category_id')}<span className='required'></span></>}
+                                        label={<div>{t('product.list.table.group_category_id')}<span className='required'></span></div>}
                                         size="small"
                                     >
                                         <MenuItem key={""} value={-1}>
@@ -143,7 +143,7 @@ const CreateAttributeModal = ({
                     </Button>
                 </Grid>
             </form>
-        </>
+        </div>
     );
 };
 

@@ -15,7 +15,7 @@ const SliderHome = (props) => {
   } = props;
 
   return (
-    <>
+    <div>
       <section className={slideClass}>
         <SlideCard
           dots={dots}
@@ -27,7 +27,7 @@ const SliderHome = (props) => {
           dotsClass={dotsClass}
         />
       </section>
-    </>
+    </div>
   )
 }
 

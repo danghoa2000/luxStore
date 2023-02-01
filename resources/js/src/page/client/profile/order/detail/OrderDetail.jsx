@@ -55,7 +55,7 @@ const OrderDetail = ({
     const [productIdReview, setProductIdReview] = useState();
     const { user } = useAuth();
     return (
-        <>
+        <div>
             <div className="d-flex justify-content-between align-items-center profile__bar__item-active">
                 <div style={{ display: "flex", alignItems: "center" }}>
                     <ShoppingBag></ShoppingBag>
@@ -402,7 +402,7 @@ const OrderDetail = ({
                     setShowNoti={setShowNoti}
                 />
             )}
-        </>
+        </div>
     );
 };
 

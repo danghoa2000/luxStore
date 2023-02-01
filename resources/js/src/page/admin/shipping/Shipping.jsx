@@ -98,7 +98,7 @@ const Shipping = (props) => {
                     >
                         {
                             editingKey === row.id ? (
-                                <>
+                                <div>
                                     <div className='d-flex align-items-center'>
                                         <CheckCircleOutline aria-label="btn-update" color="success" onClick={() => {
                                             handleUpdate(getValues())
@@ -108,7 +108,7 @@ const Shipping = (props) => {
                                         <HighlightOff aria-label="btn-cancel" color="error" onClick={() => setEditingKey(null)} />
                                     </div>
 
-                                </>
+                                </div>
                             ) : (
                                 <BorderColor color='primary' className='action'
                                     onClick={() => setEditingKey(row.id)}
@@ -156,7 +156,7 @@ const Shipping = (props) => {
         return columns;
     }, [editingKey]);
     return (
-        <>
+        <div>
             <div className="d-flex justify-content-between align-items-center">
                 <Typography variant="h4" gutterBottom>
                     Shipping
@@ -230,7 +230,7 @@ const Shipping = (props) => {
                 </Paper>
             </div>
             {showNoti && <ShowSnackbars type={status.type} message={status.message} setShowNoti={setShowNoti} />}
-        </>
+        </div>
 
     );
 };

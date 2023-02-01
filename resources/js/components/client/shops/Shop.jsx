@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 const Shop = ({ addToCart, shopItems, brand }) => {
     const navigate = useNavigate();
     return (
-        <>
+        <div>
             <section className="shop background">
                 <div className="container d-flex">
                     <Catg brand={brand} />
@@ -33,7 +33,7 @@ const Shop = ({ addToCart, shopItems, brand }) => {
                     </div>
                 </div>
             </section>
-        </>
+        </div>
     );
 };
 

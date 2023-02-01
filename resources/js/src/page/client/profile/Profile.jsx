@@ -27,7 +27,7 @@ const Profile = ({ currentActive, setCurrentActive }) => {
     const navigate = useNavigate();
     const MENU = useMemo(() => {
         return (
-            <>
+            <div>
                 <List
                     sx={{
                         width: "100%",
@@ -96,7 +96,7 @@ const Profile = ({ currentActive, setCurrentActive }) => {
                         <ListItemText primary="Address" />
                     </ListItem>
                 </List>
-            </>
+            </div>
         );
     }, [currentActive]);
     return (

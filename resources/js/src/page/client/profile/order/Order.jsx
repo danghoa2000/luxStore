@@ -33,7 +33,7 @@ const Order = ({
     const [t] = useTranslation();
     const navigate = useNavigate();
     return (
-        <>
+        <div>
             <div
                 className="d-flex align-items-center profile__bar__item-active"
                 style={{ marginBottom: 20 }}
@@ -137,7 +137,7 @@ const Order = ({
                     </Stack>
                 </div>
             </div>
-        </>
+        </div>
     );
 };
 

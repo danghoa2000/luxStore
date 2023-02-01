@@ -10,7 +10,7 @@ const Annocument = () => {
     height: "340px",
   }
   return (
-    <>
+    <div>
       <section className='annocument background'>
         <div className='container d-flex'>
           <div className='img' style={mystyle}>
@@ -21,7 +21,7 @@ const Annocument = () => {
           </div>
         </div>
       </section>
-    </>
+    </div>
   )
 }
 

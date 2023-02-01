@@ -3,7 +3,7 @@ import Dcard from "./Dcard"
 
 const Discount = ({productItems}) => {
   return (
-    <>
+    <div>
       <section className='Discount background NewArrivals'>
         <div className='container'>
           <div className='heading d-flex justify-content-between align-items-center'>
@@ -19,7 +19,7 @@ const Discount = ({productItems}) => {
           <Dcard productItems={productItems}/>
         </div>
       </section>
-    </>
+    </div>
   )
 }
 

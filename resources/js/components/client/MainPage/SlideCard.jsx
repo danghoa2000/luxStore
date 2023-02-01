@@ -38,7 +38,7 @@ const SlideCard = (props) => {
         }
     }
     return (
-        <>
+        <div>
             <section className={slideClass}>
                 <Slider {...settings}>
                     {Sdata.map((value, index) => {
@@ -57,7 +57,7 @@ const SlideCard = (props) => {
                     })}
                 </Slider>
             </section>
-        </>
+        </div>
     )
 }
 

@@ -40,7 +40,7 @@ const SliderProduct = (props) => {
         }
     }
     return (
-        <>
+        <div>
             <section className={slideClass}>
                 <Slider {...settings}>
                     {data && data.map((value, index) => {
@@ -52,7 +52,7 @@ const SliderProduct = (props) => {
                     })}
                 </Slider>
             </section>
-        </>
+        </div>
     )
 };
 

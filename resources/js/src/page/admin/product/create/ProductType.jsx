@@ -33,7 +33,7 @@ const ProductType = (props) => {
                             <FormControl variant="standard">
                                 <Select
                                     {...field}
-                                    label={<>{t('product.list.table.group_category_id')}<span className='required'></span></>}
+                                    label={<div>{t('product.list.table.group_category_id')}<span className='required'></span></div>}
                                     size="small"
                                     value={groupCategoryId}
                                     onChange={e => {
@@ -69,7 +69,7 @@ const ProductType = (props) => {
                             <FormControl variant="standard">
                                 <Select
                                     {...field}
-                                    label={<>{t('product.list.table.category_id')}<span className='required'></span></>}
+                                    label={<div>{t('product.list.table.category_id')}<span className='required'></span></div>}
                                     size="small"
                                 >
                                     <MenuItem key={""} value={-1}>
@@ -99,7 +99,7 @@ const ProductType = (props) => {
                             <FormControl variant="standard">
                                 <Select
                                     {...field}
-                                    label={<>{t('product.list.table.manufacturer_id')}<span className='required'></span></>}
+                                    label={<div>{t('product.list.table.manufacturer_id')}<span className='required'></span></div>}
                                     size="small"
                                 >
                                     <MenuItem key={""} value={-1}>

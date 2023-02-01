@@ -20,10 +20,10 @@ const ProductItem = ({ val }) => {
             <div style={{ display: 'flex', alignItems: 'baseline' }}>
                 {val?.sale_price ?
                     (
-                        <>
+                        <div>
                             <span className="old-price">{formatPrice(val?.min_price)}</span>
                             <span className="new-price" style={{ marginLeft: 5 }}>{formatPrice(val?.sale_price)}</span>
-                        </>
+                        </div>
                     )
                     :
                     (<span className="new-price">{formatPrice(val?.min_price)}</span>)

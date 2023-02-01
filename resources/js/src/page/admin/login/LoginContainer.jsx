@@ -1,5 +1,4 @@
-import axios from 'axios';
-import React, { useCallback, useContext, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';
 import { API_BASE_URL, LOGIN_API } from '../../../../constants/api';
 import { useAuth } from '../../../../hooks/useAuth';
@@ -8,7 +7,7 @@ import { ADMIN_INFO, ADMIN_SESSION_ACCESS_TOKEN, getAccessToken, saveAccessToken
 import Login from './Login';
 
 const LoginContainer = () => {
-    const { setAuth } = useAuth();
+    // const { setAuth } = useAuth();
     const [isLoginFailed, setisLoginFailed] = useState({});
     const navigate = useNavigate();
 
@@ -25,7 +24,7 @@ const LoginContainer = () => {
             password: data.password,
         },
         ).then(res => {
-            setAuth(res.data.info);
+            // setAuth(res.data.info);
             window.sessionStorage.setItem(ADMIN_SESSION_ACCESS_TOKEN, res.data.access_token);
             window.sessionStorage.setItem(ADMIN_INFO, JSON.stringify(res.data.info));
             navigate("/admin");

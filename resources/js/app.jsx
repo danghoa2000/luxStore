@@ -305,7 +305,7 @@ const App = () => {
                             <Route path="/" element={<Outlet />}>
                                 <Route
                                     index
-                                    element={<Navigate to="/elite" />}
+                                    element={<Navigate to="elite" />}
                                 />
                                 <Route
                                     path="/elite"

@@ -173,7 +173,7 @@ const OrderDetail = ({
                                             )
                                         }`}
                                     </div>
-                                    {order?.status == STATUS_ORDER.SUCCESS && (
+                                    {order?.status == STATUS_ORDER.SUCCESS ? (
                                         <div className="order__product__item-properties">
                                             {item?.product?.customer_review &&
                                             JSON.parse(
@@ -206,7 +206,9 @@ const OrderDetail = ({
                                                 </Button>
                                             )}
                                         </div>
-                                    )}
+                                    ) : (<div className="order__product__item-properties"></div>)
+                                
+                                }
                                 </div>
                             );
                         })}

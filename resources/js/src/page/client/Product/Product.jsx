@@ -47,6 +47,10 @@ const Product = (props) => {
         setValue,
         getValues,
         getProductList,
+        isCompleteSetting,
+        setComplateSetting,
+        clear,
+        keySearch
     } = props;
     const navigate = useNavigate();
     return (
@@ -62,7 +66,7 @@ const Product = (props) => {
                         <div className="d-flex justify-content-between bg-white search__header">
                             <div className="search__result">
                                 <h4 className="search__result__text">
-                                    Searching for “ {searchField?.name || "All"}{" "}
+                                    Searching for “ {keySearch || "All"}{" "}
                                     ”
                                 </h4>
                                 <p className="search__result__res">
@@ -125,6 +129,8 @@ const Product = (props) => {
                         getProductList={getProductList}
                         control={control}
                         handleSubmit={handleSubmit}
+                        isCompleteSetting={isCompleteSetting}
+                        setComplateSetting={setComplateSetting}
                     />
                     {totalRecord !== 0 ? (
                         <div className="product__list">
@@ -251,7 +257,7 @@ const Product = (props) => {
                             </div>
                         </div>
                     ) : (
-                        <NotFoundResult />
+                        <NotFoundResult clear={clear} setComplateSetting={setComplateSetting}/>
                     )}
                 </div>
             </form>

@@ -17,6 +17,7 @@ class HomeService
         $flashDelas = Product::where('sale_type', '<>', -1)
             ->where('expried', '>=', Carbon::now())
             ->with('productDetail:qty,sold_qty,product_id,price')
+            ->where('status', config('constants.user.status.active'))
             ->select('id', 'name', 'image', 'expried', 'sale_type', 'price', 'sale_off')
             ->limit(10)
             ->offset(0)
@@ -24,6 +25,7 @@ class HomeService
 
         $newArrivals = Product::orderBy('updated_at', 'desc')
             ->with('productDetail:qty,sold_qty,product_id,price')
+            ->where('status', config('constants.user.status.active'))
             ->select('id', 'name', 'image', 'expried', 'sale_type', 'price', 'sale_off')
             ->limit(10)
             ->offset(0)
@@ -33,10 +35,12 @@ class HomeService
             $query->where('event_type', Event::BIG_DISCOUNTS);
         })
             ->with('productDetail:qty,sold_qty,product_id,price')
+            ->where('status', config('constants.user.status.active'))
             ->select('id', 'name', 'image', 'expried', 'sale_type', 'price', 'sale_off')
             ->get();
 
         $ortherProduct = Product::with('productDetail:qty,sold_qty,product_id,price')
+            ->where('status', config('constants.user.status.active'))
             ->select('id', 'name', 'image', 'expried', 'sale_type', 'price', 'sale_off')
             ->limit(9)
             ->offset(0)
@@ -50,6 +54,7 @@ class HomeService
                     }
                 ]
             )
+            ->where('status', config('constants.user.status.active'))
             ->orderBy('rating', 'desc')
             ->limit(10)
             ->offset(0)
@@ -94,17 +99,13 @@ class HomeService
                 $isReturn = $item['total_rate'] == $data['rate'];
             }
             if (!empty($data['price_max'])) {
-                if ($item['sale_price']) {
-                    return $isReturn && $item['sale_price'] <= $data['price_max'];
-                } else {
-                    return $isReturn && $item['price'] <= $data['price_max'];
+                if ($item['max_price'] > $data['price_max']) {
+                    $isReturn = false;
                 }
             }
             if (!empty($data['price_min'])) {
-                if ($item['sale_price']) {
-                    return $isReturn && $item['sale_price'] >= $data['price_min'];
-                } else {
-                    return $isReturn && $item['price'] >= $data['price_min'];
+                if ($item['min_price'] < $data['price_min']) {
+                    $isReturn = false;
                 }
             }
             return $isReturn;
@@ -132,7 +133,7 @@ class HomeService
             $category = Category::where('group_category_id', $data)
                 ->select('id', 'name')
                 ->get();
-            
+
             $formFilter['category'] = $category;
 
             $attributes = $groupCategory->first() ? $groupCategory->first()->attributes : null;

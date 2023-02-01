@@ -29,4 +29,9 @@ class CustomerAddress extends Authenticatable
     ];
 
     protected $table = "customer_address";
+
+    public function customer()
+    {
+        return $this->belongsTo(Customer::class, 'code', 'id');
+    }
 }

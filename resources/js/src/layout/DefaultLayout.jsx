@@ -34,6 +34,10 @@ const DefaultLayout = ({
     setOpen,
     setCartItem,
     getCart,
+    keySearch,
+    setKeySearch,
+    isCompleteSetting,
+    setComplateSetting,
 }) => {
     const [state, setState] = useState(false);
     const toggleDrawer = (state) => (event) => {
@@ -95,6 +99,10 @@ const DefaultLayout = ({
                 setOpen={setOpen}
                 setType={setType}
                 setCartItem={setCartItem}
+                keySearch={keySearch}
+                setKeySearch={setKeySearch}
+                isCompleteSetting={isCompleteSetting}
+                setComplateSetting={setComplateSetting}
             />
             <Outlet />
             <Footer />
@@ -175,7 +183,7 @@ const DefaultLayout = ({
                                                         }}
                                                     >
                                                         {formatPrice(
-                                                            item?.sale_price
+                                                            item?.price - item?.sale_price
                                                         )}
                                                     </span>
                                                 </div>

@@ -192,8 +192,6 @@ const AdminLayout = () => {
                             <Typography
                                 variant="h6"
                                 noWrap
-                                component="a"
-                                href="/"
                                 sx={{
                                     mr: 2,
                                     display: { xs: "none", md: "flex" },
@@ -202,6 +200,10 @@ const AdminLayout = () => {
                                     letterSpacing: ".3rem",
                                     color: "inherit",
                                     textDecoration: "none",
+                                    cursor: 'pointer'
+                                }}
+                                onClick={() => {
+                                    navigate('/admin/dashboard')
                                 }}
                             >
                                 LOGO

@@ -2,10 +2,13 @@
 
 namespace App\Http\Services\Admin;
 
+use App\Jobs\SendMailPassword;
+use App\Mail\MailSendPassword;
 use App\Models\Customer;
 use App\Models\Info;
 use App\Models\User;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
@@ -54,10 +57,11 @@ class AccountService
             DB::beginTransaction();
 
             // add user info
+            $password = Str::random(8);
             $info = Info::create([
                 'full_name' => $request->full_name,
                 'email' => $request->email,
-                'password' => Hash::make(Str::random(8)),
+                'password' => Hash::make($password),
                 'telephone' => $request->telephone,
                 'birthday' => $request->birthday,
                 'province_id' => $request->province_id,
@@ -68,7 +72,6 @@ class AccountService
 
             if ($request->isCustomer) {
                 $password = Hash::make($request->password);
-                // dd($password, $info->password);
                 $info->update(['password' => $password]);
                 Customer::create(['customer_code' => $info->id]);
                 DB::commit();
@@ -87,12 +90,9 @@ class AccountService
                 'created_by' => auth('api')->user()->id,
             ]);
 
-
-            // send mail password
-            // Mail::send('mail', [], function ($message) {
-            //     $message->to('abc@gmail.com', 'Tutorials Point')->subject('Laravel HTML Testing Mail');
-            //     $message->from('xyz@gmail.com', 'Virat Gandhi');
-            // });
+            //send mail password
+            $auth = Auth::guard('api')->user();
+            SendMailPassword::dispatch($info, $auth, $password);
             DB::commit();
             return response([
                 'user' => $user,

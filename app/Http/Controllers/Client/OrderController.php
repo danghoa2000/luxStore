@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Client;
 
 use App\Http\Controllers\Controller;
+use App\Jobs\SendNotiOrder;
 use App\Models\Coupon;
 use App\Models\Order;
 use App\Models\ProductDetail;
@@ -17,6 +18,12 @@ use Illuminate\Support\Facades\Log;
 
 class OrderController extends Controller
 {
+    const ORDER_STATUS = [
+        '0' => 'Pending',
+        '1' => 'Delivery',
+        '2' => 'Success',
+        '3' => 'Cancel'
+    ];
     /**
      * Display a listing of the resource.
      *
@@ -67,7 +74,7 @@ class OrderController extends Controller
                 $productsOrder[$key]['product_id'] = $key;
                 $productsOrder[$key]['order_id'] = $order->id;
                 $productsOrder[$key]['product_name'] = $value['product']['name'];
-                $productsOrder[$key]['product_price'] = $value['price'];
+                $productsOrder[$key]['product_price'] = $value['price'] - $value['sale_price'];
                 $productsOrder[$key]['qty'] = $value['pivot']['qty'];
                 $productList[] = $value['product']['id'];
             }
@@ -98,7 +105,10 @@ class OrderController extends Controller
 
             // delete cart
             $user->cart->products()->detach(array_keys($productsOrder));
-
+            $content = ' <span>' . config("app.name") . '</span>
+            is happy to announce that your quote #'.$order->id.' has been received and is in the process of being processed. We will notify you of the exact order as soon as we receive it (within 24 hours).
+            <br>';
+            SendNotiOrder::dispatch($order, $content);
             DB::commit();
             return response([
                 'message' => "success",
@@ -150,6 +160,10 @@ class OrderController extends Controller
             $order = Order::with('orderDetail.propertyValue')->find($request->id);
             if ($order) {
                 $order->update(['status' => $request->order_status]);
+                $content = ' <span>' . config("app.name") . '</span>
+                notify #' . $order->id . '
+                <br>
+                Your order status has been updated to ' . self::ORDER_STATUS[$request->order_status];
                 if ($request->order_status == 3) {
                     $productsOrder = [];
                     foreach ($order->orderDetail as $value) {
@@ -168,6 +182,7 @@ class OrderController extends Controller
 
                     ProductDetail::upsert($options, ['id'], ['qty', 'sold_qty']);
                 }
+                SendNotiOrder::dispatch($order, $content);
                 DB::commit();
                 return response([
                     'order' => $order,
@@ -180,7 +195,6 @@ class OrderController extends Controller
                     'code' => Response::HTTP_NOT_FOUND
                 ], Response::HTTP_NOT_FOUND);
             }
-
         } catch (\Throwable $th) {
             DB::rollBack();
             return response([

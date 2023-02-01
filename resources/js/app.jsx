@@ -148,6 +148,8 @@ const App = () => {
     const [CartItem, setCartItem] = useState([]);
     const [open, setOpen] = useState(false);
     const [type, setType] = useState(2);
+    const [keySearch, setKeySearch] = useState("");
+    const [isCompleteSetting, setComplateSetting] = useState(true);
 
     const getCart = () => {
         axiosClient
@@ -225,10 +227,9 @@ const App = () => {
                 if (response.response.status === CODE.UNAUTHENTICATED) {
                     setStatus({
                         type: "warning",
-                        message: 'Sign in to purchase'
+                        message: "Sign in to purchase",
                     });
                 }
-                
             });
     }, []);
 
@@ -263,7 +264,7 @@ const App = () => {
                 if (response.response.status === CODE.UNAUTHENTICATED) {
                     setStatus({
                         type: "warning",
-                        message: 'Sign in to purchase'
+                        message: "Sign in to purchase",
                     });
                 }
             });
@@ -324,6 +325,10 @@ const App = () => {
                                             setOpen={setOpen}
                                             setCartItem={setCartItem}
                                             getCart={getCart}
+                                            keySearch={keySearch}
+                                            setKeySearch={setKeySearch}
+                                            isCompleteSetting={isCompleteSetting}
+                                            setComplateSetting={setComplateSetting}
                                         />
                                     }
                                 >
@@ -386,7 +391,12 @@ const App = () => {
                                         path="search"
                                         element={
                                             <Suspense fallback={<Loading />}>
-                                                <ProductContainer />
+                                                <ProductContainer
+                                                    keySearch={keySearch}
+                                                    setKeySearch={setKeySearch}
+                                                    isCompleteSetting={isCompleteSetting}
+                                                    setComplateSetting={setComplateSetting}
+                                                />
                                             </Suspense>
                                         }
                                     />
@@ -651,10 +661,7 @@ const App = () => {
                                             }
                                         />
                                     </Route>
-                                    <Route
-                                        path="coupon"
-                                        element={<Outlet />}
-                                    >
+                                    <Route path="coupon" element={<Outlet />}>
                                         <Route
                                             index
                                             element={

@@ -3,7 +3,17 @@ import "./Header.css";
 import Search from "./Search";
 import Navbar from "./Navbar";
 
-const Header = ({ CartItem, toggleDrawer, setOpen, setType, setCartItem }) => {
+const Header = ({
+    CartItem,
+    toggleDrawer,
+    setOpen,
+    setType,
+    setCartItem,
+    keySearch,
+    setKeySearch,
+    isCompleteSetting,
+    setComplateSetting
+}) => {
     return (
         <>
             <Search
@@ -12,6 +22,10 @@ const Header = ({ CartItem, toggleDrawer, setOpen, setType, setCartItem }) => {
                 setOpen={setOpen}
                 setType={setType}
                 setCartItem={setCartItem}
+                keySearch={keySearch}
+                setKeySearch={setKeySearch}
+                isCompleteSetting={isCompleteSetting}
+                setComplateSetting={setComplateSetting}
             />
             <Navbar />
         </>

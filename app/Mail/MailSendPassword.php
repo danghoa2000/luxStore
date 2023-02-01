@@ -13,14 +13,16 @@ class MailSendPassword extends Mailable
 {
     use Queueable, SerializesModels;
 
+    public $body;
+    
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct($body)
     {
-        //
+        $this->body = $body;
     }
 
     /**
@@ -43,7 +45,7 @@ class MailSendPassword extends Mailable
     public function content()
     {
         return new Content(
-            view: 'view.name',
+            view: 'view.BacancyMail',
         );
     }
 
@@ -55,5 +57,10 @@ class MailSendPassword extends Mailable
     public function attachments()
     {
         return [];
+    }
+
+    public function build()
+    {
+        return $this->markdown('emails.BacancyMail');
     }
 }

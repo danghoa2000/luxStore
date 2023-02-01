@@ -40,7 +40,17 @@ import {
     SESSION_ACCESS_TOKEN,
 } from "../../../utils/sessionHelper";
 
-const Search = ({ CartItem, toggleDrawer, setOpen, setType, setCartItem }) => {
+const Search = ({
+    CartItem,
+    toggleDrawer,
+    setOpen,
+    setType,
+    setCartItem,
+    keySearch,
+    setKeySearch,
+    isCompleteSetting,
+    setComplateSetting,
+}) => {
     const { searchField, setSearchFiled } = useSearchField();
     const [isLogin, setLogin] = useState(false);
     const { user, setUser } = useAuth();
@@ -73,14 +83,8 @@ const Search = ({ CartItem, toggleDrawer, setOpen, setType, setCartItem }) => {
     }, [user]);
 
     const handleSearch = useCallback(() => {
-        if (name) {
-            const newSearchField = { ...searchField };
-            newSearchField["name"] = name;
-            setSearchFiled(newSearchField);
-        } else {
-            setSearchFiled(({ name, ...newObj }) => newObj);
-        }
         navigate("search");
+        setComplateSetting((pre) => !pre);
     }, [name]);
 
     const logout = () => {
@@ -124,10 +128,10 @@ const Search = ({ CartItem, toggleDrawer, setOpen, setType, setCartItem }) => {
                         <input
                             type="text"
                             placeholder="Search and hit enter..."
-                            value={name}
-                            onChange={(e) => setName(e.target.value)}
+                            value={keySearch}
+                            onChange={(e) => setKeySearch(e.target.value)}
                             onBlur={(e) => {
-                                setName(
+                                setKeySearch(
                                     e.target.value ? e.target.value.trim() : ""
                                 );
                             }}

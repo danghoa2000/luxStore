@@ -4,7 +4,7 @@ import { useLocation } from "react-router-dom";
 
 import { useForm } from "react-hook-form";
 import { axiosClient } from "../../../../../../hooks/useHttp";
-import { ADMIN_ORDER_API } from "../../../../../../constants/api";
+import { ORDER_API } from "../../../../../../constants/api";
 import { CODE } from "../../../../../../constants/constants";
 
 const OrderDetailContainer = () => {
@@ -25,7 +25,7 @@ const OrderDetailContainer = () => {
 
     const getOrder = useCallback(() => {
         axiosClient
-            .get(ADMIN_ORDER_API.SHOW, {
+            .get(ORDER_API.SHOW, {
                 params: {
                     id: state.id,
                 },
@@ -55,7 +55,7 @@ const OrderDetailContainer = () => {
 
     const handleUpdate = (value) => {
         axiosClient
-            .put(ADMIN_ORDER_API.UPDATE, {
+            .put(ORDER_API.UPDATE, {
                 ...value,
             })
             .then((response) => {

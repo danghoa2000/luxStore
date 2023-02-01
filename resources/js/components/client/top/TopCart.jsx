@@ -4,6 +4,7 @@ import "slick-carousel/slick/slick.css"
 import "slick-carousel/slick/slick-theme.css"
 import Tdata from "./Tdata"
 import { API_BASE_URL } from "../../../constants/api"
+import { auto } from "@popperjs/core"
 
 const TopCart = ({ topGroupCategory }) => {
   const settings = {
@@ -22,7 +23,7 @@ const TopCart = ({ topGroupCategory }) => {
               <div className="product">
                 <div className='nametop d-flex'>
                   <span className='tleft'>{value?.products_count}</span>
-                  <span className='tright'>{value?.name}</span>
+                  <span className='tright' style={{ height: auto }}>{value?.name}</span>
                 </div>
                 <div className='img has__hover'>
                   <img src={API_BASE_URL + value?.image} alt='' />

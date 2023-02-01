@@ -340,7 +340,7 @@ const App = () => {
                                                     productItems={productItems}
                                                     addToCart={addToCart}
                                                     shopItems={shopItems}
-                                                />
+                                                ></HomePageContainer>
                                             </Suspense>
                                         }
                                     />

@@ -65,7 +65,7 @@ const HomePageContainer = ({ productItems, addToCart, CartItem, shopItems }) => 
             brand={brand}
             status={status}
             showNoti={showNoti}
-            />
+        ></HomePage>
     );
 };
 

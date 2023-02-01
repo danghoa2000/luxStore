@@ -29,7 +29,7 @@ const HomePage = ({
     return (
         <div>
             <Home CartItem={CartItem} />
-            <FlashDeals productItems={flashDelas} addToCart={addToCart} />
+            {/* <FlashDeals productItems={flashDelas} addToCart={addToCart} /> */}
             {/* <section className="background">
                 <div
                     className="container"

@@ -15,7 +15,7 @@ const CartStep = ({
     setData,
 }) => {
     return (
-        <React.Fragment>
+        <div>
             <div className="container d-flex">
                 {/* if hamro cart ma kunai pani item xaina bhane no diplay */}
 
@@ -104,7 +104,7 @@ const CartStep = ({
                     </Button>
                 </div>
             </div>
-        </React.Fragment>
+        </div>
     );
 };
 

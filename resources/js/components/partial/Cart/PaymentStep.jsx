@@ -21,7 +21,7 @@ const PaymentStep = ({
     handelSubmit,
 }) => {
     return (
-        <React.Fragment>
+        <div>
             <div className="container d-flex">
                 <div className="cart-details">
                     <div className="cart-list product">
@@ -181,7 +181,7 @@ const PaymentStep = ({
                     </label>
                 </div>
             </div>
-        </React.Fragment>
+        </div>
     );
 };
 

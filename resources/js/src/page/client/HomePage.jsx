@@ -29,8 +29,8 @@ const HomePage = ({
     return (
         <div>
             <Home CartItem={CartItem} ></Home>
-            {/* <FlashDeals productItems={flashDelas} addToCart={addToCart} /> */}
-            {/* <section className="background">
+            <FlashDeals productItems={flashDelas} addToCart={addToCart} />
+            <section className="background">
                 <div
                     className="container"
                     style={{ display: "flex", flexWrap: "wrap" }}
@@ -50,15 +50,15 @@ const HomePage = ({
                     </div>
                 </div>
             </section>
-            <NewArrivals productItems={newArrivals} /> */}
+            <NewArrivals productItems={newArrivals} />
             {/* <Discount productItems={bigDiscounts} /> */}
-            {/* <Shop
+            <Shop
                 shopItems={ortherProduct}
                 addToCart={addToCart}
                 brand={brand}
             />
             <Annocument />
-            <Wrapper /> */}
+            <Wrapper />
         </div>
     );
 };

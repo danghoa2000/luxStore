@@ -1,6 +1,5 @@
 import { Button, Divider } from "@mui/material";
 import React, { useMemo } from "react";
-import { Fragment } from "react";
 import Option from "./Option";
 import OptionAttribute from "./OptionAttribute";
 import OptionGroupCategory from "./OptionGroupCategory";

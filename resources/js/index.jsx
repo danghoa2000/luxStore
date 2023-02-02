@@ -6,11 +6,10 @@ import { createRoot } from "react-dom/client";
 
 const container = document.getElementById("App");
 const root = createRoot(container);
-setTimeout(function(){ 
-    root.render(
+root.render(
+    <div>
         <I18nextProvider i18n={i18n}>
             <App />
         </I18nextProvider>
-    );
-}, 1500);
-
+    </div>
+);

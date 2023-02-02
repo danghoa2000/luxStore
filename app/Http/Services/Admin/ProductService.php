@@ -40,12 +40,6 @@ class ProductService
             ->withSum('productDetail', 'qty')
             ->filter($request);
 
-        
-
-        if ($request->pageSize) {
-            $products->limit($request->pageSize)
-                ->offset(($request->currentPage) * $request->pageSize);
-        }
 
         $data = json_decode($request->searchField, true);
         $allProduct = $products->get();
@@ -57,7 +51,7 @@ class ProductService
                         $result = false;
                     }
                 }
-                
+
                 if (!empty($data['price_max'])) {
                     if ($product['max_price'] > $data['price_max']) {
                         $result = false;
@@ -67,9 +61,11 @@ class ProductService
             });
         }
         $total = count($allProduct);
-
+        if ($request->pageSize) {
+            $allProduct = array_slice($allProduct->toArray(), $request->currentPage * $request->pageSize, $request->pageSize);
+        }
         return response([
-            'products' => $allProduct->toArray(),
+            'products' => $allProduct,
             'total' => $total,
             'code' => Response::HTTP_OK
         ], Response::HTTP_OK);
@@ -187,7 +183,6 @@ class ProductService
 
     public function edit($request)
     {
-        // dd($request->all());
         try {
             DB::beginTransaction();
             $product = Product::find($request->id);

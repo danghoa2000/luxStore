@@ -109,7 +109,7 @@ const FlashCard = ({ productItems, addToCart }) => {
                                                     style={{ marginLeft: 5 }}
                                                 >
                                                     {formatPrice(
-                                                        items?.sale_price
+                                                        items?.min_price - items?.sale_price
                                                     )}
                                                 </span>
                                             </div>

@@ -108,7 +108,7 @@ class Product extends Model
         ) {
             if ($this->attributes['sale_type'] && $this->attributes['sale_type'] != -1) {
                 if ($this->attributes['sale_type'] == config('constants.sale_type.price')) {
-                    return $this->getMinPriceAttribute() - $this->attributes['sale_off'];
+                    return $this->attributes['sale_off'];
                 } else {
                     return $this->getMinPriceAttribute() ? floor(($this->getMinPriceAttribute() * $this->attributes['sale_off']) / 100) : 0;
                 }

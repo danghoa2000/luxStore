@@ -63,11 +63,12 @@
                                                             <tbody bgcolor="#eee"
                                                                 style="font-family: Arial, Helvetica, sans-serif; font-size: 12px; color: #444; line-height: 18px;">
                                                                 @if ($data->orderDetail)
+                                                                    @php
+                                                                        $i = 1;
+                                                                    @endphp
                                                                     @foreach ($data->orderDetail as $item)
                                                                         @php
-                                                                            $i = 1;
                                                                             $properties = '';
-                                                                            
                                                                         @endphp
                                                                         @foreach ($item->propertyValue as $value)
                                                                             @php
@@ -80,7 +81,7 @@
                                                                             <td align="center"
                                                                                 style="padding: 3px 9px; vertical-align: middle;"
                                                                                 valign="top">
-                                                                                <span>{{ $i++ }}</span>
+                                                                                <span>{{ $i }}</span>
                                                                             </td>
                                                                             <td align="left"
                                                                                 style="padding: 0; vertical-align: middle;">
@@ -109,6 +110,9 @@
                                                                                 valign="top">{{ $item->pivot->qty }}
                                                                             </td>
                                                                         </tr>
+                                                                        @php
+                                                                            $i++;
+                                                                        @endphp
                                                                     @endforeach
                                                                 @endif
                                                             </tbody>
@@ -119,7 +123,7 @@
                                                                         style="padding: 5px 9px;">Subtotal
                                                                     </td>
                                                                     <td align="right" style="padding: 5px 9px;">
-                                                                        {{ '$'. number_format($data->price) }}</td>
+                                                                        {{ '$' . number_format($data->price + ($data->price_discount ?? 0)) }}</td>
                                                                 </tr>
 
                                                                 <tr>
@@ -135,7 +139,8 @@
                                                                         style="padding: 5px 9px;">Discount
                                                                     </td>
                                                                     <td align="right" style="padding: 5px 9px;">
-                                                                        <span> {{ '$'. number_format($data->price_discount ?? 0) }}</span>
+                                                                        <span>
+                                                                            {{ '$' . number_format($data->price_discount ?? 0) }}</span>
                                                                     </td>
                                                                 </tr>
                                                                 <tr>

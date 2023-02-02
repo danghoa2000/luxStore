@@ -222,7 +222,7 @@ const DefaultLayout = ({
                     )}
                 </div>
                 {window.sessionStorage.getItem(SESSION_ACCESS_TOKEN) ? (
-                    <div>
+                    <>
                         <Button variant="contained" className="btn__checkcout">
                             Checkout Now
                         </Button>
@@ -233,7 +233,7 @@ const DefaultLayout = ({
                         >
                             View cart
                         </Button>
-                    </div>
+                    </>
                 ) : (
                     <Button
                         variant="contained"

@@ -38,8 +38,6 @@ const ProductUpdateContainer = () => {
             required(t('validate.required', { name: 'Product code' })),
         name: Yup.string().
             required(t('validate.required', { name: 'Product name' })),
-        price: Yup.string().
-            required(t('validate.required', { name: 'Price' })),
         group_category_id: Yup.string()
             .required(t('validate.required', { name: 'Group category' }))
             .test("isSelect", t('validate.required', { name: 'Group category' }), value => value != "-1"),
@@ -125,7 +123,6 @@ const ProductUpdateContainer = () => {
                 avatar: '',
                 product_code: '',
                 name: '',
-                price: '',
                 status: STATUS.ACTIVE,
                 group_category_id: groupCategoryId,
                 category_id: -1,
@@ -137,7 +134,6 @@ const ProductUpdateContainer = () => {
             },
             resolver: yupResolver(validationSchema),
         });
-
     const handleUpdate = useCallback((value) => {
         setLoading(true);
         axiosClient.put(PRODUCT_API.UPDATE, {

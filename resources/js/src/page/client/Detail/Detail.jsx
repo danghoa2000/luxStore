@@ -48,7 +48,7 @@ const Detail = ({
     setPage,
     totalRecord,
     rowsPerPage,
-    totalRate
+    totalRate,
 }) => {
     return (
         <section className="detail py-5">
@@ -79,9 +79,7 @@ const Detail = ({
                         <div style={{ display: "flex" }}>
                             <div className="detail__product__info-rate">
                                 <span className="text-underline total__rate">
-                                    {parseFloat(
-                                        totalRate || 0
-                                    ).toFixed(1)}
+                                    {parseFloat(totalRate || 0).toFixed(1)}
                                 </span>
                                 <Rating
                                     name="simple-controlled"
@@ -113,7 +111,7 @@ const Detail = ({
                                 product?.sale_price ? (
                                     product?.max_price ===
                                     product?.min_price ? (
-                                        <div>
+                                        <>
                                             <span className="old-price detail__product__info-price font-bold">
                                                 {formatPrice(
                                                     product?.max_price
@@ -124,16 +122,17 @@ const Detail = ({
                                                 style={{ marginLeft: 5 }}
                                             >
                                                 {formatPrice(
-                                                    product?.sale_price
+                                                    product?.max_price -
+                                                        product?.sale_price
                                                 )}
                                             </span>
                                             <span
                                                 className="saled_price detail__product__info-price font-bold"
                                                 style={{ marginLeft: 5 }}
                                             >{`${product?.sale_persen}% off`}</span>
-                                        </div>
+                                        </>
                                     ) : (
-                                        <div>
+                                        <>
                                             <span className="old-price detail__product__info-price font-bold">
                                                 {formatPrice(
                                                     product?.min_price
@@ -149,9 +148,7 @@ const Detail = ({
                                             >
                                                 {formatPrice(
                                                     product?.min_price -
-                                                        (product?.min_price *
-                                                            product?.sale_persen) /
-                                                            100
+                                                        (product?.sale_price || 0)
                                                 )}{" "}
                                                 <span
                                                     style={{ margin: "0 5px" }}
@@ -160,16 +157,14 @@ const Detail = ({
                                                 </span>
                                                 {formatPrice(
                                                     product?.max_price -
-                                                        (product?.max_price *
-                                                            product?.sale_persen) /
-                                                            100
+                                                        (product?.sale_price || 0)
                                                 )}
                                             </span>
                                             <span
                                                 className="saled_price detail__product__info-price font-bold"
                                                 style={{ marginLeft: 5 }}
                                             >{`${product?.sale_persen}% off`}</span>
-                                        </div>
+                                        </>
                                     )
                                 ) : product?.max_price ===
                                   product?.min_price ? (
@@ -177,7 +172,7 @@ const Detail = ({
                                         {formatPrice(product?.max_price)}
                                     </span>
                                 ) : (
-                                    <div>
+                                    <>
                                         <span className="new-price detail__product__info-price font-bold">
                                             {formatPrice(product?.min_price)}
                                         </span>
@@ -187,10 +182,10 @@ const Detail = ({
                                         <span className="new-price detail__product__info-price font-bold">
                                             {formatPrice(product?.max_price)}
                                         </span>
-                                    </div>
+                                    </>
                                 )
                             ) : currentOption?.sale_price ? (
-                                <div>
+                                <>
                                     <span className="old-price detail__product__info-price font-bold">
                                         {formatPrice(currentOption?.price)}
                                     </span>
@@ -198,13 +193,16 @@ const Detail = ({
                                         className="new-price detail__product__info-price font-bold"
                                         style={{ marginLeft: 5 }}
                                     >
-                                        {formatPrice(currentOption?.price - currentOption?.sale_price)}
+                                        {formatPrice(
+                                            currentOption?.price -
+                                                currentOption?.sale_price
+                                        )}
                                     </span>
                                     <span
                                         className="saled_price detail__product__info-price font-bold"
                                         style={{ marginLeft: 5 }}
                                     >{`${currentOption?.sale_persen}% off`}</span>
-                                </div>
+                                </>
                             ) : (
                                 <span className="new-price detail__product__info-price font-bold">
                                     {formatPrice(currentOption?.price)}
@@ -309,9 +307,7 @@ const Detail = ({
                                 variant="h5"
                                 className="rating__overview__rate"
                             >
-                                {parseFloat(totalRate || 0).toFixed(
-                                    1
-                                )}
+                                {parseFloat(totalRate || 0).toFixed(1)}
                                 /5.0
                             </Typography>
                             <Rating
@@ -371,7 +367,12 @@ const Detail = ({
                                                                       }
                                                                       readOnly
                                                                   />
-                                                                  <span className="font-bold mx-2" style={{ fontSize: 14 }}>
+                                                                  <span
+                                                                      className="font-bold mx-2"
+                                                                      style={{
+                                                                          fontSize: 14,
+                                                                      }}
+                                                                  >
                                                                       {review
                                                                           ?.pivot
                                                                           ?.created_at

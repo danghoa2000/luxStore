@@ -27,16 +27,16 @@ const Option = ({
     getValues,
     getProductList,
     isCompleteSetting,
-    setComplateSetting
+    setComplateSetting,
 }) => {
-    const [value, setValueCategory] = useState(getValues("category_id"));
+    const [valueCat, setValueCategory] = useState(getValues("category_id"));
     useEffect(() => {
-        setValue("category_id", value);
-        setComplateSetting(pre => !pre)
+        setValue("category_id", valueCat);
+        setComplateSetting((pre) => !pre);
         return () => {
-            setValue("category_id", "");
+            setValue("category_id", []);
         };
-    }, [value]);
+    }, [valueCat]);
     return (
         <List
             sx={{ width: "100%", maxWidth: 360, bgcolor: "background.paper" }}
@@ -80,10 +80,10 @@ const Option = ({
                                                             ...field.value,
                                                             value.id,
                                                         ]);
-                                                        setValueCategory(
+                                                        setValueCategory([
                                                             ...field.value,
-                                                            value.id
-                                                        );
+                                                            value.id,
+                                                        ]);
                                                         return;
                                                     }
                                                     const newSeleted =

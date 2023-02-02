@@ -34,7 +34,7 @@ const ProductContainer = ({
         shouldUnregister: false,
         defaultValues: {
             group_category_id: "",
-            category_id: "",
+            category_id: [],
             attribute: [],
             rate: "",
             price_min: "",

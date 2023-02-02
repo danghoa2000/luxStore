@@ -37,7 +37,7 @@ const ProductItem = ({ addToCart, shopItems }) => {
                                 (
                                     <div>
                                         <span className="old-price">{formatPrice(shopItems?.min_price)}</span>
-                                        <span className="new-price" style={{ marginLeft: 5 }}>{formatPrice(shopItems?.sale_price)}</span>
+                                        <span className="new-price" style={{ marginLeft: 5 }}>{formatPrice(shopItems?.min_price - shopItems?.sale_price)}</span>
                                     </div>
                                 )
                                 :

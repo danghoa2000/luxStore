@@ -216,7 +216,7 @@ const Product = (props) => {
                                                                             }}
                                                                         >
                                                                             {formatPrice(
-                                                                                value?.sale_price
+                                                                                value?.min_price - value?.sale_price
                                                                             )}
                                                                         </span>
                                                                     </div>

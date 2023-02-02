@@ -71,8 +71,8 @@ class OrderController extends Controller
             $productsOrder = [];
             foreach ($request->cart as $value) {
                 $key = $value['id'];
-                $productsOrder[$key]['product_id'] = $key;
-                $productsOrder[$key]['order_id'] = $order->id;
+                // $productsOrder[$key]['product_id'] = $key;
+                // $productsOrder[$key]['order_id'] = $order->id;
                 $productsOrder[$key]['product_name'] = $value['product']['name'];
                 $productsOrder[$key]['product_price'] = $value['price'] - $value['sale_price'];
                 $productsOrder[$key]['qty'] = $value['pivot']['qty'];

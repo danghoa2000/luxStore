@@ -103,7 +103,6 @@ const ProductCreateContainer = () => {
                 file: [],
                 product_code: '',
                 name: '',
-                price: '',
                 status: STATUS.ACTIVE,
                 group_category_id: groupCategoryId,
                 category_id: -1,

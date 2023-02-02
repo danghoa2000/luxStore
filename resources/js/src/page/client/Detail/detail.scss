@@ -95,8 +95,9 @@ button.btn-add-product {
             height: 70px;
             width: 70px;
             border-radius: 0;
-
             margin: 5px;
+            display: flex;
+            align-items: center;
             img {
                 max-height: 100%;
                 max-width: 100%;

@@ -22,7 +22,7 @@ const ProductItem = ({ val }) => {
                     (
                         <div>
                             <span className="old-price">{formatPrice(val?.min_price)}</span>
-                            <span className="new-price" style={{ marginLeft: 5 }}>{formatPrice(val?.sale_price)}</span>
+                            <span className="new-price" style={{ marginLeft: 5 }}>{formatPrice(val?.min_price - val?.sale_price)}</span>
                         </div>
                     )
                     :

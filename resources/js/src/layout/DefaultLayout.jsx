@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import Header from "../../components/partial/header/Header";
 import Footer from "../../components/partial/footer/Footer";
@@ -222,7 +222,7 @@ const DefaultLayout = ({
                     )}
                 </div>
                 {window.sessionStorage.getItem(SESSION_ACCESS_TOKEN) ? (
-                    <>
+                    <div>
                         <Button variant="contained" className="btn__checkcout">
                             Checkout Now
                         </Button>
@@ -233,7 +233,7 @@ const DefaultLayout = ({
                         >
                             View cart
                         </Button>
-                    </>
+                    </div>
                 ) : (
                     <Button
                         variant="contained"

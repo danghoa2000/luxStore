@@ -17,9 +17,6 @@
                 font-family: 'Nunito', sans-serif;
             }
         </style>
-        @viteReactRefresh
-        @vite(['resources/js/index.jsx'])
-        <script src="https://www.paypal.com/sdk/js?client-id=AbWEJccQnDpW_R1MloAJFFZdjA4ya-u8O82m5oKtoAThpejvKYuzdyhzD8UwcYYxUe5ipVrq5R2tQERV"></script>
     </head>
     <body class="antialiased">
         <div id="App"></div>

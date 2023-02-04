@@ -1,10 +1,10 @@
 <?php
 
 use App\Http\Controllers\Admin\AccountController;
-use App\Http\Controllers\admin\AttributeController;
+use App\Http\Controllers\Admin\AttributeController;
 use App\Http\Controllers\Admin\CategoriesController;
 use App\Http\Controllers\Admin\CouponController;
-use App\Http\Controllers\admin\EventController;
+use App\Http\Controllers\Admin\EventController;
 use App\Http\Controllers\Admin\GroupCategoryController;
 use App\Http\Controllers\Admin\HomeController as AdminHomeController;
 use App\Http\Controllers\Admin\LoginController;

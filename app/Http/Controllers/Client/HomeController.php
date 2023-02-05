@@ -36,6 +36,7 @@ class HomeController extends Controller
      */
     public function index()
     {
+        dd(1);
         return $this->homeService->index();
     }
 

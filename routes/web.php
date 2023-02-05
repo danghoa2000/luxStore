@@ -17,7 +17,7 @@ use Illuminate\Support\Facades\Route;
 //     return view('welcome');
 // })->where('path', '.*')->name('react');
 
-Route::get('test', function ($id) {
+Route::get('test', function () {
     dd(1);
 });
 Auth::routes();

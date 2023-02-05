@@ -13,8 +13,11 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/{path?}', function () {
-    return view('welcome');
-})->where('path', '.*')->name('react');
+// Route::get('/{path?}', function () {
+//     return view('welcome');
+// })->where('path', '.*')->name('react');
 
+Route::get('test', function ($id) {
+    dd(1);
+});
 Auth::routes();

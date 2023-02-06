@@ -129,7 +129,7 @@ class HomeController extends Controller
                 } while ($startDate1->add(1, 'month')->lte($endDate1));
                 foreach ($statistic as $chart) {
                     $index = $chart->year . '-' . $chart->month;
-                    $data[$index]['total'] = $chart->total;
+                    $data[$index]['total'] = $chart->total ?? 0;
                     $data[$index]['order_pending'] = $chart->order_pending;
                     $data[$index]['order_cancel'] = $chart->order_cancel;
                     $data[$index]['order_success'] = $chart->order_success;
@@ -150,7 +150,7 @@ class HomeController extends Controller
                 } while ($startDate1->add(1, 'year')->lte($endDate1));
                 foreach ($statistic as $chart) {
                     $index = $chart->year;
-                    $data[$index]['total'] = $chart->total;
+                    $data[$index]['total'] = $chart->total ?? 0;
                     $data[$index]['order_pending'] = $chart->order_pending;
                     $data[$index]['order_cancel'] = $chart->order_cancel;
                     $data[$index]['order_success'] = $chart->order_success;
@@ -170,7 +170,7 @@ class HomeController extends Controller
                 } while ($startDate1->add(1, 'day')->lte($endDate1));
                 foreach ($statistic as $chart) {
                     $index = $chart->date;
-                    $data[$index]['total'] = $chart->total;
+                    $data[$index]['total'] = $chart->total ?? 0;
                     $data[$index]['order_pending'] = $chart->order_pending;
                     $data[$index]['order_cancel'] = $chart->order_cancel;
                     $data[$index]['order_success'] = $chart->order_success;

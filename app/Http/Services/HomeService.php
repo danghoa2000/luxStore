@@ -14,8 +14,8 @@ class HomeService
 {
     public function index()
     {
-        dd(1);
-        $flashDelas = Product::where('sale_type', '<>', -1)
+        try {
+            $flashDelas = Product::where('sale_type', '<>', -1)
             ->where('expried', '>=', Carbon::now())
             ->with('productDetail:qty,sold_qty,product_id,price')
             ->where('status', config('constants.user.status.active'))
@@ -74,6 +74,12 @@ class HomeService
             ->limit(6)
             ->offset(0)
             ->get();
+        } catch (Exception $e) {
+            dd($e->getMessage());
+        }
+
+        
+
         return response([
             'flashDelas' => $flashDelas,
             'newArrivals' => $newArrivals,

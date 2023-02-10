@@ -78,14 +78,10 @@ class HomeService
         }
 
         
-        return response()->json([
-            'flashDelas' => $flashDelas,
-            'newArrivals' => $newArrivals,
+        return response()->json([$flashDelas,$newArrivals,
             // 'ortherProduct' => $ortherProduct,
             // 'topRateProduct' => $topRateProduct,
-            'brand' => $brand,
-            'message' => 'success!',
-            'code' => Response::HTTP_OK
+            // 'brand' => $brand,
         ]);
     }
 

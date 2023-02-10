@@ -77,12 +77,14 @@ class HomeService
             dd($e->getMessage());
         }
 
-        
-        return response()->json([$flashDelas,$newArrivals,
-            // 'ortherProduct' => $ortherProduct,
-            // 'topRateProduct' => $topRateProduct,
-            // 'brand' => $brand,
-        ]);
+        $data = [
+            'flashDelas' => $flashDelas,
+            'newArrivals' => $newArrivals,
+            'ortherProduct' => $ortherProduct,
+            'topRateProduct' => $topRateProduct,
+            'brand' => $brand,
+        ];
+        return response()->json([$data]);
     }
 
     public function search($request)

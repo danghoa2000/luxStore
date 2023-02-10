@@ -77,8 +77,7 @@ class HomeService
         }
 
         
-        return response()->json([$flashDelas]);
-        return response([
+        return response()->json([
             'flashDelas' => $flashDelas,
             'newArrivals' => $newArrivals,
             'ortherProduct' => $ortherProduct,
@@ -86,7 +85,7 @@ class HomeService
             'brand' => $brand,
             'message' => 'success!',
             'code' => Response::HTTP_OK
-        ], Response::HTTP_OK);
+        ]);
     }
 
     public function search($request)

@@ -84,7 +84,7 @@ class HomeService
             'topRateProduct' => $topRateProduct,
             'brand' => $brand,
         ];
-        return response()->json([$data]);
+        return response()->json([$newArrivals]);
     }
 
     public function search($request)

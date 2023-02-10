@@ -40,7 +40,6 @@ class HomeService
             ->offset(0)
             ->get();
 
-            dd($ortherProduct);
 
         $topRateProduct = Product::select('id', 'name', 'image', 'expried', 'sale_type', 'price', 'sale_off')
             ->withCount(
@@ -56,6 +55,8 @@ class HomeService
             ->offset(0)
             ->get();
 
+            dd($topRateProduct);
+
 
         $brand = Category::select(
             'id',
@@ -70,6 +71,9 @@ class HomeService
             ->limit(6)
             ->offset(0)
             ->get();
+
+
+
         } catch (Exception $e) {
             dd($e->getMessage());
         }

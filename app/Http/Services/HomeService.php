@@ -77,7 +77,7 @@ class HomeService
         }
 
         
-        dd(1);
+        return response()->json([$flashDelas]);
         return response([
             'flashDelas' => $flashDelas,
             'newArrivals' => $newArrivals,

@@ -24,7 +24,6 @@ class HomeService
             ->offset(0)
             ->get();
 
-            dd($flashDelas);
 
         $newArrivals = Product::orderBy('updated_at', 'desc')
             ->with('productDetail:qty,sold_qty,product_id,price')
@@ -34,20 +33,14 @@ class HomeService
             ->offset(0)
             ->get();
 
-        $bigDiscounts = Product::whereHas('events', function ($query) {
-            $query->where('event_type', Event::BIG_DISCOUNTS);
-        })
-            ->with('productDetail:qty,sold_qty,product_id,price')
-            ->where('status', config('constants.user.status.active'))
-            ->select('id', 'name', 'image', 'expried', 'sale_type', 'price', 'sale_off')
-            ->get();
-
         $ortherProduct = Product::with('productDetail:qty,sold_qty,product_id,price')
             ->where('status', config('constants.user.status.active'))
             ->select('id', 'name', 'image', 'expried', 'sale_type', 'price', 'sale_off')
             ->limit(9)
             ->offset(0)
             ->get();
+
+            dd($ortherProduct);
 
         $topRateProduct = Product::select('id', 'name', 'image', 'expried', 'sale_type', 'price', 'sale_off')
             ->withCount(
@@ -62,6 +55,7 @@ class HomeService
             ->limit(10)
             ->offset(0)
             ->get();
+
 
         $brand = Category::select(
             'id',
@@ -85,7 +79,6 @@ class HomeService
         return response([
             'flashDelas' => $flashDelas,
             'newArrivals' => $newArrivals,
-            'bigDiscounts' => $bigDiscounts,
             'ortherProduct' => $ortherProduct,
             'topRateProduct' => $topRateProduct,
             'brand' => $brand,

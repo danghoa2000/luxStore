@@ -55,8 +55,6 @@ class HomeService
             ->offset(0)
             ->get();
 
-            dd($topRateProduct);
-
 
         $brand = Category::select(
             'id',

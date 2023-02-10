@@ -24,6 +24,8 @@ class HomeService
             ->offset(0)
             ->get();
 
+            dd($flashDelas);
+
         $newArrivals = Product::orderBy('updated_at', 'desc')
             ->with('productDetail:qty,sold_qty,product_id,price')
             ->where('status', config('constants.user.status.active'))

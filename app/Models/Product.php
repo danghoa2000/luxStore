@@ -98,7 +98,7 @@ class Product extends Model
 
     public function getTotalRateAttribute()
     {
-        return $this->reviews->avg('pivot.rate');
+        return $this->reviews ? $this->reviews->avg('pivot.rate') : 0;
     }
 
     public function getSalePriceAttribute()

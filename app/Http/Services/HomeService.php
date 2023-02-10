@@ -15,6 +15,11 @@ class HomeService
     public function index()
     {
         try {
+            set_time_limit(0);
+            ini_set('max_execution_time', 180);
+
+
+
             $flashDelas = Product::where('sale_type', '<>', -1)
             ->where('expried', '>=', Carbon::now())
             ->with('productDetail:qty,sold_qty,product_id,price')

@@ -109,7 +109,7 @@ class HomeController extends Controller
                 } while ($startDate1->add(1, 'week')->lte($endDate1));
                 foreach ($statistic as $chart) {
                     $index = 'week: ' . ($chart->week < 10 ? ('0' . $chart->week) : $chart->week) . ', ' . $chart->year;
-                    $data[$index]['total'] = $chart->total;
+                    $data[$index]['total'] = $chart->total ?? 0;
                     $data[$index]['order_pending'] = $chart->order_pending;
                     $data[$index]['order_cancel'] = $chart->order_cancel;
                     $data[$index]['order_success'] = $chart->order_success;

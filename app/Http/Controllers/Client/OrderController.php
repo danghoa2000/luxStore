@@ -25,10 +25,10 @@ class OrderController extends Controller
     public function index(Request $request)
     {
         $orders = Order::query()->filter($request);
-        $total = count($orders->get());
+        $total = $orders->count();
         if ($request->pageSize) {
             $orders->limit($request->pageSize)
-                ->offset(($request->currentPage) * ($request->pageSize));
+                ->offset(($request->currentPage - 1) * $request->pageSize);
         }
         return response([
             'orders' => $orders->get(),
@@ -49,7 +49,7 @@ class OrderController extends Controller
             DB::beginTransaction();
             $user = Auth::guard('customerApi')->user();
 
-            // add order
+            // Add order
             $order = Order::create([
                 'customer_id' => $user->id,
                 'status' => $request->orderStatus,
@@ -60,43 +60,18 @@ class OrderController extends Controller
                 'payment_method' => $request->paymentMethod,
             ]);
 
-            $productList = [];
-            $productsOrder = [];
-            foreach ($request->cart as $value) {
-                $key = $value['id'];
-                $productsOrder[$key]['product_id'] = $key;
-                $productsOrder[$key]['order_id'] = $order->id;
-                $productsOrder[$key]['product_name'] = $value['product']['name'];
-                $productsOrder[$key]['product_price'] = $value['price'];
-                $productsOrder[$key]['qty'] = $value['pivot']['qty'];
-                $productList[] = $value['product']['id'];
-            }
+            $productsOrder = $this->prepareOrderDetails($request->cart, $order->id);
 
-            $productList = array_unique($productList);
             if (isset($request->voucher["id"])) {
-                $voucher = Coupon::find($request->voucher["id"]);
-                if ($voucher->qty > 0 && Carbon::parse($voucher->date_finish)->format('Y-m-d') >= Carbon::now()->format('Y-m-d')) {
-                    $order->update([
-                        'price' => $order->price - $voucher->value,
-                        'price_discount' => $voucher->value
-                    ]);
-                    $voucher->update([
-                        'qty' => $voucher->qty - 1
-                    ]);
-                }
+                $this->applyVoucher($request->voucher["id"], $order);
             }
-            $order->orderDetail()->attach($productsOrder);
-            // update qty product
-            $product = ProductDetail::whereIn('id', array_keys($productsOrder))->get();
-            $options = [];
-            foreach ($product as $data) {
-                $options[$data->id]['id'] =  $data->id;
-                $options[$data->id]['qty'] =  $data['qty'] - $productsOrder[$data->id]['qty'];
-                $options[$data->id]['sold_qty'] =  $data['sold_qty'] + $productsOrder[$data->id]['qty'];
-            }
-            ProductDetail::upsert($options, ['id'], ['qty', 'sold_qty']);
 
-            // delete cart
+            $order->orderDetail()->attach($productsOrder);
+
+            // Update product quantities
+            $this->updateProductQuantities($productsOrder);
+
+            // Delete cart
             $user->cart->products()->detach(array_keys($productsOrder));
 
             DB::commit();
@@ -131,7 +106,7 @@ class OrderController extends Controller
         }
 
         return response([
-            'message' => 'This order dont exist!',
+            'message' => 'This order does not exist!',
             'code' => Response::HTTP_NOT_FOUND
         ], Response::HTTP_NOT_FOUND);
     }
@@ -151,22 +126,7 @@ class OrderController extends Controller
             if ($order) {
                 $order->update(['status' => $request->order_status]);
                 if ($request->order_status == 3) {
-                    $productsOrder = [];
-                    foreach ($order->orderDetail as $value) {
-                        $key = $value['id'];
-                        $productsOrder[$key]['id'] = $key;
-                        $productsOrder[$key]['qty'] = $value['pivot']['qty'];
-                    }
-
-                    $product = ProductDetail::whereIn('id', array_keys($productsOrder))->get();
-                    $options = [];
-                    foreach ($product as $data) {
-                        $options[$data->id]['id'] =  $data->id;
-                        $options[$data->id]['qty'] =  $data['qty'] + $productsOrder[$data->id]['qty'];
-                        $options[$data->id]['sold_qty'] =  $data['sold_qty'] - $productsOrder[$data->id]['qty'];
-                    }
-
-                    ProductDetail::upsert($options, ['id'], ['qty', 'sold_qty']);
+                    $this->restoreProductQuantities($order->orderDetail);
                 }
                 DB::commit();
                 return response([
@@ -176,11 +136,10 @@ class OrderController extends Controller
                 ], Response::HTTP_OK);
             } else {
                 return response([
-                    'message' => 'This order dont exist!',
+                    'message' => 'This order does not exist!',
                     'code' => Response::HTTP_NOT_FOUND
                 ], Response::HTTP_NOT_FOUND);
             }
-
         } catch (\Throwable $th) {
             DB::rollBack();
             return response([
@@ -198,22 +157,21 @@ class OrderController extends Controller
      */
     public function destroy($id)
     {
-        return;
+        // Implement the destroy method if needed
     }
 
     /**
-     * checkVouchervalid.
+     * Check if the voucher is valid.
      *
-     * @param  collection  voucher
-     * @param  array  product
-     * @param  string  user id
-     * 
-     * @return \Illuminate\Http\Response
+     * @param  collection  $voucher
+     * @param  array  $product
+     * @param  string  $userId
+     * @return bool
      */
-    public function checkVouchervalid($voucher, $product, $user)
+    public function checkVoucherValid($voucher, $product, $userId)
     {
         $result = true;
-        if (isset($voucher->expried_date) && Carbon::parse($voucher->expried_date)->format('Y-m-d h:i:s') < Carbon::now()->format('Y-m-d h:i:s')) {
+        if (isset($voucher->expired_date) && Carbon::parse($voucher->expired_date)->format('Y-m-d H:i:s') < Carbon::now()->format('Y-m-d H:i:s')) {
             $result = false;
         }
 
@@ -223,9 +181,74 @@ class OrderController extends Controller
         }
 
         $customerList = json_decode($voucher->customer_id);
-        if (in_array($user, $customerList)) {
+        if (in_array($userId, $customerList)) {
             $result = false;
         }
         return $result;
+    }
+
+    private function prepareOrderDetails($cart, $orderId)
+    {
+        $productsOrder = [];
+        foreach ($cart as $value) {
+            $key = $value['id'];
+            $productsOrder[$key] = [
+                'product_id' => $key,
+                'order_id' => $orderId,
+                'product_name' => $value['product']['name'],
+                'product_price' => $value['price'],
+                'qty' => $value['pivot']['qty']
+            ];
+        }
+        return $productsOrder;
+    }
+
+    private function applyVoucher($voucherId, $order)
+    {
+        $voucher = Coupon::find($voucherId);
+        if ($voucher->qty > 0 && Carbon::parse($voucher->date_finish)->format('Y-m-d') >= Carbon::now()->format('Y-m-d')) {
+            $order->update([
+                'price' => $order->price - $voucher->value,
+                'price_discount' => $voucher->value
+            ]);
+            $voucher->update(['qty' => $voucher->qty - 1]);
+        }
+    }
+
+    private function updateProductQuantities($productsOrder)
+    {
+        $product = ProductDetail::whereIn('id', array_keys($productsOrder))->get();
+        $options = [];
+        foreach ($product as $data) {
+            $options[$data->id] = [
+                'id' => $data->id,
+                'qty' => $data['qty'] - $productsOrder[$data->id]['qty'],
+                'sold_qty' => $data['sold_qty'] + $productsOrder[$data->id]['qty']
+            ];
+        }
+        ProductDetail::upsert($options, ['id'], ['qty', 'sold_qty']);
+    }
+
+    private function restoreProductQuantities($orderDetails)
+    {
+        $productsOrder = [];
+        foreach ($orderDetails as $value) {
+            $key = $value['id'];
+            $productsOrder[$key] = [
+                'id' => $key,
+                'qty' => $value['pivot']['qty']
+            ];
+        }
+
+        $product = ProductDetail::whereIn('id', array_keys($productsOrder))->get();
+        $options = [];
+        foreach ($product as $data) {
+            $options[$data->id] = [
+                'id' => $data->id,
+                'qty' => $data['qty'] + $productsOrder[$data->id]['qty'],
+                'sold_qty' => $data['sold_qty'] - $productsOrder[$data->id]['qty']
+            ];
+        }
+        ProductDetail::upsert($options, ['id'], ['qty', 'sold_qty']);
     }
 }

@@ -58,7 +58,7 @@ export const CODE = {
     UNAUTHENTICATED: 401,
 };
 
-export const BASE_URL = "https://lux-store.herokuapp.com/";
+export const BASE_URL = "http://localhost:8000/";
 export const DATE_TIME = "Y-M-dd";
 export const SALE_TYPE = {
     PRICE: 1,

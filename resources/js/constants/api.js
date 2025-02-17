@@ -1,4 +1,4 @@
-export const API_BASE_URL = "https://lux-store.herokuapp.com/";
+export const API_BASE_URL = "http://localhost:8000/";
 
 export const LOGIN_API = {
     LOGIN: API_BASE_URL + "api/auth/login",

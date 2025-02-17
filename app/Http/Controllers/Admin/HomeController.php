@@ -13,45 +13,23 @@ use Illuminate\Support\Facades\DB;
 
 class HomeController extends Controller
 {
-    /*
-    |--------------------------------------------------------------------------
-    | Login Controller
-    |--------------------------------------------------------------------------
-    |
-    | This controller handles authenticating users for the application and
-    | redirecting them to your home screen. The controller uses a trait
-    | to conveniently provide its functionality to your applications.
-    |
-    */
-
     use AuthenticatesUsers;
 
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
     public function index(Request $request)
     {
-        $statistic = Order::selectRaw(('SUM(case when status = 2 then price end) AS total'))
-            ->selectRaw(('COUNT(case when status = 0 then 1 end) as order_pending'))
-            ->selectRaw(('COUNT(case when status = 2 then 1 end) as order_success'))
-            ->selectRaw(('COUNT(case when status = 3 then 1 end) as order_cancel'));
-        $startDate = Carbon::now()->format('Y-m-01');
-        $endDate = Carbon::now()->endOfMonth()->format('Y-m-d');
-        if ($request->date_from) {
-            $startDate = Carbon::parse($request->date_from)->format('Y-m-d');
-            $statistic->where('created_at', '>=', $startDate);
-        }
-        if ($request->date_to) {
-            $endDate = Carbon::parse($request->date_to)->format('Y-m-d');
-            $statistic->where('created_at', '<=', $endDate);
-        }
+        $statistic = Order::selectRaw('SUM(case when status = 2 then price end) AS total')
+            ->selectRaw('COUNT(case when status = 0 then 1 end) as order_pending')
+            ->selectRaw('COUNT(case when status = 2 then 1 end) as order_success')
+            ->selectRaw('COUNT(case when status = 3 then 1 end) as order_cancel');
+
+        [$startDate, $endDate] = $this->getDateRange($request);
+        $statistic->whereBetween('created_at', [$startDate, $endDate]);
 
         $statisticOrder = $statistic->get();
         $statisticTotalAssets = $this->statisticTotalAssets($statistic, $request);
         $bestSaledStatistic = $this->bestSaledStatistic($request);
         $ratingStatistic = $this->ratingStatistic($request);
+
         return response()->json([
             'statistic' => $statisticTotalAssets,
             'orderStatistic' => $statisticOrder,
@@ -62,122 +40,98 @@ class HomeController extends Controller
         ]);
     }
 
+    private function getDateRange(Request $request)
+    {
+        $startDate = $request->date_from ? Carbon::parse($request->date_from)->format('Y-m-d') : Carbon::now()->format('Y-m-01');
+        $endDate = $request->date_to ? Carbon::parse($request->date_to)->format('Y-m-d') : Carbon::now()->endOfMonth()->format('Y-m-d');
+        return [$startDate, $endDate];
+    }
+
     public function statisticTotalAssets($statistic, $request)
     {
-        $startDate = Carbon::now()->format('Y-m-01');
-        $endDate = Carbon::now()->endOfMonth()->format('Y-m-d');
-        if ($request->date_from) {
-            $startDate = Carbon::parse($request->date_from)->format('Y-m-d');
-        }
-        if ($request->date_to) {
-            $endDate = Carbon::parse($request->date_to)->format('Y-m-d');
-        }
+        [$startDate, $endDate] = $this->getDateRange($request);
+
         switch ($request->display_by) {
             case 'week':
-                $statistic->selectRaw(('WEEK(created_at) AS week, YEAR(created_at) AS year'))
-                    ->groupByRaw(('WEEK(created_at), YEAR(created_at)'));
+                $statistic->selectRaw('WEEK(created_at) AS week, YEAR(created_at) AS year')
+                    ->groupByRaw('WEEK(created_at), YEAR(created_at)');
                 break;
             case 'month':
                 $statistic->selectRaw('DATE_FORMAT(created_at, "%b") AS month, YEAR(created_at) AS year')
-                    ->groupByRaw(('DATE_FORMAT(created_at, "%b"), YEAR(created_at)'));
+                    ->groupByRaw('DATE_FORMAT(created_at, "%b"), YEAR(created_at)');
                 break;
             case 'year':
-                $statistic->selectRaw(('YEAR(created_at) AS year'))
-                    ->groupByRaw(('YEAR(created_at)'));
+                $statistic->selectRaw('YEAR(created_at) AS year')
+                    ->groupByRaw('YEAR(created_at)');
                 break;
-
             default:
-                $statistic->selectRaw(('DATE_FORMAT(created_at, "%b %e, %Y") AS date, DATE(created_at) AS createDate'))
-                    ->groupByRaw(('DATE(created_at), DAY(created_at)'));
+                $statistic->selectRaw('DATE_FORMAT(created_at, "%b %e, %Y") AS date, DATE(created_at) AS createDate')
+                    ->groupByRaw('DATE(created_at), DAY(created_at)');
                 break;
         }
 
         $statistic = $statistic->get();
+        $data = $this->initializeData($startDate, $endDate, $request->display_by);
 
-        switch ($request->display_by) {
+        foreach ($statistic as $chart) {
+            $index = $this->getIndex($chart, $request->display_by);
+            $data[$index]['total'] = $chart->total;
+            $data[$index]['order_pending'] = $chart->order_pending;
+            $data[$index]['order_cancel'] = $chart->order_cancel;
+            $data[$index]['order_success'] = $chart->order_success;
+        }
+
+        return $data;
+    }
+
+    private function initializeData($startDate, $endDate, $displayBy)
+    {
+        $data = [];
+        $startDate1 = Carbon::parse($startDate);
+        $endDate1 = Carbon::parse($endDate);
+
+        switch ($displayBy) {
             case 'week':
-                $startDate1 = Carbon::parse($startDate);
-                $endDate1 = Carbon::parse($endDate);
                 do {
                     $index = 'week: ' . $startDate1->format('W') . ', ' . $startDate1->format('Y');
-                    $data[$index] = [
-                        'total' => 0,
-                        'order_pending' => 0,
-                        'order_cancel' => 0,
-                        'order_success' => 0,
-                    ];
-                } while ($startDate1->add(1, 'week')->lte($endDate1));
-                foreach ($statistic as $chart) {
-                    $index = 'week: ' . ($chart->week < 10 ? ('0' . $chart->week) : $chart->week) . ', ' . $chart->year;
-                    $data[$index]['total'] = $chart->total;
-                    $data[$index]['order_pending'] = $chart->order_pending;
-                    $data[$index]['order_cancel'] = $chart->order_cancel;
-                    $data[$index]['order_success'] = $chart->order_success;
-                }
+                    $data[$index] = ['total' => 0, 'order_pending' => 0, 'order_cancel' => 0, 'order_success' => 0];
+                } while ($startDate1->addWeek()->lte($endDate1));
                 break;
             case 'month':
-                $startDate1 = Carbon::parse($startDate);
-                $endDate1 = Carbon::parse($endDate);
                 do {
                     $index = $startDate1->format('Y') . '-' . $startDate1->format('M');
-                    $data[$index] = [
-                        'total' => 0,
-                        'order_pending' => 0,
-                        'order_cancel' => 0,
-                        'order_success' => 0,
-                    ];
-                } while ($startDate1->add(1, 'month')->lte($endDate1));
-                foreach ($statistic as $chart) {
-                    $index = $chart->year . '-' . $chart->month;
-                    $data[$index]['total'] = $chart->total;
-                    $data[$index]['order_pending'] = $chart->order_pending;
-                    $data[$index]['order_cancel'] = $chart->order_cancel;
-                    $data[$index]['order_success'] = $chart->order_success;
-                }
+                    $data[$index] = ['total' => 0, 'order_pending' => 0, 'order_cancel' => 0, 'order_success' => 0];
+                } while ($startDate1->addMonth()->lte($endDate1));
                 break;
-
             case 'year':
-                $startDate1 = Carbon::parse($startDate);
-                $endDate1 = Carbon::parse($endDate);
                 do {
                     $index = $startDate1->format('Y');
-                    $data[$index] = [
-                        'total' => 0,
-                        'order_pending' => 0,
-                        'order_cancel' => 0,
-                        'order_success' => 0,
-                    ];
-                } while ($startDate1->add(1, 'year')->lte($endDate1));
-                foreach ($statistic as $chart) {
-                    $index = $chart->year;
-                    $data[$index]['total'] = $chart->total;
-                    $data[$index]['order_pending'] = $chart->order_pending;
-                    $data[$index]['order_cancel'] = $chart->order_cancel;
-                    $data[$index]['order_success'] = $chart->order_success;
-                }
+                    $data[$index] = ['total' => 0, 'order_pending' => 0, 'order_cancel' => 0, 'order_success' => 0];
+                } while ($startDate1->addYear()->lte($endDate1));
                 break;
             default:
-                $startDate1 = Carbon::parse($startDate);
-                $endDate1 = Carbon::parse($endDate);
                 do {
                     $index = $startDate1->toFormattedDateString();
-                    $data[$index] = [
-                        'total' => 0,
-                        'order_pending' => 0,
-                        'order_cancel' => 0,
-                        'order_success' => 0,
-                    ];
-                } while ($startDate1->add(1, 'day')->lte($endDate1));
-                foreach ($statistic as $chart) {
-                    $index = $chart->date;
-                    $data[$index]['total'] = $chart->total;
-                    $data[$index]['order_pending'] = $chart->order_pending;
-                    $data[$index]['order_cancel'] = $chart->order_cancel;
-                    $data[$index]['order_success'] = $chart->order_success;
-                }
+                    $data[$index] = ['total' => 0, 'order_pending' => 0, 'order_cancel' => 0, 'order_success' => 0];
+                } while ($startDate1->addDay()->lte($endDate1));
                 break;
         }
+
         return $data;
+    }
+
+    private function getIndex($chart, $displayBy)
+    {
+        switch ($displayBy) {
+            case 'week':
+                return 'week: ' . ($chart->week < 10 ? '0' . $chart->week : $chart->week) . ', ' . $chart->year;
+            case 'month':
+                return $chart->year . '-' . $chart->month;
+            case 'year':
+                return $chart->year;
+            default:
+                return $chart->date;
+        }
     }
 
     public function bestSaledStatistic($request)
@@ -186,49 +140,25 @@ class HomeController extends Controller
             ->join('order_detail', 'order_detail.order_id', '=', 'order.id')
             ->join('product_detail', 'order_detail.product_id', '=', 'product_detail.id')
             ->join('products', 'products.id', '=', 'product_detail.product_id')
-            ->selectRaw(('SUM(order_detail.qty) as total, products.name'))
-            ->groupByRaw('product_detail.product_id')
+            ->selectRaw('SUM(order_detail.qty) as total, products.name')
+            ->groupBy('product_detail.product_id')
             ->where('order.status', 2);
 
-        $startDate = Carbon::now()->format('Y-m-01');
-        $endDate = Carbon::now()->endOfMonth()->format('Y-m-d');
-        if ($request->date_from) {
-            $startDate = Carbon::parse($request->date_from)->format('Y-m-d');
-            $statistic->where('order.created_at', '>=', $startDate);
-        }
-        if ($request->date_to) {
-            $endDate = Carbon::parse($request->date_to)->format('Y-m-d');
-            $statistic->where('order.created_at', '<=', $endDate);
-        }
+        [$startDate, $endDate] = $this->getDateRange($request);
+        $statistic->whereBetween('order.created_at', [$startDate, $endDate]);
 
-        $statistic = $statistic->limit(10)
-            ->offset(0)
-            ->get();
-        return $statistic;
+        return $statistic->limit(10)->offset(0)->get();
     }
 
     public function ratingStatistic($request)
     {
-        $startDate = Carbon::now()->format('Y-m-01');
-        $endDate = Carbon::now()->endOfMonth()->format('Y-m-d');
-        if ($request->date_from) {
-            $startDate = Carbon::parse($request->date_from)->format('Y-m-d');
-        }
-        if ($request->date_to) {
-            $endDate = Carbon::parse($request->date_to)->format('Y-m-d');
-        }
-        $statistic = Product::withCount(
-            [
-                'reviews AS rating' => function ($query) use ($startDate, $endDate) {
-                    $query->select(DB::raw('AVG(rate)'))
-                        ->where('reviews.created_at', '>=', $startDate)
-                        ->where('reviews.created_at', '<=', $endDate);
-                }
-            ]
-        )
-            ->limit(10)
-            ->offset(0)
-            ->get();
-        return $statistic;
+        [$startDate, $endDate] = $this->getDateRange($request);
+
+        return Product::withCount([
+            'reviews AS rating' => function ($query) use ($startDate, $endDate) {
+                $query->select(DB::raw('AVG(rate)'))
+                    ->whereBetween('reviews.created_at', [$startDate, $endDate]);
+            }
+        ])->limit(10)->offset(0)->get();
     }
 }
